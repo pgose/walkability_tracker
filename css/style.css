@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+}
+
+header {
+    position: fixed;
+    width: 100vw;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+}
+
+nav {
+    position: fixed;
+    display: inline;
+    bottom: 5vh;
+    z-index: 800;
+}
+
+nav li {
+    list-style-type: none;
+    padding: 10%;
+    background: #c17561;
+    border-radius: 1vh;
+    margin: 1vh 0;
+}
+
+nav li a {
+    color: #dfdfdf;
+    text-decoration: none;
+}
+
+#map {
+    height: 95vh;
+    width: 100vw;
+
+}
+
+@media
