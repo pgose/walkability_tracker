@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Walkability App</title>
+    <link   rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""/>
+    <link   rel="stylesheet" href="css/style.css"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous" defer></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script src="js/main.js" defer></script>
+  </head>
+
+  <body>
+
+    <!-- Small Header Area -->
+    <header>
+      <p>Walkability App v1</p>
+    </header>
+
+    <!-- Main Content with Map, populated by js -->
+    <main>
+      <div id="map">
+      </div>
+    </main>
+
+    <!-- Navigation Bar at the Bottom -->
+    <nav>
+      <menu>
+        <li><a href=".">Walk</a></li>
+        <li><a href="heatmap">Heatmap</a></li>
+      <menu>
+    </nav>
+
+    <button type="button">Start Walk</button>
+
+    <!-- Small Footer Area under the nav bar -->
+    <footer>
+      <em>D-BAUG</em>
+      <em>GTA 2024</em>
+    </footer>
+  </body>
+</html>
