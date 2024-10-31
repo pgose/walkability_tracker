@@ -119,7 +119,7 @@ function geoerror() {
 };
 
 let geooptions = {
-    enableHighAccuracy: false,
+    enableHighAccuracy: true,
     // These values are probably lower than they can be.^
     maximumAge: 15000,  // The maximum age of a cached location (10 seconds).
     timeout: 12000   // A maximum of 5 seconds before timeout.
