@@ -1,23 +1,66 @@
-body {
+html, body {
+    width: 100%;
     margin: 0;
 }
 
-header {
+html {
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
     position: fixed;
-    width: 100vw;
+    height: 100%;
+}
+
+header {
+    z-index: 2;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+}
+
+#map {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+}
+
+nav {
+    position: relative;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+}
+menu {
+    position: absolute;
+    bottom: 5vh;
+    z-index: 2;
+}
+
+li, button {
+    display: inline;
+    z-index: 3;
+}
+
+button {
+    background-color:
 }
 
 footer {
-    position: fixed;
-    bottom: 0;
-    width: 100vw;
+    z-index: 9;
 }
-
+/*
 nav {
     position: fixed;
     display: inline;
     bottom: 5vh;
-    z-index: 800;
+    z-index: 9;
 }
 
 nav li {
@@ -32,11 +75,4 @@ nav li a {
     color: #dfdfdf;
     text-decoration: none;
 }
-
-#map {
-    height: 95vh;
-    width: 100vw;
-
-}
-
-@media
+*/
