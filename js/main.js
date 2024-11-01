@@ -21,7 +21,7 @@ var line = new L.Polyline([], {color: 'red',
     weight: 10,
     opacity: 1,
     smoothFactor: 1,
-    stroke: true
+    stroke: false
 })
 var dots = new L.Polyline([], {color: 'red',
     weight: 5,
