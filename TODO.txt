@@ -1,0 +1,39 @@
+JavaScript:
+
+- Reject trajectories that never leave a certain radius from the start (Backend)
+    - Notify the user about this (Frontend)
+
+- Maybe stabilize the path? optional, maybe do this at the end if we still have time...
+
+UI (frontend):
+
+- Make a Help Button that triggers an "Instructions" Dialog Box (not an alert )
+    (See HTML <dialog> tag documentation on w3c)
+
+- Make the Buttons and Menu Icons look nice (CSS)
+
+Server (Backend):
+
+- Pass csv to Geoserver
+
+- Setup Flask Server
+
+    - Fetch Geoserver Data using Flask
+
+    - Decide 3 Datasets
+
+    - Store OpenData Datasets on the Server
+
+    - Implement the {lines & Dataset => Rating => lines & ratings => dots} function using one of those datasets in Python
+
+    - Find a way to fuse those datasets into one "walkability scale" dataset.
+
+
+
+UI (frontend, new tab, heatmap):
+
+- Implement Leaflet.heat heatmap plugin for Leaflet in JavaScript (https://github.com/Leaflet/Leaflet.heat)
+
+- Create labels for the map; maybe delineate perimeter of analysis visually
+
+Backend for Heatmap (fetch point data from GeoServer and pass them to the frontend)
