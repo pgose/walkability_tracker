@@ -7,7 +7,7 @@ JavaScript:
 
 UI (frontend):
 
-- Make a Help Button that triggers an "Instructions" Dialog Box (not an alert )
+- Make a Help Button that triggers an "Instructions" Dialog Box (not an alert)
     (See HTML <dialog> tag documentation on w3c)
 
 - Make the Buttons and Menu Icons look nice (CSS)
@@ -46,4 +46,6 @@ UI (frontend, new tab, heatmap):
 
 - Create labels for the map; maybe delineate perimeter of analysis visually
 
-Backend for Heatmap (fetch point data from GeoServer and pass them to the frontend)
+Backend for Heatmap:
+
+- fetch point data from GeoServer and pass them to the frontend (JavaScript)
