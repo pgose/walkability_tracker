@@ -54,6 +54,10 @@ function geosuccess(position) {
     });
     appstate.marker.addLayer(circle);
     }
+    // At present the map is centered at Zürich HB (I believe), this way I center my map to the user's position
+    if (map) {
+        map.setView([lat,lng]);
+    }
 
     // Checks if the button has been pressed yet
     if (appstate.press == false) {
