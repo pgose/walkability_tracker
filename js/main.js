@@ -9,7 +9,7 @@ let appstate = {
     // This holds the marker for the user's current location & radius
     marker: L.layerGroup()
 }
-
+// HOWDY!!
 // Initializes Leaflet map. For more Info see Leaflet documentation online.
 var map = L.map('map').setView([47.408375, 8.507669], 13);
 
