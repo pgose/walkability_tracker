@@ -54,9 +54,10 @@ function geosuccess(position) {
     });
     appstate.marker.addLayer(circle);
     }
-    // At present the map is centered at Zürich HB (I believe), this way I center my map to the user's position
+    // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
+    // So that we aren't too far away from the point, its zoom level was set to 18
     if (map) {
-        map.setView([lat,lng]);
+        map.setView([lat,lng],18);
     }
 
     // Checks if the button has been pressed yet
