@@ -16,7 +16,7 @@ var map = L.map('map').setView([47.408375, 8.507669], 13);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-
+// github test comment, pls ignore
 var line = new L.Polyline([], {color: 'red',
     weight: 10,
     opacity: 1,
