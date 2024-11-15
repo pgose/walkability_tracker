@@ -10,6 +10,23 @@ let appstate = {
     marker: L.layerGroup()
 }
 
+
+// Function to switch to Start mode (green)
+function setStartMode() {
+    startButton.classList.remove("stop");
+    startButton.classList.add("start");
+    startButton.innerHTML = "Start";
+    startButton.onclick = start; // Set click event to start tracking
+}
+
+// Function to switch to Stop mode (red)
+function setStopMode() {
+    startButton.classList.remove("start");
+    startButton.classList.add("stop");
+    startButton.innerHTML = "Stop";
+    startButton.onclick = stop; // Set click event to stop tracking
+}
+
 // Initializes Leaflet map. For more Info see Leaflet documentation online.
 var map = L.map('map').setView([47.408375, 8.507669], 13);
 
@@ -55,7 +72,7 @@ function geosuccess(position) {
     appstate.marker.addLayer(circle);
     }
     // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
-    // So that we aren't too far away from the point, its zoom level was set to 18 :)
+    // So that we aren't too far away from the point, its zoom level was set to 18
     if (map) {
         map.setView([lat,lng],18);
     }
@@ -143,10 +160,7 @@ function start() {
     // Sets "press" to true, which makes geosuccess start doing its thing
     appstate.press = true;
     console.log("appstate.press has been set to", appstate.press);
-
-    // Changes the Start button into a Stop button
-    startbutton.innerHTML = "Stop";
-    startbutton.onclick = stop;
+    setStopMode();  // Switch button to Stop mode
 }
 
 // This is called when the Stop button is pressed
@@ -156,11 +170,15 @@ function stop() {
     // Reverts "press" back to false, which stops geosuccess in its tracks
     appstate.press = false;
     startbutton.innerHTML = "Start";
-    startbutton.onclick = start;
+    setStartMode();  // Switch button to Start mode
     downloadlink.innerHTML = "download csv";
     localStorage['saved'] = true;
 }
 
+
+// Button reference and default state
+const startButton = document.getElementById("startbutton");
+setStartMode();  // Initialize button in Start mode
 
 // This part allows you to download a csv of your trackpoints
 // Mostly copied & adapted lecture code; I don't know how jquery works. mfg Philip

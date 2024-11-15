@@ -16,6 +16,13 @@ body {
 
 header {
     z-index: 2;
+    height: 7vh;
+    padding: 1vh 2vw;
+    background-color: rgba(255, 255, 255, 0.8); /* transparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* shadow */
 }
 
 main {
@@ -52,8 +59,59 @@ button {
     background-color:
 }
 
+
+/* Start button style (green) */
+#startbutton.start {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #4CAF50; /* Green color for "Start" */
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Stop button style (red) */
+#startbutton.stop {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #F44336; /* Red color for "Stop" */
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Hover effect */
+#startbutton:hover {
+    transform: scale(1.05);
+}
+
+/* Active (pressed) effect */
+#startbutton:active {
+    transform: scale(0.95);
+}
+
+
+
+
 footer {
     z-index: 9;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* shadow */
 }
 /*
 nav {
