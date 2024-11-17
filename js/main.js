@@ -155,7 +155,7 @@ function start() {
     console.log("start button has been pressed");
     // Clears the currently cached trajectory
     localStorage.clear();
-    downloadlink.innerHTML = ""
+    //downloadlink.innerHTML = ""
 
     // Sets "press" to true, which makes geosuccess start doing its thing
     appstate.press = true;
@@ -171,7 +171,7 @@ function stop() {
     appstate.press = false;
     startbutton.innerHTML = "Start";
     setStartMode();  // Switch button to Start mode
-    downloadlink.innerHTML = "download csv";
+    //downloadlink.innerHTML = "download csv";
     localStorage['saved'] = true;
 }
 
@@ -180,9 +180,69 @@ function stop() {
 const startButton = document.getElementById("startbutton");
 setStartMode();  // Initialize button in Start mode
 
-// This part allows you to download a csv of your trackpoints
-// Mostly copied & adapted lecture code; I don't know how jquery works. mfg Philip
-$('a#download').click(function() {
+// This is where the popup window is triggered and made interactive
+// The querySelector finds the very first element that has the type dialog
+const dialog = document.querySelector("dialog");
+document.getElementById("startbutton").addEventListener("click", function(){
+    // It seems counterintuitive but by checking if the inner HTML of the button is
+    // "Start" we are able to directly target the state change from Start to Stop
+    // Why? Because when we click stop, the inner HTML becomes "start" AND
+    // Because the addEventListener is click based, the edge case when the page is loaded
+    // and the inner HTML is "start", it will be ignored
+    if (startButton.innerHTML == "Start") {
+        dialog.showModal();  // Show the dialog when disabled
+    } 
+    
+});
+// If the cancel button is pressed, it closes the popup
+dialog.querySelector(".close-btn").addEventListener("click", function(){
+    dialog.close();
+});
+// If the submit button is pressed, only then does the download commence
+//dialog.querySelector(".submit-btn").addEventListener("click", function(){
+dialog.querySelector(".submit-btn").addEventListener("click", function(){
+    console.log("Submit button clicked");
+    let filename = "trackpoints.csv";
+
+    try {
+        download(filename);
+    } catch (error) {
+        console.error("Error during download:", error);
+    }
+    dialog.close();
+}, false);
+
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("value");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+output.innerHTML = this.value;
+}
+
+
+
+
+
+// A different Version to dowload the file
+function download(filename) {
+
+    //creating an invisible element
+    // Why invisible? Because this element should be clicked at the same time as the submit button
+    // So we have to secretly press it ;)
+    // ATTENTION, currently the format of the csv file is NOT accurate to the UML, since the user rating is missing
+    // And of course it is not connected to the geoserver
+    // SHOULD BE EDITED HERE !!!!
+
+    if (!localStorage["trajectory"]) {
+        console.warn("No trajectory data available in localStorage.");
+        alert("No trajectory data available for download.");
+        return;
+    }
+
+
+
     let firstrow = "time;lat;lon;accuracy%0D%0A";
     let alldata = firstrow;
     trj = JSON.parse(localStorage["trajectory"]);
@@ -190,8 +250,31 @@ $('a#download').click(function() {
     for (i = 0; i < trj.length; i++) {
         alldata = alldata + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + trj[i][1] + "%0D%0A";
     }
-    this.href = "data:text/csv;charset=UTF-8," + alldata;
-    });
+
+    let element = document.createElement('a');
+    element.setAttribute('href',
+        "data:text/csv;charset=UTF-8," + alldata);
+    element.setAttribute('download', filename);
+    document.body.appendChild(element);
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+
+// This part allows you to download a csv of your trackpoints
+// Mostly copied & adapted lecture code; I don't know how jquery works. mfg Philip
+// Allyna UPDATE: This is no longer necessary 
+//$('a#download').click(function() {
+    //let firstrow = "time;lat;lon;accuracy%0D%0A";
+    //let alldata = firstrow;
+    //trj = JSON.parse(localStorage["trajectory"]);
+    //let i;
+    //for (i = 0; i < trj.length; i++) {
+        //alldata = alldata + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + trj[i][1] + "%0D%0A";
+    //}
+    //this.href = "data:text/csv;charset=UTF-8," + alldata;
+    //});
 
 
 // This function is called when the document loads
@@ -201,7 +284,7 @@ function onload() {
     downloadlink = document.getElementById("download")
     // If there's already a trajectory, recording picks up where it left off.
     if ('saved' in localStorage) {
-        downloadlink.innerHTML = "download csv";
+        //downloadlink.innerHTML = "download csv";
         startbutton.innerHTML = "Start";
         startbutton.onclick = start;
     }
