@@ -52,6 +52,40 @@
       </div>
     </main>
 
+    <!-- When the stop button is pressed, this will become active and visible on the webpage-->
+    <!-- This is the popup with the user rating-->
+
+    <dialog>
+      <h2>Popup title</h2>
+      <p> Howdy partner! Here is a text....IF I make the text even longer, 
+          it also adapts to the shape?! Make sure to set the max-width otherwise it will go 
+          over the edge of the phone, which can be very inconvenient...</p>
+      <!-- This is the slider-->
+      <div class="slidecontainer">    
+          <!-- <p>Custom range slider:</p> -->
+          <label for="range">How would you rate your walking experience?</label>
+          <!--With this I set the range of the slider, if I don't want a continuous slider add step=2.5 -->
+          <input type="range" min="0" max="10" value="5" class="slider" id="myRange">
+          <!--Here we make the ticks that you know where which value approximately is-->
+          <div class="sliderticks">
+            <span>0</span>
+            <span>2.5</span>
+            <span>5</span>
+            <span>7.5</span>
+            <span>10</span>
+          </div>
+          <!--The current selected value output-->
+          <p>Value: <span id="value"></span></p>
+      </div>
+      <!-- These are the buttons to either confirm or submit-->
+      <div class="controls">
+          <button class="close-btn">Cancel</button>
+          <button class="submit-btn">Submit</button>
+      </div>
+    </dialog> 
+
+
+
     <!-- Navigation Bar at the Bottom -->
     <nav>
       <menu>
@@ -63,7 +97,9 @@
 
     <!-- Small Footer Area under the nav bar -->
     <footer>
-      <a id="download" href="#" download="trackpoints.csv"></a>
+      <!--Allyna: Made a change to make it popup dependent-->
+      <!--Old code: -->
+      <!-- <a id="download" href="#" download="trackpoints.csv"></a> -->
       <em>D-BAUG</em>
       <em>GTA 2024</em>
     </footer>
