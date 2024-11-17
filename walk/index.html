@@ -56,14 +56,12 @@
     <!-- This is the popup with the user rating-->
 
     <dialog>
-      <h2>Popup title</h2>
-      <p> Howdy partner! Here is a text....IF I make the text even longer, 
-          it also adapts to the shape?! Make sure to set the max-width otherwise it will go 
-          over the edge of the phone, which can be very inconvenient...</p>
+      <h2>Thank you for participating!</h2>
+      <!-- <p> Thank you for participating! </p> -->
       <!-- This is the slider-->
       <div class="slidecontainer">    
           <!-- <p>Custom range slider:</p> -->
-          <label for="range">How would you rate your walking experience?</label>
+          <label for="range">How would you rate the quality of your trip?</label>
           <!--With this I set the range of the slider, if I don't want a continuous slider add step=2.5 -->
           <input type="range" min="0" max="10" value="5" class="slider" id="myRange">
           <!--Here we make the ticks that you know where which value approximately is-->
@@ -83,7 +81,15 @@
           <button class="submit-btn">Submit</button>
       </div>
     </dialog> 
-
+    <!-- If you accidentally click cancel, you should get another popup-->
+    <dialog id="are_you_sure">
+      <h2>Do you wish to discard your walk?</h2>
+      <p>If you discard your recorded trajectory, it will not be saved and can not be recovered</p>
+      <div class="controls">
+        <button class="close-btn">No</button>
+        <button class="submit-btn">Yes</button>
+    </div>
+    </dialog>
 
 
     <!-- Navigation Bar at the Bottom -->
