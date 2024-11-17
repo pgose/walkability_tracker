@@ -183,6 +183,7 @@ setStartMode();  // Initialize button in Start mode
 // This is where the popup window is triggered and made interactive
 // The querySelector finds the very first element that has the type dialog
 const dialog = document.querySelector("dialog");
+const are_you_sure_dialog = document.querySelector("#are_you_sure");
 document.getElementById("startbutton").addEventListener("click", function(){
     // It seems counterintuitive but by checking if the inner HTML of the button is
     // "Start" we are able to directly target the state change from Start to Stop
@@ -196,7 +197,7 @@ document.getElementById("startbutton").addEventListener("click", function(){
 });
 // If the cancel button is pressed, it closes the popup
 dialog.querySelector(".close-btn").addEventListener("click", function(){
-    dialog.close();
+    are_you_sure_dialog.showModal();
 });
 // If the submit button is pressed, only then does the download commence
 //dialog.querySelector(".submit-btn").addEventListener("click", function(){
@@ -221,7 +222,15 @@ slider.oninput = function() {
 output.innerHTML = this.value;
 }
 
-
+// If the No button of the are you sure popup is pressed, it closes the popup and returns to the original popup
+are_you_sure_dialog.querySelector(".close-btn").addEventListener("click", function(){
+    are_you_sure_dialog.close();
+});
+// If the yes button is pressed it closes the pop up completely
+are_you_sure_dialog.querySelector(".submit-btn").addEventListener("click", function(){
+    are_you_sure_dialog.close();
+    dialog.close();
+});
 
 
 
