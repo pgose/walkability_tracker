@@ -13,8 +13,8 @@
     <link   rel="stylesheet" href="../css/style.css"/>
 
     <!-- load custom icons from google fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=map" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=explore" />
+    <!-- pedestrian -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,0,200" />
 
     <!-- load Leaflet stylesheet (necessary for Leaflet to render correctly) -->
 
@@ -40,25 +40,45 @@
 
     <!-- Small Header Area -->
     <header>
-      <p>Walkability App v1</p>
-      <!-- This message only shows up when a user cannot use JavaScript -->
-      <noscript>Enable JavaScript to use this App as intended.</noscript>
+      <p>Walkability App</p>
+      <!-- This message will get populated when the user doesn't have GPS enabled -->
       <p id="nogps"></p>
+      <a href="nowehre" style="float: right;"><p>menu</p></a>
     </header>
 
     <!-- Main Content with Map, populated using javascript -->
     <main>
+      <!-- This message only shows up when a user cannot use JavaScript -->
+      <noscript>Enable JavaScript to use this App as intended.</noscript>
       <div id="map">
       </div>
     </main>
 
-    <!-- When the stop button is pressed, this will become active and visible on the webpage-->
+    <!-- Navigation Bar at the Bottom -->
+    <nav>
+      <menu>
+        <li><a href="."><span class="material-symbols-outlined">directions_walk</span></a></li>
+        <button id="startbutton" type="button" onclick=""></button>
+        <li><a href="../heatmap"><span class="material-symbols-outlined">map</span></a></li>
+      <menu>
+    </nav>
+
+    <!-- Small Footer Area under the nav bar -->
+    <footer>
+      <!--Allyna: Made a change to make it popup dependent-->
+      <!--Old code: -->
+      <!-- <a id="download" href="#" download="trackpoints.csv"></a> -->
+      <em>D-BAUG</em>
+      <em>GTA 2024</em>
+    </footer>
+
+        <!-- When the stop button is pressed, this will become active and visible on the webpage-->
     <!-- This is the popup with the user rating-->
 
     <dialog>
       <h2>Thank you for participating!</h2>
       <!-- This is the slider-->
-      <div class="slidecontainer">    
+      <div class="slidecontainer">
           <!-- <p>Custom range slider:</p> -->
           <label for="range">How would you rate the quality of your trip?</label>
           <!--With this I set the range of the slider, if I don't want a continuous slider add step=2.5 -->
@@ -79,7 +99,7 @@
           <button class="close-btn">Cancel</button>
           <button class="submit-btn">Submit</button>
       </div>
-    </dialog> 
+    </dialog>
     <!-- If you accidentally click cancel, you should get another popup-->
     <dialog id="are_you_sure">
       <h2>Do you wish to discard your walk?</h2>
@@ -90,24 +110,6 @@
     </div>
     </dialog>
 
-
-    <!-- Navigation Bar at the Bottom -->
-    <nav>
-      <menu>
-        <li><a href=".">Walk</a></li>
-        <button id="startbutton" type="button" onclick=""></button>
-        <li><a href="../heatmap">Heatmap</a></li>
-      <menu>
-    </nav>
-
-    <!-- Small Footer Area under the nav bar -->
-    <footer>
-      <!--Allyna: Made a change to make it popup dependent-->
-      <!--Old code: -->
-      <!-- <a id="download" href="#" download="trackpoints.csv"></a> -->
-      <em>D-BAUG</em>
-      <em>GTA 2024</em>
-    </footer>
 
   </body>
 

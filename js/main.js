@@ -130,7 +130,7 @@ let appstate = {
         // Sets timeout to true, so that the user can be notified about the gap
         // in recording using an alert in geosuccess.
         appstate.timeout = true;
-        document.getElementById("nogps").innerHTML = "GPS Tracking disabled!"
+        document.getElementById("nogps").innerHTML = "GPS disabled!"
     };
 
     geooptions = {
@@ -191,7 +191,7 @@ let appstate = {
     setStartMode();  // Initialize button in Start mode
 
 
-    // This code block implements the dialog that is triggered on stop.
+    // This code block implements the dialogs.
     {
         // This is where the popup window is triggered and made interactive
         // The querySelector finds the very first element that has the type dialog
