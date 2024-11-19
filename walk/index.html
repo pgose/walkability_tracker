@@ -54,12 +54,14 @@
 
     <div id="navigation-icons">
       <a href="." id="walk-icon" class="material-symbols-outlined">directions_walk</a>
-      <a href="../heatmap" id="heatmap-icon" class="material-symbols-outlined">scatter_plot</a>
+
+      <a href="../heatmap" id="heatmap-icon" class="material-symbols-outlined">map</a>
     </div>
-    
+
 
     <!-- Main Content with Map, populated using javascript -->
     <main>
+      <noscript>Enable JavaScript to use this App as intended.</noscript>
       <div id="map">
       </div>
     </main>
@@ -71,7 +73,7 @@
       <h2>Thank you for participating!</h2>
       <!-- <p> Thank you for participating! </p> -->
       <!-- This is the slider-->
-      <div class="slidecontainer">    
+      <div class="slidecontainer">
           <!-- <p>Custom range slider:</p> -->
           <label for="range">How would you rate the quality of your trip?</label>
           <!--With this I set the range of the slider, if I don't want a continuous slider add step=2.5 -->
@@ -79,9 +81,7 @@
           <!--Here we make the ticks that you know where which value approximately is-->
           <div class="sliderticks">
             <span>0</span>
-            <span>2.5</span>
             <span>5</span>
-            <span>7.5</span>
             <span>10</span>
           </div>
           <!--The current selected value output-->
@@ -92,7 +92,7 @@
           <button class="close-btn">Cancel</button>
           <button class="submit-btn">Submit</button>
       </div>
-    </dialog> 
+    </dialog>
     <!-- If you accidentally click cancel, you should get another popup-->
     <dialog id="are_you_sure">
       <h2>Do you wish to discard your walk?</h2>
@@ -113,8 +113,6 @@
       <menu>
     </nav>
 
-
-    
 
     <!-- Modal Structure -->
     <div id="help-modal" class="modal">

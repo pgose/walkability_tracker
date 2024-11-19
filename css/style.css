@@ -1,9 +1,11 @@
+
 html, body {
     width: 100%;
     margin: 0;
 }
 
 html {
+    font-family: Arial;
     overflow: hidden;
 }
 
@@ -15,14 +17,44 @@ body {
 }
 
 header {
-    z-index: 2;
     height: 7vh;
     padding: 1vh 2vw;
     background-color: rgba(255, 255, 255, 0.8); /* transparent */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: inline;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* shadow */
+}
+
+header p {
+    white-space: nowrap;
+    float: left;
+    padding: 0 1vw;
+    z-index: 99;
+}
+
+header a {
+    white-space: nowrap;
+}
+
+header button {
+    padding: 0;
+    cursor:pointer;
+    border: none;
+    background-color: transparent;
+    height: auto;
+    color: darkgray;
+}
+
+header button:hover {
+    background: darkgray;
+    color: white;
+}
+header button span {
+    font-size: 3em !important;
+    padding: 6px;
+}
+
+header button p {
+    margin: 0;
 }
 
 
@@ -35,7 +67,7 @@ header {
       'opsz' 24;
   }
 
-  
+
 /* Help icon positioned below the header */
 #help-icon {
     position: absolute; /* Position it independently from other elements */
@@ -70,19 +102,19 @@ header {
     gap: 20px; /* Space between icons */
     z-index: 10;
   }
-  
+
   #navigation-icons a {
     text-decoration: none; /* Remove underline */
     color: #333; /* Default icon color */
     font-size: 36px; /* Icon size */
     transition: transform 0.2s ease, color 0.2s ease;
   }
-  
+
   #navigation-icons a:hover {
     color: #007bff; /* Change color on hover */
     transform: scale(1.1); /* Slightly enlarge on hover */
   }
-  
+
   /* Active Page Icon (Optional Highlight) */
   #walk-icon.active,
   #heatmap-icon.active {
@@ -106,8 +138,8 @@ header {
     width: 32px; /* container width = iconSize */
     height: 32px; /* container height = iconSize */
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
     transform-origin: center; /* center of rotation is the center of radio_button_checked */
     transform: rotate(0deg); /* degree at start 0 */
 }
@@ -128,7 +160,7 @@ header {
 /* arrow */
 .arrow {
     width: 8px;
-    height: 10px; 
+    height: 10px;
     background-color: #007bff; /* blue arrow */
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* triangle */
     position: absolute;
@@ -163,16 +195,14 @@ menu {
     position: absolute;
     bottom: 5vh;
     z-index: 2;
-    margin: 0; 
-    padding: 0; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    background: none; 
-    border: none; 
-    width: auto; 
-    height: auto; 
-}
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    width: auto;
 
 
 /* Start button style (green) */
@@ -230,7 +260,7 @@ menu {
     background-color: rgba(0, 0, 0, 0.5); /* Black with transparency */
     overflow: auto; /* Enable scrolling for content that overflows */
   }
-  
+
   /* Modal content box */
   .modal-content {
     position: fixed; /* Position it relative to the viewport */
@@ -245,8 +275,7 @@ menu {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
     z-index: 1001; /* Ensure it stays on top of other content */
   }
-  
-  
+
   /* Close button (X) */
   .close-button {
     color: #aaa;
@@ -256,12 +285,10 @@ menu {
     cursor: pointer;
     transition: color 0.3s ease;
   }
-  
+
   .close-button:hover {
     color: #000; /* Darker color on hover */
   }
-  
-
 
 footer {
     z-index: 9;
@@ -270,6 +297,10 @@ footer {
     align-items: flex-end;
     justify-content: flex-start;
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* shadow */
+}
+
+footer em {
+    margin-right: 2vw;
 }
 
 /* The popup styling*/
@@ -286,7 +317,7 @@ dialog {
     text-align: center;
     padding: 0.8em 1.5em 1em;
     color: #111;
-   
+
 }
 dialog h2 {
     margin-bottom: 0.5em;
@@ -330,24 +361,24 @@ dialog .controls button.close-btn {
     -webkit-appearance: none;
     width: 100%;
     height: 15px;
-    border-radius: 5px;  
+    border-radius: 5px;
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
 }
-  
+
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 25px;
     height: 25px;
-    border-radius: 50%; 
+    border-radius: 50%;
     background: #04AA6D;
     cursor: pointer;
 }
-  
+
 .slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
@@ -365,7 +396,7 @@ dialog .controls button.close-btn {
     justify-content: space-between;
     padding: 0 10px;
   }
-  
+
 .sliderticks span {
     display: flex;
     justify-content: center;
@@ -374,28 +405,3 @@ dialog .controls button.close-btn {
     background: #d3d3d3;
     line-height: 40px;
   }
-
-
-
-
-/*
-nav {
-    position: fixed;
-    display: inline;
-    bottom: 5vh;
-    z-index: 9;
-}
-
-nav li {
-    list-style-type: none;
-    padding: 10%;
-    background: #c17561;
-    border-radius: 1vh;
-    margin: 1vh 0;
-}
-
-nav li a {
-    color: #dfdfdf;
-    text-decoration: none;
-}
-*/
