@@ -25,6 +25,120 @@ header {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* shadow */
 }
 
+
+/* General Material Symbols styles */
+.material-symbols-outlined {
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+  
+/* Help icon positioned below the header */
+#help-icon {
+    position: absolute; /* Position it independently from other elements */
+    top: calc(7vh + 30px); /* Adjust to appear below the header, 5px gap */
+    right: 10px; /* Distance from the right edge of the screen */
+    font-size: 36px; /* Icon size */
+    color: #333; /* Default icon color */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    z-index: 10; /* Ensure it stays above other content */
+    background: none; /* Remove any background to avoid white bar */
+    border: none; /* Remove any borders */
+    box-shadow: none; /* Ensure no shadow effects */
+    display: inline-block; /* Avoid block-level behavior */
+    padding: 0; /* No padding around the icon */
+    margin: 0; /* No additional margins */
+    transition: transform 0.2s ease, color 0.2s ease; /* Smooth hover effect */
+}
+
+#help-icon:hover {
+    color: #007bff; /* Change color on hover */
+    transform: scale(1.1); /* Slightly enlarge the icon */
+}
+
+
+/* Navigation Icons */
+#navigation-icons {
+    position: absolute;
+    top: calc(7vh + 80px); /* Below the Help icon */
+    right: 10px; /* Align to the right edge */
+    display: flex;
+    flex-direction: column; /* Vertical alignment */
+    gap: 20px; /* Space between icons */
+    z-index: 10;
+  }
+  
+  #navigation-icons a {
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Default icon color */
+    font-size: 36px; /* Icon size */
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  
+  #navigation-icons a:hover {
+    color: #007bff; /* Change color on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+  }
+  
+  /* Active Page Icon (Optional Highlight) */
+  #walk-icon.active,
+  #heatmap-icon.active {
+    color: #007bff; /* Highlight active page icon */
+    font-weight: bold;
+  }
+
+
+
+/* user location */
+.user-location-icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* icon with arrow */
+.user-icon-container {
+    position: relative;
+    width: 32px; /* container width = iconSize */
+    height: 32px; /* container height = iconSize */
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    transform-origin: center; /* center of rotation is the center of radio_button_checked */
+    transform: rotate(0deg); /* degree at start 0 */
+}
+
+
+/* user location icon blue */
+.material-symbols-outlined {
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+    font-size: 32px;
+    color: #007bff;
+    z-index: 1; /* higher than arrow */
+}
+
+/* arrow */
+.arrow {
+    width: 8px;
+    height: 10px; 
+    background-color: #007bff; /* blue arrow */
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* triangle */
+    position: absolute;
+    top: -10px;
+    left: 40%; /* could be changed!!!!!!!!!!!!!!!! */
+    transform: translateX(-55%); /* could be changed!!!!!!!!!!!!!!!! */
+}
+
+
+
 main {
     flex-grow: 1;
     display: flex;
@@ -44,19 +158,20 @@ nav {
     display: flex;
     justify-content: center;
 }
+
 menu {
     position: absolute;
     bottom: 5vh;
     z-index: 2;
-}
-
-li, button {
-    display: inline;
-    z-index: 3;
-}
-
-button {
-    background-color:
+    margin: 0; 
+    padding: 0; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    background: none; 
+    border: none; 
+    width: auto; 
+    height: auto; 
 }
 
 
@@ -103,6 +218,49 @@ button {
 }
 
 
+/* Modal background */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* On top of everything else */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Black with transparency */
+    overflow: auto; /* Enable scrolling for content that overflows */
+  }
+  
+  /* Modal content box */
+  .modal-content {
+    position: fixed; /* Position it relative to the viewport */
+    top: 50%; /* Start at the middle of the viewport vertically */
+    left: 50%; /* Start at the middle of the viewport horizontally */
+    transform: translate(-50%, -50%); /* Center the modal by offsetting its own size */
+    background-color: #fff; /* Modal background */
+    padding: 20px; /* Add some padding for content */
+    border-radius: 10px; /* Rounded corners */
+    width: 80%; /* Adjust width as needed (80% of viewport for smaller devices) */
+    max-width: 400px; /* Ensure it doesn’t get too wide on larger screens */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    z-index: 1001; /* Ensure it stays on top of other content */
+  }
+  
+  
+  /* Close button (X) */
+  .close-button {
+    color: #aaa;
+    float: right; /* Align to the right */
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .close-button:hover {
+    color: #000; /* Darker color on hover */
+  }
+  
 
 
 footer {
