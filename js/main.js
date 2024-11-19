@@ -62,14 +62,39 @@ function geosuccess(position) {
     time = Date.now();
 
     // This renders the user's current location and accuracy as a circle
-    {appstate.marker.clearLayers();
+    {appstate.marker.clearLayers(); // clear old marker
 
     let circle = L.circle(latlng, {
         radius: accuracy,
-        color: '#c17561',
-        opacity: 0.3
+        color: '#007bff', // Border color for accuracy circle
+        fillColor: '#007bff', // Fill color for accuracy circle
+        fillOpacity: 0.2, // Transparency of the fill
+        weight: 2 // Border thickness
     });
     appstate.marker.addLayer(circle);
+
+    // Update user location marker with icon and heading
+    let userIconWithArrow = L.divIcon({
+        className: 'user-location-icon',
+        html: `
+            <div class="user-icon-with-arrow">
+                <span class="material-symbols-outlined">radio_button_checked</span>
+                <div class="arrow"></div>
+            </div>
+        `,
+        iconSize: [32, 32], // constant size
+        iconAnchor: [16, 16] // central
+    });
+
+    let userMarkerWithArrow = L.marker(latlng, { icon: userIconWithArrow });
+    appstate.marker.addLayer(userMarkerWithArrow);
+
+    // turn the arrow
+    if (position.coords.heading != null) {
+        const heading = position.coords.heading; // direction
+        document.querySelector('.user-icon-container').style.transform = `rotate(${heading}deg)`;
+    }
+    
     }
     // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
     // So that we aren't too far away from the point, its zoom level was set to 18
@@ -226,3 +251,24 @@ function onload() {
     }
 }
 
+// Get modal and close button elements
+const helpModal = document.getElementById("help-modal");
+const closeModal = document.getElementById("close-modal");
+const helpIcon = document.getElementById("help-icon");
+
+// Show the modal when help icon is clicked
+helpIcon.addEventListener("click", function () {
+  helpModal.style.display = "block";
+});
+
+// Hide the modal when the close button is clicked
+closeModal.addEventListener("click", function () {
+  helpModal.style.display = "none";
+});
+
+// Hide the modal when clicking outside of the modal content
+window.addEventListener("click", function (event) {
+  if (event.target === helpModal) {
+    helpModal.style.display = "none";
+  }
+});
