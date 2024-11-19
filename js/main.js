@@ -7,7 +7,9 @@ let appstate = {
     // is true when there's still a trajectory "saved" in localStorage
     saved: false,
     // This holds the "marker" for the user's current location & radius
-    marker: L.layerGroup()
+    marker: L.layerGroup(),
+    // is true when the the viewport should "follow" the user's location.'
+    follow: true,
 }
 
 // This code block initializes the map and all of its layers (markers and path)
@@ -68,29 +70,31 @@ let appstate = {
         let userIconWithArrow = L.divIcon({
             className: 'user-location-icon',
             html: `
-                <div class="user-icon-with-arrow">
-                    <span class="material-symbols-outlined">radio_button_checked</span>
-                    <div class="arrow"></div>
-                </div>
+                <div id="dot"/>
             `,
-            iconSize: [32, 32], // constant size
-            iconAnchor: [16, 16] // central
+            iconSize: [20, 20], // constant size
+            iconAnchor: [10, 10] // central
         });
 
         let userMarkerWithArrow = L.marker(latlng, { icon: userIconWithArrow });
         appstate.marker.addLayer(userMarkerWithArrow);
 
         // turn the arrow
-        if (position.coords.heading != null) {
-            const heading = position.coords.heading; // direction
-            document.querySelector('.user-icon-container').style.transform = `rotate(${heading}deg)`;
-        }
+        // if (position.coords.heading != null) {
+        //    const heading = position.coords.heading; // direction
+        //    document.querySelector('.user-icon-container').style.transform = `rotate(${heading}deg)`;
+        // }
 
         }
-        // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
-        // So that we aren't too far away from the point, its zoom level was set to 18
-        if (map) {
+
+        console.log(appstate.follow, "appstate initialized?")
+        if (appstate.follow == true) {
+            appstate.follow = false;
+            // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
+            // So that we aren't too far away from the point, its zoom level was set to 18
+            if (map) {
             map.setView([lat,lng],18);
+            }
         }
 
         // Checks if the button has been pressed yet
@@ -100,7 +104,7 @@ let appstate = {
         }
 
 
-        // Creates a timeout message from the user, alerting them how long
+        // Creates a timeout message for the user, alerting them how long
         // the recording was stopped.
         if (appstate.timeout == true) {
             // Removes the nogps error message
@@ -115,38 +119,38 @@ let appstate = {
             // Alerts the user to how much time has passed
             alert("Tracking timed out for " + offlinetime + " seconds")
 
+        };
+
+        console.log("geosuccess was called, with appstate.press =", appstate.press);
+
+
+        // This section records gps locations into the trajectory
+        {if ('trajectory' in localStorage) {
+            console.log("trajectory is in localStorage.")
+            //Append a new Point to the list of current points named "trajectory"
+            let newtrajectory = JSON.parse(localStorage["trajectory"]);
+            newtrajectory.push([latlng, accuracy, time]);
+            localStorage.setItem("trajectory", JSON.stringify(newtrajectory));
+            console.log("trajectory is currently as follows:", localStorage["trajectory"])
+        }
+
+        else {
+            // Start recording a new Trajectory
+            console.log("starting record")
+            let firstpoint = JSON.stringify([[latlng, accuracy, time]]);
+            console.log("writing firstpoint into trajectory:", firstpoint)
+            localStorage.setItem("trajectory", firstpoint)
+        }}
+
+        // Render a Polyline that shows the users trajectory on the map
+        trj = JSON.parse(localStorage["trajectory"]);
+        pointlist = trj.map((x) => x[0]);
+        console.log("pointlist is:", pointlist);
+
+        line.setLatLngs(pointlist);
+
+        dots.setLatLngs(pointlist);
     };
-
-    console.log("geosuccess was called, with appstate.press =", appstate.press);
-
-
-    // This section records gps locations into the trajectory
-    {if ('trajectory' in localStorage) {
-        console.log("trajectory is in localStorage.")
-        //Append a new Point to the list of current points named "trajectory"
-        let newtrajectory = JSON.parse(localStorage["trajectory"]);
-        newtrajectory.push([latlng, accuracy, time]);
-        localStorage.setItem("trajectory", JSON.stringify(newtrajectory));
-        console.log("trajectory is currently as follows:", localStorage["trajectory"])
-    }
-
-    else {
-        // Start recording a new Trajectory
-        console.log("starting record")
-        let firstpoint = JSON.stringify([[latlng, accuracy, time]]);
-        console.log("writing firstpoint into trajectory:", firstpoint)
-        localStorage.setItem("trajectory", firstpoint)
-    }}
-
-    // Render a Polyline that shows the users trajectory on the map
-    trj = JSON.parse(localStorage["trajectory"]);
-    pointlist = trj.map((x) => x[0]);
-    console.log("pointlist is:", pointlist);
-
-    line.setLatLngs(pointlist);
-
-    dots.setLatLngs(pointlist);
-};
 
 
     // This function is called when the location data stops being provided.
@@ -312,18 +316,18 @@ let appstate = {
 
         // Show the modal when help icon is clicked
         helpIcon.addEventListener("click", function () {
-        helpModal.style.display = "block";
+        helpModal.showModal();
         });
 
         // Hide the modal when the close button is clicked
         closeModal.addEventListener("click", function () {
-        helpModal.style.display = "none";
+        helpModal.close();
         });
 
         // Hide the modal when clicking outside of the modal content
         window.addEventListener("click", function (event) {
         if (event.target === helpModal) {
-            helpModal.style.display = "none";
+            helpModal.close();
         }
         });
     }
@@ -360,25 +364,3 @@ function onload() {
         navigator.geolocation.watchPosition(geosuccess, geoerror, geooptions)
     }
 }
-
-// Get modal and close button elements
-const helpModal = document.getElementById("help-modal");
-const closeModal = document.getElementById("close-modal");
-const helpIcon = document.getElementById("help-icon");
-
-// Show the modal when help icon is clicked
-helpIcon.addEventListener("click", function () {
-  helpModal.style.display = "block";
-});
-
-// Hide the modal when the close button is clicked
-closeModal.addEventListener("click", function () {
-  helpModal.style.display = "none";
-});
-
-// Hide the modal when clicking outside of the modal content
-window.addEventListener("click", function (event) {
-  if (event.target === helpModal) {
-    helpModal.style.display = "none";
-  }
-});

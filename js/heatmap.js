@@ -4,10 +4,10 @@ let points = {
     userratingpoints: [],
 }
 
-// Defines a container for where the weights will live, defaults to 10
+// Defines a container for where the weights will live, defaults to 5
 let weights = {
-    airquality: 10,
-    userrating: 10,
+    airquality: 5,
+    userrating: 5,
 }
 
 let heatmap = L.layerGroup()
@@ -33,19 +33,19 @@ let heatmap = L.layerGroup()
 
     // Show the modal when help icon is clicked
     helpIcon.addEventListener("click", function () {
-    helpModal.style.display = "block";
+    helpModal.showModal();
     });
 
     // Hide the modal when the close button is clicked
     closeModal.addEventListener("click", function () {
-    helpModal.style.display = "none";
+    helpModal.close();
     });
 
     // Hide the modal when clicking outside of the modal content
     window.addEventListener("click", function (event) {
     if (event.target === helpModal) {
-        helpModal.style.display = "none";}
-
+        helpModal.close();
+    }
     });
 }
 
@@ -60,6 +60,8 @@ let heatmap = L.layerGroup()
     var displayedvalues = [document.getElementById("airqualityvalue"), document.getElementById("userratingvalue")]
     var previousweights = [weights.airquality, weights.userrating]
 
+
+
     airqualityslider.oninput = function() {
         weights.airquality = this.value;
         displayedvalues[0].innerHTML = weights.airquality;
@@ -71,9 +73,9 @@ let heatmap = L.layerGroup()
         displayedvalues[1].innerHTML = weights.userrating;
         renderheatmap();
     }
-    // Shows the Weights menu when the menu button is pressed
+    // Shows the weights menu when the menu button is pressed
     function weightmenu() {
-        [airqualityslider.value, userratingslider] = [weights.airquality, weights. userrating];
+        [airqualityslider.value, userratingslider.value] = [weights.airquality, weights. userrating];
         [displayedvalues[0].innerHTML, displayedvalues[1].innerHTML] = [weights.airquality, weights.userrating];
         weightdialog.showModal();
     }
