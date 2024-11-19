@@ -47,6 +47,15 @@
       <button id="menu" type="button" onclick="weightmenu()" style="float: right;"><span class="material-symbols-outlined">Tune</span></a>
     </header>
 
+    <div id="help-icon" class="material-symbols-outlined">
+      help
+    </div>
+
+    <div id="navigation-icons">
+      <a href="../walk" id="walk-icon" class="material-symbols-outlined">directions_walk</a>
+      <a href="../heatmap" id="heatmap-icon" class="material-symbols-outlined">map</a>
+    </div>
+
     <!-- Main Content with Map, populated using javascript -->
     <main>
       <noscript>Enable JavaScript to use this App as intended.</noscript>
@@ -56,10 +65,7 @@
 
     <!-- Navigation Bar at the Bottom -->
     <nav>
-      <menu>
-        <li><a href="../walk"><span class="material-symbols-outlined">directions_walk</span></a></li>
-        <li><a href="../heatmap"><span class="material-symbols-outlined">map</span></a></li>
-      <menu>
+
     </nav>
 
     <!-- Small Footer Area under the nav bar -->
@@ -93,6 +99,20 @@
           <button class="set-btn">Set</button>
       </div>
     </dialog>
+
+    <div id="help-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-modal" class="close-button">&times;</span>
+        <h2>How to Use This Page</h2>
+        <p>Instruction for using the webpage. For example:</p>
+        <ul>
+          <li>Click on the map to interact.</li>
+          <li>Use the buttons on the right side to navigate between pages.</li>
+          <li>Press "Start" to begin tracking your movement.</li>
+        </ul>
+      </div>
+    </div>
+
 
   </body>
 

@@ -24,13 +24,13 @@ let appstate = {
     // I tried implementing this with "stroke" true and false, but it doesn't seem to work
     // Feel free to remove one of the polylines (but also remove the part that updates it
     // in geosuccess)
-    var line = new L.Polyline([], {color: 'red',
+    var line = new L.Polyline([], {color: 'blue',
         weight: 10,
         opacity: 1,
         smoothFactor: 1,
         stroke: false
     })
-    var dots = new L.Polyline([], {color: 'red',
+    var dots = new L.Polyline([], {color: 'blue',
         weight: 5,
         opacity: 1,
         smoothFactor: 1,
@@ -53,15 +53,39 @@ let appstate = {
         time = Date.now();
 
         // This renders the user's current location and accuracy as a circle
-        {
-            appstate.marker.clearLayers();
+        {appstate.marker.clearLayers(); // clear old marker
 
-            let circle = L.circle(latlng, {
-                radius: accuracy,
-                color: '#c17561',
-                opacity: 0.3
-            });
-            appstate.marker.addLayer(circle);
+        let circle = L.circle(latlng, {
+            radius: accuracy,
+            color: '#007bff', // Border color for accuracy circle
+            fillColor: '#007bff', // Fill color for accuracy circle
+            fillOpacity: 0.2, // Transparency of the fill
+            weight: 2 // Border thickness
+        });
+        appstate.marker.addLayer(circle);
+
+        // Update user location marker with icon and heading
+        let userIconWithArrow = L.divIcon({
+            className: 'user-location-icon',
+            html: `
+                <div class="user-icon-with-arrow">
+                    <span class="material-symbols-outlined">radio_button_checked</span>
+                    <div class="arrow"></div>
+                </div>
+            `,
+            iconSize: [32, 32], // constant size
+            iconAnchor: [16, 16] // central
+        });
+
+        let userMarkerWithArrow = L.marker(latlng, { icon: userIconWithArrow });
+        appstate.marker.addLayer(userMarkerWithArrow);
+
+        // turn the arrow
+        if (position.coords.heading != null) {
+            const heading = position.coords.heading; // direction
+            document.querySelector('.user-icon-container').style.transform = `rotate(${heading}deg)`;
+        }
+
         }
         // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
         // So that we aren't too far away from the point, its zoom level was set to 18
@@ -76,7 +100,8 @@ let appstate = {
         }
 
 
-        // Creates a timeout message from the user, alerting them how long the recording was stopped.
+        // Creates a timeout message from the user, alerting them how long
+        // the recording was stopped.
         if (appstate.timeout == true) {
             // Removes the nogps error message
             document.getElementById("nogps").innerHTML = ""
@@ -89,40 +114,39 @@ let appstate = {
             let offlinetime = (Date.now() - (trj[trj.length - 1][2]))/1000
             // Alerts the user to how much time has passed
             alert("Tracking timed out for " + offlinetime + " seconds")
-        };
-
-        console.log("geosuccess was called, with appstate.press =", appstate.press);
-
-
-        // This section records gps locations into the trajectory
-        {
-            if ('trajectory' in localStorage) {
-                console.log("trajectory is in localStorage.")
-                //Append a new Point to the list of current points named "trajectory"
-                let newtrajectory = JSON.parse(localStorage["trajectory"]);
-                newtrajectory.push([latlng, accuracy, time]);
-                localStorage.setItem("trajectory", JSON.stringify(newtrajectory));
-                console.log("trajectory is currently as follows:", localStorage["trajectory"])
-            }
-
-            else {
-                // Start recording a new Trajectory
-                console.log("starting record")
-                let firstpoint = JSON.stringify([[latlng, accuracy, time]]);
-                console.log("writing firstpoint into trajectory:", firstpoint)
-                localStorage.setItem("trajectory", firstpoint)
-            }
-        }
-
-        // Render a Polyline that shows the users trajectory on the map
-        trj = JSON.parse(localStorage["trajectory"]);
-        pointlist = trj.map((x) => x[0]);
-        console.log("pointlist is:", pointlist);
-
-        line.setLatLngs(pointlist);
-
-        dots.setLatLngs(pointlist);
     };
+
+    console.log("geosuccess was called, with appstate.press =", appstate.press);
+
+
+    // This section records gps locations into the trajectory
+    {if ('trajectory' in localStorage) {
+        console.log("trajectory is in localStorage.")
+        //Append a new Point to the list of current points named "trajectory"
+        let newtrajectory = JSON.parse(localStorage["trajectory"]);
+        newtrajectory.push([latlng, accuracy, time]);
+        localStorage.setItem("trajectory", JSON.stringify(newtrajectory));
+        console.log("trajectory is currently as follows:", localStorage["trajectory"])
+    }
+
+    else {
+        // Start recording a new Trajectory
+        console.log("starting record")
+        let firstpoint = JSON.stringify([[latlng, accuracy, time]]);
+        console.log("writing firstpoint into trajectory:", firstpoint)
+        localStorage.setItem("trajectory", firstpoint)
+    }}
+
+    // Render a Polyline that shows the users trajectory on the map
+    trj = JSON.parse(localStorage["trajectory"]);
+    pointlist = trj.map((x) => x[0]);
+    console.log("pointlist is:", pointlist);
+
+    line.setLatLngs(pointlist);
+
+    dots.setLatLngs(pointlist);
+};
+
 
     // This function is called when the location data stops being provided.
     function geoerror() {
@@ -141,9 +165,8 @@ let appstate = {
     };
 }
 
-// This code block implements the button logic
+// This code block implements the button & dialog logic
 {
-
     // Function to switch to Start mode (green)
     function setStartMode() {
         startButton.classList.remove("stop");
@@ -281,6 +304,27 @@ let appstate = {
 
             document.body.removeChild(element);
         }
+        // Get modal and close button elements
+        const helpModal = document.getElementById("help-modal");
+        const closeModal = document.getElementById("close-modal");
+        const helpIcon = document.getElementById("help-icon");
+
+        // Show the modal when help icon is clicked
+        helpIcon.addEventListener("click", function () {
+        helpModal.style.display = "block";
+        });
+
+        // Hide the modal when the close button is clicked
+        closeModal.addEventListener("click", function () {
+        helpModal.style.display = "none";
+        });
+
+        // Hide the modal when clicking outside of the modal content
+        window.addEventListener("click", function (event) {
+        if (event.target === helpModal) {
+            helpModal.style.display = "none";
+        }
+        });
     }
 }
 
