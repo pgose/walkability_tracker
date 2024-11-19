@@ -203,8 +203,6 @@ menu {
     background: none;
     border: none;
     width: auto;
-    height: auto;
-}
 
 
 /* Start button style (green) */
@@ -278,7 +276,6 @@ menu {
     z-index: 1001; /* Ensure it stays on top of other content */
   }
 
-
   /* Close button (X) */
   .close-button {
     color: #aaa;
@@ -292,8 +289,6 @@ menu {
   .close-button:hover {
     color: #000; /* Darker color on hover */
   }
-
-
 
 footer {
     z-index: 9;

@@ -114,6 +114,7 @@ let appstate = {
             let offlinetime = (Date.now() - (trj[trj.length - 1][2]))/1000
             // Alerts the user to how much time has passed
             alert("Tracking timed out for " + offlinetime + " seconds")
+
     };
 
     console.log("geosuccess was called, with appstate.press =", appstate.press);
@@ -360,3 +361,24 @@ function onload() {
     }
 }
 
+// Get modal and close button elements
+const helpModal = document.getElementById("help-modal");
+const closeModal = document.getElementById("close-modal");
+const helpIcon = document.getElementById("help-icon");
+
+// Show the modal when help icon is clicked
+helpIcon.addEventListener("click", function () {
+  helpModal.style.display = "block";
+});
+
+// Hide the modal when the close button is clicked
+closeModal.addEventListener("click", function () {
+  helpModal.style.display = "none";
+});
+
+// Hide the modal when clicking outside of the modal content
+window.addEventListener("click", function (event) {
+  if (event.target === helpModal) {
+    helpModal.style.display = "none";
+  }
+});
