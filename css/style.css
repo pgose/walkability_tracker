@@ -58,7 +58,6 @@ header button p {
     margin: 0;
 }
 
-
 /* General Material Symbols styles */
 .material-symbols-outlined {
     font-variation-settings:
@@ -370,3 +369,32 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     background: #d3d3d3;
     line-height: 40px;
   }
+
+
+/*The About us page styling*/ 
+
+/*
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+  
+li {
+    float: right;
+}
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 0.25em;
+    text-decoration: none;
+}
+  
+li a:hover {
+    background-color: #111;
+}
+*/

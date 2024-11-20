@@ -26,13 +26,13 @@ let appstate = {
     // I tried implementing this with "stroke" true and false, but it doesn't seem to work
     // Feel free to remove one of the polylines (but also remove the part that updates it
     // in geosuccess)
-    var line = new L.Polyline([], {color: 'blue',
+    var line = new L.Polyline([], {color: '#007bff',
         weight: 10,
         opacity: 1,
         smoothFactor: 1,
         stroke: false
     })
-    var dots = new L.Polyline([], {color: 'blue',
+    var dots = new L.Polyline([], {color: '#007bff',
         weight: 5,
         opacity: 1,
         smoothFactor: 1,
@@ -272,8 +272,6 @@ let appstate = {
             dialog.close();
         });
 
-
-
         // A different Version to dowload the file
         function download(filename) {
 
@@ -351,12 +349,14 @@ function onload() {
         console.log("appstate is:", appstate.press);
         startbutton.innerHTML = "Stop";
         startbutton.onclick = stop;
+        setStopMode();
     }
     // Otherwise the button is populated as normal
     else {
         console.log("page loaded. No trajectory in localstorage")
         startbutton.innerHTML = "Start";
         startbutton.onclick = start;
+        setStartMode();
     };
 
     // Checks if the user is sharing location data in the first place
