@@ -305,16 +305,16 @@ dialog .controls {
 dialog .controls button {
     padding: 0.75em;
     cursor:pointer;
-    background: #00acee;
+    background: #007bff;
     outline: none;
-    border: 1px solid #00acee;
+    border: 1px solid #007bff;
     color: #ddd;
     font-size: 0.9em;
 }
 
 dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     background: transparent;
-    color: #00acee;
+    color: #007bff;
 }
 
 .slidecontainer {
@@ -339,7 +339,7 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #04AA6D;
+    background: #007bff;
     cursor: pointer;
 }
 
@@ -347,7 +347,7 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #04AA6D;
+    background: #007bff;
     cursor: pointer;
 }
 
@@ -371,30 +371,3 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
   }
 
 
-/*The About us page styling*/ 
-
-/*
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-}
-  
-li {
-    float: right;
-}
-  
-li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 0.25em;
-    text-decoration: none;
-}
-  
-li a:hover {
-    background-color: #111;
-}
-*/
