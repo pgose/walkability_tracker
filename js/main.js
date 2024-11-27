@@ -272,6 +272,13 @@ let appstate = {
             dialog.close();
         });
 
+        // To generate the id of the trajectory with a specific amount of decimals
+        function getRandomID(length) {
+
+            return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
+        }
+            
+
         // A different Version to dowload the file
         function download(filename) {
 
@@ -290,14 +297,23 @@ let appstate = {
 
 
 
-            let firstrow = "time;lat;lon;accuracy%0D%0A";
+            let firstrow = "id;time;lat;lon;rating;accuracy%0D%0A";
             let alldata = firstrow;
             trj = JSON.parse(localStorage["trajectory"]);
             let i;
-            for (i = 0; i < trj.length; i++) {
-                alldata = alldata + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + trj[i][1] + "%0D%0A";
-            }
+            // PK of the trajectory and in order to concatinate it has to be a string
+            let id = getRandomID(9).toString();
+            /*
+            // Will be adapted so that we get a linestring
+            alldata = alldata + id + ";" + trj[2] + ";" + trj[0] + ";" + (slider.value).toString() + "%0D%0A";
+            */
+            // Currently generates a new id per point and gives the same rating to every point
 
+            // TODO: Make a list of timestamps and a trajectory linestring
+            for (i = 0; i < trj.length; i++) {
+                alldata = alldata + id + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ ";" +trj[i][1] + "%0D%0A";
+            }
+            
             let element = document.createElement('a');
             element.setAttribute('href',
                 "data:text/csv;charset=UTF-8," + alldata);
