@@ -297,21 +297,16 @@ let appstate = {
 
 
 
-            let firstrow = "id;time;lat;lon;rating;accuracy%0D%0A";
+            let firstrow = "trajectory_id;point_id;time_stamp;lat;lon;rating%0D%0A";
             let alldata = firstrow;
             trj = JSON.parse(localStorage["trajectory"]);
             let i;
             // PK of the trajectory and in order to concatinate it has to be a string
-            let id = getRandomID(9).toString();
-            /*
-            // Will be adapted so that we get a linestring
-            alldata = alldata + id + ";" + trj[2] + ";" + trj[0] + ";" + (slider.value).toString() + "%0D%0A";
-            */
-            // Currently generates a new id per point and gives the same rating to every point
-
-            // TODO: Make a list of timestamps and a trajectory linestring
+            let trj_id = getRandomID(9).toString();
+            
+            // Currently generates a new id per trajectory and creates point_id iteratively
             for (i = 0; i < trj.length; i++) {
-                alldata = alldata + id + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ ";" +trj[i][1] + "%0D%0A";
+                alldata = alldata + trj_id + ";" + i.toString() + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ "%0D%0A";
             }
             
             let element = document.createElement('a');
