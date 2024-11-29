@@ -245,11 +245,11 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         // If the submit button is pressed, only then does the download commence
         dialog.querySelector(".submit-btn").addEventListener("click", function(){
             console.log("Submit button clicked");
-            /* NEED ADMIN RIGHTS!
+           
             // This function sends everything to the geoserver and conversely to the database
             insertTrajectory();
-            */
-
+            
+            /*
             // the local download code
             
             let filename = "trackpoints.csv";
@@ -259,7 +259,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             } catch (error) {
                 console.error("Error during download:", error);
             }
-            
+            */
             dialog.close();
         }, false);
 
