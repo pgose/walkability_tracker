@@ -11,6 +11,8 @@ let appstate = {
     // is true when the the viewport should "follow" the user's location.'
     follow: true,
 }
+// The location of the geoserver
+let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
 
 // This code block initializes the map and all of its layers (markers and path)
 {
@@ -243,6 +245,13 @@ let appstate = {
         // If the submit button is pressed, only then does the download commence
         dialog.querySelector(".submit-btn").addEventListener("click", function(){
             console.log("Submit button clicked");
+            /* NEED ADMIN RIGHTS!
+            // This function sends everything to the geoserver and conversely to the database
+            insertTrajectory();
+            */
+
+            // the local download code
+            
             let filename = "trackpoints.csv";
 
             try {
@@ -250,6 +259,7 @@ let appstate = {
             } catch (error) {
                 console.error("Error during download:", error);
             }
+            
             dialog.close();
         }, false);
 
@@ -287,7 +297,7 @@ let appstate = {
             // So we have to secretly press it ;)
             // ATTENTION, currently the format of the csv file is NOT accurate to the UML, since the user rating is missing
             // And of course it is not connected to the geoserver
-            // SHOULD BE EDITED HERE !!!!
+            
 
             if (!localStorage["trajectory"]) {
                 console.warn("No trajectory data available in localStorage.");
@@ -318,6 +328,77 @@ let appstate = {
 
             document.body.removeChild(element);
         }
+
+        // Instead of local download, we want to send this to the geoserver
+        // This is done with WFS-T 
+        function insertTrajectory() {
+            trj = JSON.parse(localStorage["trajectory"]);
+            let i;
+            // PK of the trajectory and in order to concatinate it has to be a string
+            // TODO: CREATE A CHECK FOR DUPLICATES
+            let trj_id = getRandomID(9).toString();
+            
+            // The xml file that is sent to the geoserver
+            let postData = 
+                '<wfs:Transaction\n'
+              + '  service="WFS"\n'
+              + '  version="1.0.0"\n'
+              + '  xmlns="http://www.opengis.net/wfs"\n'
+              + '  xmlns:wfs="http://www.opengis.net/wfs"\n'
+              + '  xmlns:gml="http://www.opengis.net/gml"\n'
+              + '  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
+              + '  xmlns:GTA24_project="https://www.gis.ethz.ch/GTA24_project" \n'
+              + '  xsi:schemaLocation="https://www.gis.ethz.ch/GTA24_project \n https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs?service=WFS&amp;version=1.0.0&amp;request=DescribeFeatureType&amp;typeName=GTA24_project%3Atrajectory_table \n'
+              + '                      http://www.opengis.net/wfs\n'
+              + '                      https://baug-ikg-gis-01.ethz.ch:8443/geoserver/schemas/wfs/1.0.0/WFS-basic.xsd">\n';
+              
+            // By now iteratively creating the insert request we create the xml file content needed by WFS-T to update the table
+            for (i = 0; i < trj.length; i++) {
+                postData = postData
+                    + '  <wfs:Insert>\n'
+                    + '    <GTA24_project:trajectory_table>\n'
+                    + '      <trajectory_id>'+trj_id+'</trajectory_id>\n'
+                    + '      <point_id>'+i.toString()+'</point_id>\n'
+                    + '      <time_stamp>'+trj[i][2]+'</time_stamp>\n'
+                    + '      <lat>'+trj[i][0].lat+'</lat>\n'
+                    + '      <lon>'+trj[i][0].lng+'</lon>\n'
+                    + '      <rating>'+(slider.value).toString()+'</rating>\n'
+                    + '      <geometry>\n'
+                    + '        <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">\n'
+                    + '          <gml:coordinates xmlns:gml="http://www.opengis.net/gml" decimal="." cs="," ts=" ">'+trj[i][0].lng+ ',' +trj[i][0].lat+'</gml:coordinates>\n'
+                    + '        </gml:Point>\n'
+                    + '      </geometry>\n'
+                    + '    </GTA24_project:trajectory_table>\n'
+                    + '  </wfs:Insert>\n';
+            }
+            postData = postData 
+              + '</wfs:Transaction>';
+            
+            $.ajax({
+                method: "POST",
+                url: wfs,
+                dataType: "xml",
+                contentType: "text/xml",
+                data: postData,
+                success: function() {	
+                    //Success feedback
+                    console.log("Success from AJAX, data sent to Geoserver");
+                    
+                    // Do something to notisfy user
+                    alert("Check if data is inserted into database");
+                },
+                error: function (xhr, errorThrown) {
+                    //Error handling
+                    console.log("Error from AJAX");
+                    console.log(xhr.status);
+                    console.log(errorThrown);
+                  }
+            });
+        }
+
+
+
+
         // Get modal and close button elements
         const helpModal = document.getElementById("help-modal");
         const closeModal = document.getElementById("close-modal");
