@@ -336,7 +336,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             let i;
             // PK of the trajectory and in order to concatinate it has to be a string
             // TODO: CREATE A CHECK FOR DUPLICATES
-            let trj_id = getRandomID(9).toString();
+            let geo_trj_id = getRandomID(9).toString();
             
             // The xml file that is sent to the geoserver
             let postData = 
@@ -357,8 +357,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
                 postData = postData
                     + '  <wfs:Insert>\n'
                     + '    <GTA24_project:trajectory_table>\n'
-                    + '      <trajectory_id>'+trj_id+'</trajectory_id>\n'
-                    + '      <point_id>'+i.toString()+'</point_id>\n'
+                    + '      <trajectory_id>'+geo_trj_id+'</trajectory_id>\n'
                     + '      <time_stamp>'+trj[i][2]+'</time_stamp>\n'
                     + '      <lat>'+trj[i][0].lat+'</lat>\n'
                     + '      <lon>'+trj[i][0].lng+'</lon>\n'
@@ -385,7 +384,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
                     console.log("Success from AJAX, data sent to Geoserver");
                     
                     // Do something to notisfy user
-                    alert("Check if data is inserted into database");
+                    alert("Your trajectory has been successfully sent to the database");
                 },
                 error: function (xhr, errorThrown) {
                     //Error handling
