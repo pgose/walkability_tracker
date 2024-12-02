@@ -227,6 +227,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         // The querySelector finds the very first element that has the type dialog
         const dialog = document.querySelector("dialog");
         const are_you_sure_dialog = document.querySelector("#are_you_sure");
+       
         document.getElementById("startbutton").addEventListener("click", function(){
             // It seems counterintuitive but by checking if the inner HTML of the button is
             // "Start" we are able to directly target the state change from Start to Stop
@@ -245,9 +246,16 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         // If the submit button is pressed, only then does the download commence
         dialog.querySelector(".submit-btn").addEventListener("click", function(){
             console.log("Submit button clicked");
-           
-            // This function sends everything to the geoserver and conversely to the database
-            insertTrajectory();
+
+            if (!localStorage["trajectory"]) {
+                console.warn("No trajectory data is available in local storage.");
+                alert("There is no trajectory data available for download.");
+                
+            } else {
+                // This function sends everything to the geoserver and conversely to the database
+                console.log("There are trajectories in the local storage");
+                insertTrajectory();
+            }
             
             /*
             // the local download code
@@ -300,8 +308,8 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             
 
             if (!localStorage["trajectory"]) {
-                console.warn("No trajectory data available in localStorage.");
-                alert("No trajectory data available for download.");
+                console.warn("No trajectory data is available in localStorage.");
+                alert("No trajectory data is available for download.");
                 return;
             }
 
