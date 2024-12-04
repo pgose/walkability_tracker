@@ -3,5 +3,10 @@
 # Define main function
 
 def data_analysis(weights):
-    pass
+    final_raster = 0
+    return final_raster
+
+
+
+
 
