@@ -256,18 +256,6 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
                 console.log("There are trajectories in the local storage");
                 insertTrajectory();
             }
-            
-            /*
-            // the local download code
-            
-            let filename = "trackpoints.csv";
-
-            try {
-                download(filename);
-            } catch (error) {
-                console.error("Error during download:", error);
-            }
-            */
             dialog.close();
         }, false);
 
@@ -290,121 +278,6 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             dialog.close();
         });
 
-        // To generate the id of the trajectory with a specific amount of decimals
-        function getRandomID(length) {
-
-            return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
-        }
-            
-
-        // A different Version to dowload the file
-        function download(filename) {
-
-            //creating an invisible element
-            // Why invisible? Because this element should be clicked at the same time as the submit button
-            // So we have to secretly press it ;)
-            // ATTENTION, currently the format of the csv file is NOT accurate to the UML, since the user rating is missing
-            // And of course it is not connected to the geoserver
-            
-
-            if (!localStorage["trajectory"]) {
-                console.warn("No trajectory data is available in localStorage.");
-                alert("No trajectory data is available for download.");
-                return;
-            }
-
-
-
-            let firstrow = "trajectory_id;point_id;time_stamp;lat;lon;rating%0D%0A";
-            let alldata = firstrow;
-            trj = JSON.parse(localStorage["trajectory"]);
-            let i;
-            // PK of the trajectory and in order to concatinate it has to be a string
-            let trj_id = getRandomID(9).toString();
-            
-            // Currently generates a new id per trajectory and creates point_id iteratively
-            for (i = 0; i < trj.length; i++) {
-                alldata = alldata + trj_id + ";" + i.toString() + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ "%0D%0A";
-            }
-            
-            let element = document.createElement('a');
-            element.setAttribute('href',
-                "data:text/csv;charset=UTF-8," + alldata);
-            element.setAttribute('download', filename);
-            document.body.appendChild(element);
-            element.click();
-
-            document.body.removeChild(element);
-        }
-
-        // Instead of local download, we want to send this to the geoserver
-        // This is done with WFS-T 
-        function insertTrajectory() {
-            trj = JSON.parse(localStorage["trajectory"]);
-            let i;
-            // PK of the trajectory and in order to concatinate it has to be a string
-            // TODO: CREATE A CHECK FOR DUPLICATES
-            let geo_trj_id = getRandomID(9).toString();
-            
-            // The xml file that is sent to the geoserver
-            let postData = 
-                '<wfs:Transaction\n'
-              + '  service="WFS"\n'
-              + '  version="1.0.0"\n'
-              + '  xmlns="http://www.opengis.net/wfs"\n'
-              + '  xmlns:wfs="http://www.opengis.net/wfs"\n'
-              + '  xmlns:gml="http://www.opengis.net/gml"\n'
-              + '  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
-              + '  xmlns:GTA24_project="https://www.gis.ethz.ch/GTA24_project" \n'
-              + '  xsi:schemaLocation="https://www.gis.ethz.ch/GTA24_project \n https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs?service=WFS&amp;version=1.0.0&amp;request=DescribeFeatureType&amp;typeName=GTA24_project%3Atrajectory_table \n'
-              + '                      http://www.opengis.net/wfs\n'
-              + '                      https://baug-ikg-gis-01.ethz.ch:8443/geoserver/schemas/wfs/1.0.0/WFS-basic.xsd">\n';
-              
-            // By now iteratively creating the insert request we create the xml file content needed by WFS-T to update the table
-            for (i = 0; i < trj.length; i++) {
-                postData = postData
-                    + '  <wfs:Insert>\n'
-                    + '    <GTA24_project:trajectory_table>\n'
-                    + '      <trajectory_id>'+geo_trj_id+'</trajectory_id>\n'
-                    + '      <time_stamp>'+trj[i][2]+'</time_stamp>\n'
-                    + '      <lat>'+trj[i][0].lat+'</lat>\n'
-                    + '      <lon>'+trj[i][0].lng+'</lon>\n'
-                    + '      <rating>'+(slider.value).toString()+'</rating>\n'
-                    + '      <geometry>\n'
-                    + '        <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">\n'
-                    + '          <gml:coordinates xmlns:gml="http://www.opengis.net/gml" decimal="." cs="," ts=" ">'+trj[i][0].lng+ ',' +trj[i][0].lat+'</gml:coordinates>\n'
-                    + '        </gml:Point>\n'
-                    + '      </geometry>\n'
-                    + '    </GTA24_project:trajectory_table>\n'
-                    + '  </wfs:Insert>\n';
-            }
-            postData = postData 
-              + '</wfs:Transaction>';
-            
-            $.ajax({
-                method: "POST",
-                url: wfs,
-                dataType: "xml",
-                contentType: "text/xml",
-                data: postData,
-                success: function() {	
-                    //Success feedback
-                    console.log("Success from AJAX, data sent to Geoserver");
-                    
-                    // Do something to notisfy user
-                    alert("Your trajectory has been successfully sent to the database");
-                },
-                error: function (xhr, errorThrown) {
-                    //Error handling
-                    console.log("Error from AJAX");
-                    console.log(xhr.status);
-                    console.log(errorThrown);
-                  }
-            });
-        }
-
-
-
 
         // Get modal and close button elements
         const helpModal = document.getElementById("help-modal");
@@ -426,6 +299,121 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         if (event.target === helpModal) {
             helpModal.close();
         }
+        });
+    }
+}
+
+// This code block implements the trajectory download and the push to the geoserver.
+{
+    // To generate the id of the trajectory with a specific amount of decimals
+    function getRandomID(length) {
+
+        return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
+    }
+
+
+    // A different Version to download the file
+    function download(filename) {
+
+        //creating an invisible element
+        // Why invisible? Because this element should be clicked at the same time as the submit button
+        // So we have to secretly press it ;)
+        // ATTENTION, currently the format of the csv file is NOT accurate to the UML, since the user rating is missing
+        // And of course it is not connected to the geoserver
+
+        if (!localStorage["trajectory"]) {
+            console.warn("No trajectory data is available in localStorage.");
+            alert("No trajectory data is available for download.");
+            return;
+        }
+
+
+
+        let firstrow = "trajectory_id;point_id;time_stamp;lat;lon;rating%0D%0A";
+        let alldata = firstrow;
+        trj = JSON.parse(localStorage["trajectory"]);
+        let i;
+        // PK of the trajectory and in order to concatinate it has to be a string
+        let trj_id = getRandomID(9).toString();
+
+        // Currently generates a new id per trajectory and creates point_id iteratively
+        for (i = 0; i < trj.length; i++) {
+            alldata = alldata + trj_id + ";" + i.toString() + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ "%0D%0A";
+        }
+
+        let element = document.createElement('a');
+        element.setAttribute('href',
+            "data:text/csv;charset=UTF-8," + alldata);
+        element.setAttribute('download', filename);
+        document.body.appendChild(element);
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
+    // Instead of local download, we want to send this to the geoserver
+    // This is done with WFS-T
+    function insertTrajectory() {
+        trj = JSON.parse(localStorage["trajectory"]);
+        let i;
+        // PK of the trajectory and in order to concatinate it has to be a string
+        // TODO: CREATE A CHECK FOR DUPLICATES
+        let geo_trj_id = getRandomID(9).toString();
+
+        // The xml file that is sent to the geoserver
+        let postData =
+            '<wfs:Transaction\n'
+          + '  service="WFS"\n'
+          + '  version="1.0.0"\n'
+          + '  xmlns="http://www.opengis.net/wfs"\n'
+          + '  xmlns:wfs="http://www.opengis.net/wfs"\n'
+          + '  xmlns:gml="http://www.opengis.net/gml"\n'
+          + '  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
+          + '  xmlns:GTA24_project="https://www.gis.ethz.ch/GTA24_project" \n'
+          + '  xsi:schemaLocation="https://www.gis.ethz.ch/GTA24_project \n https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs?service=WFS&amp;version=1.0.0&amp;request=DescribeFeatureType&amp;typeName=GTA24_project%3Atrajectory_table \n'
+          + '                      http://www.opengis.net/wfs\n'
+          + '                      https://baug-ikg-gis-01.ethz.ch:8443/geoserver/schemas/wfs/1.0.0/WFS-basic.xsd">\n';
+
+        // By now iteratively creating the insert request we create the xml file content needed by WFS-T to update the table
+        for (i = 0; i < trj.length; i++) {
+            postData = postData
+                + '  <wfs:Insert>\n'
+                + '    <GTA24_project:trajectory_table>\n'
+                + '      <trajectory_id>'+geo_trj_id+'</trajectory_id>\n'
+                + '      <time_stamp>'+trj[i][2]+'</time_stamp>\n'
+                + '      <lat>'+trj[i][0].lat+'</lat>\n'
+                + '      <lon>'+trj[i][0].lng+'</lon>\n'
+                + '      <rating>'+(slider.value).toString()+'</rating>\n'
+                + '      <geometry>\n'
+                + '        <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">\n'
+                + '          <gml:coordinates xmlns:gml="http://www.opengis.net/gml" decimal="." cs="," ts=" ">'+trj[i][0].lng+ ',' +trj[i][0].lat+'</gml:coordinates>\n'
+                + '        </gml:Point>\n'
+                + '      </geometry>\n'
+                + '    </GTA24_project:trajectory_table>\n'
+                + '  </wfs:Insert>\n';
+        }
+        postData = postData
+          + '</wfs:Transaction>';
+
+        $.ajax({
+            method: "POST",
+            url: wfs,
+            dataType: "xml",
+            contentType: "text/xml",
+            data: postData,
+            success: function() {
+                //Success feedback
+                console.log("Success from AJAX, data sent to Geoserver");
+
+                // Do something to notisfy user
+                alert("Your trajectory has been successfully sent to the database");
+            },
+            error: function (xhr, errorThrown) {
+                //Error handling
+                console.log("Error from AJAX");
+                console.log(xhr.status);
+                console.log(errorThrown);
+              }
         });
     }
 }
