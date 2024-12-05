@@ -27,5 +27,5 @@ def debug():
 def test():
     return "<h1>Test Pog</h1><p>This is merely a test :)</p>"
 
-
-app.run(debug=True, host="localhost", port=8989)
+if __name__ == "__main__":
+    app.run(debug=True, host="localhost", port=8989)
