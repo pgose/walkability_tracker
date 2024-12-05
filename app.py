@@ -1,7 +1,3 @@
-import numpy as np
-
-import pyproj
-
 from flask import Flask, jsonify, request, redirect, render_template, url_for
 
 
