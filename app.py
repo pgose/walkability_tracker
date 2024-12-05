@@ -9,7 +9,7 @@ app = Flask(__name__, static_folder='static')
 
 @app.route("/")
 def hello_world():
-    return render_template('index.html')
+    return render_template('landing.html')
 
 @app.route("/walk")
 def walk():
