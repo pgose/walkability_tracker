@@ -10,10 +10,11 @@
     <title>Walkability App</title>
     <!-- load style.css -->
 
-    <link rel="stylesheet" href="../css/style.css"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}"/>
 
-    <!-- load all google icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- load custom icons from google fonts -->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,0,200" />
 
     <!-- load Leaflet stylesheet (necessary for Leaflet to render correctly) -->
 
@@ -29,91 +30,72 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
 
+    <!-- load leaflet.heat plugin -->
+    <script src="{{url_for('static', filename='leaflet-heat.js')}}" defer></script>
+
     <!-- load local main.js file -->
-    <script src="../js/main.js" defer></script>
+    <script src="{{url_for('static', filename='heatmap.js')}}" defer></script>
 
   </head>
 
 
-  <body onload="onload();">
+  <body onload="onload()">
 
     <!-- Small Header Area -->
     <header>
-      <p>Walkability App v1</p>
+      <p style="float: left;">Walkability App v1 Heatmap</p>
       <!-- This message only shows up when a user cannot use JavaScript -->
-      <noscript>Enable JavaScript to use this App as intended.</noscript>
-      <p id="nogps"></p>
+      <button id="menu" type="button" onclick="weightmenu()" style="float: right;"><span class="material-symbols-outlined">Tune</span></a>
     </header>
+
     <div id="help-icon" class="material-symbols-outlined">
       help
     </div>
 
     <div id="navigation-icons">
-      <a href="." id="walk-icon" class="material-symbols-outlined">directions_walk</a>
-
+      <a href="../walk" id="walk-icon" class="material-symbols-outlined">directions_walk</a>
       <a href="../heatmap" id="heatmap-icon" class="material-symbols-outlined">map</a>
     </div>
-
 
     <!-- Main Content with Map, populated using javascript -->
     <main>
       <noscript>Enable JavaScript to use this App as intended.</noscript>
       <div id="map">
       </div>
-      <button id="startbutton" type="button" onclick=""></button>
     </main>
 
     <!-- Small Footer Area under the nav bar -->
     <footer>
-      <!--Allyna: Made a change to make it popup dependent-->
-      <!--Old code: -->
-      <!-- <a id="download" href="#" download="trackpoints.csv"></a> -->
-      
+      <a id="download" href="#" download="trackpoints.csv"></a>
       <em>D-BAUG</em>
       <em>GTA 2024</em>
-
-      
     </footer>
 
-    <!-- DIALOGS -->
-
-    <!-- When the stop button is pressed, this will become active and visible on the webpage-->
-    <!-- This is the popup with the user rating-->
-
     <dialog>
-      <h2>Thank you for participating!</h2>
-      <!-- This is the slider-->
-      <div class="slidecontainer">
-          <!-- <p>Custom range slider:</p> -->
-          <label for="range">How would you rate the quality of your trip?</label>
-          <!--With this I set the range of the slider, if I don't want a continuous slider add step=2.5 -->
-          <input type="range" min="0" max="10" value="5" class="slider" id="myRange">
-          <!--Here we make the ticks that you know where which value approximately is-->
-          <div class="sliderticks">
+      <h4>Set weights for different walkability factors:</h4>
+      <label for="range">Air Quality</label>
+      <input type="range" min="0" max="10" value="10" class="slider" id="airQuality">
+      <div class="sliderticks">
             <span>0</span>
             <span>5</span>
             <span>10</span>
-          </div>
-          <!--The current selected value output-->
-          <p>Value: <span id="value"></span></p>
       </div>
-      <!-- These are the buttons to either confirm or submit-->
-      <div class="controls">
-          <button class="submit-btn">Submit</button>
-          <button class="close-btn">Cancel</button>
+      <p>Value: <span id="airqualityvalue">10</span></p>
+
+      <label for="range">User Rating</label>
+      <input type="range" min="0" max="10" value="10" class="slider" id="userRating">
+      <div class="sliderticks">
+            <span>0</span>
+            <span>5</span>
+            <span>10</span>
       </div>
-    </dialog>
-    <!-- If you accidentally click cancel, you should get another popup-->
-    <dialog id="are_you_sure">
-      <h2>Do you wish to discard your walk?</h2>
-      <p>If you discard your recorded trajectory, it will not be saved and can not be recovered</p>
+      <p>Value: <span id="userratingvalue">10</span></p>
       <div class="controls">
-        <button class="submit-btn">Yes</button>
-        <button class="close-btn">No</button>
+          <button class="cancel-btn">Cancel</button>
+          <button class="set-btn">Set</button>
       </div>
     </dialog>
 
-    <!-- Help Dialog -->
     <dialog id="help-modal">
       <span id="close-modal" class="close-button">&times;</span>
       <h2>How to Use This Page</h2>
@@ -126,6 +108,5 @@
     </dialog>
 
   </body>
-
 
 </html>
