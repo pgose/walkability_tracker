@@ -101,6 +101,8 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
 
         // Checks if the button has been pressed yet
         if (appstate.press == false) {
+            // Removes the nogps error message for when it appears before recording
+            document.getElementById("nogps").innerHTML = "";
             console.log("geosuccess called before button press, waiting.")
             return
         }
