@@ -10,7 +10,7 @@
     <title>Walkability App</title>
     <!-- load style.css -->
 
-    <link   rel="stylesheet" href="../css/style.css"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}"/>
 
     <!-- load custom icons from google fonts -->
 
@@ -31,10 +31,10 @@
             crossorigin=""></script>
 
     <!-- load leaflet.heat plugin -->
-    <script src="../js/leaflet-heat.js" defer></script>
+    <script src="{{url_for('static', filename='leaflet-heat.js')}}" defer></script>
 
     <!-- load local main.js file -->
-    <script src="../js/heatmap.js" defer></script>
+    <script src="{{url_for('static', filename='heatmap.js')}}" defer></script>
 
   </head>
 
