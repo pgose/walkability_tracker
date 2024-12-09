@@ -101,6 +101,8 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
 
         // Checks if the button has been pressed yet
         if (appstate.press == false) {
+            // Removes the nogps error message for when it appears before recording
+            document.getElementById("nogps").innerHTML = "";
             console.log("geosuccess called before button press, waiting.")
             return
         }
@@ -110,14 +112,14 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         // the recording was stopped.
         if (appstate.timeout == true) {
             // Removes the nogps error message
-            document.getElementById("nogps").innerHTML = ""
+            document.getElementById("nogps").innerHTML = "";
 
             // the "timeout" is over
             appstate.timeout = false;
 
             // Compares current time to last recorded time from trajectories.
             trj = JSON.parse(localStorage["trajectory"]);
-            let offlinetime = (Date.now() - (trj[trj.length - 1][2]))/1000
+            let offlinetime = (Date.now() - (trj[trj.length - 1][2]))/1000;
             // Alerts the user to how much time has passed
             alert("Tracking timed out for " + offlinetime + " seconds")
 
