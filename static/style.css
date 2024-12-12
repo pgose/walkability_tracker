@@ -274,7 +274,7 @@ dialog {
     box-sizing: border-box;
     width: calc(100%-1em);
     /*max-width: 350px; */
-    border: 1px solid #ddd;
+    border: 1px solid #ffffff;
     border-radius: 0.5em;
     text-align: center;
     padding: 0.8em 1.5em 1em;
@@ -308,7 +308,7 @@ dialog .controls button {
     background: #007bff;
     outline: none;
     border: 1px solid #007bff;
-    color: #ddd;
+    color: #ffffff;
     font-size: 0.9em;
 }
 
@@ -369,5 +369,11 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     background: #d3d3d3;
     line-height: 40px;
   }
+/* Have the info button show up next to the label without moving it from the center */
+.criteriaBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-
+  
