@@ -67,6 +67,20 @@ header button p {
       'opsz' 24;
 }
 
+/* centering button */
+#center-button {
+    position: absolute;
+    top: calc(9vh + 85px); /* Below the zoom buttons */
+    left: -10px; /* Align to the left edge */
+    display: flex;
+    flex-direction: column; /* Vertical alignment */
+    gap: 20px; /* Space between icons */
+    z-index: 10;
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Default icon color */
+    font-size: 36px; /* Icon size */
+    padding-left: 0.5em;
+}
 
 /* Help icon positioned below the header */
 #help-icon {
@@ -146,7 +160,20 @@ header button p {
     transform: translateX(-55%); /* could be changed!!!!!!!!!!!!!!!! */
 }
 
+/* Criteria info button styling */
+#info-icon-air-quality{
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Default icon color */
+    font-size: 20px; /* Icon size */
+    padding-left: 0.5em;
+}
 
+#info-icon-user-rating{
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Default icon color */
+    font-size: 20px; /* Icon size */
+    padding-left: 0.5em;
+}
 
 main {
     flex-grow: 1;
@@ -178,6 +205,13 @@ main button {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: none;
+}
+
+/* So that the info button border is invisible */
+button {
+    padding: 0;
+    border: none;
     background: none;
 }
 
@@ -236,7 +270,11 @@ main button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
     z-index: 1001; /* Ensure it stays on top of other content */
   }
-
+/*Text that needs to have the "block" formating instead of center*/
+#block_text {
+    text-align: justify;
+    hyphens: auto;
+}
   /* Close button (X) */
   .close-button {
     color: #aaa;
