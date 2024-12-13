@@ -39,7 +39,7 @@
 
     <!-- Small Header Area -->
     <header>
-      <p>Walkability App v2</p>
+      <p>WalkAcity</p>
       <!-- This message only shows up when a user cannot use JavaScript -->
       <p id="nogps"></p>
     </header>
@@ -48,10 +48,14 @@
     </div>
 
     <div id="navigation-icons">
-      <a href="." id="walk-icon" class="material-symbols-outlined">directions_walk</a>
-
-      <a href="../heatmap" id="heatmap-icon" class="material-symbols-outlined">map</a>
+      <div class="symbol-box">
+          <a href="." id="walk-icon" class="material-symbols-outlined">directions_walk</a>
+      </div>
+      <div class="symbol-box">
+          <a href="../heatmap" id="heatmap-icon" class="material-symbols-outlined">map</a>
+      </div>
     </div>
+  
 
 
     <!-- Main Content with Map, populated using javascript -->
@@ -115,14 +119,145 @@
     <!-- Help Dialog -->
     <dialog id="help-modal">
       <span id="close-modal" class="close-button">&times;</span>
-      <h2>How to Use This Page</h2>
-      <p>Instruction for using the webpage. For example:</p>
-      <ul>
-        <li>Click on the map to interact.</li>
-        <li>Use the buttons on the right side to navigate between pages.</li>
-        <li>Press "Start" to begin tracking your movement.</li>
-      </ul>
+    
+      <!-- Main Help Page -->
+      <div id="help-main" class="help-page">
+        <h2>Help Center</h2>
+        <ul class="help-options">
+          <li><button id="introduction-btn">Introduction</button></li>
+          <li><button id="troubleshooting-btn">Troubleshooting</button></li>
+          <li><button id="contact-btn">Contact & About Us</button></li>
+        </ul>
+      </div>
+    
+      <!-- Introduction Page -->
+      <div id="help-introduction" class="help-page hidden">
+        <button id="back-to-main-1" class="back-button">&larr; Back</button>
+        <h2>Introduction</h2>
+        <div class="help-content">
+            <section>
+                <h3>Track Your Route</h3>
+                <ol>
+                    <li><strong>Start Recording:</strong> Click the <em>"Start"</em> button at the bottom of the screen to begin recording your trip. The button will change to <em>"Stop"</em>, indicating the recording is in progress.</li>
+                    <li><strong>Stop Recording:</strong> When you are done, click the <em>"Stop"</em> button. A dialog will appear, allowing you to either <strong>rate the quality of your trip</strong> or <strong>cancel the submission</strong>.</li>
+                    <li><strong>Submit or Discard:</strong> 
+                        <ul>
+                            <li>If you choose to <strong>Submit</strong>, your route and rating will be saved for further analysis.</li>
+                            <li>If you select <strong>Cancel</strong>, the recorded data will be discarded and cannot be recovered.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+            <section>
+                <h3>Switch Between Layers</h3>
+                <p>The app offers two layers to help you analyze walkability in your area:</p>
+                <ul>
+                    <li><strong>Walk Layer:</strong> Track and visualize your route in real time. It highlights your movement and provides tools for route recording.</li>
+                    <li><strong>Heatmap Layer:</strong> Presents a heatmap showcasing the walkability quality across the map. Adjust the <em>weights for different walkability factors</em> like air quality and user ratings using the control menu in the top-right corner.</li>
+                </ul>
+                <p>To switch between layers, use the <strong>icons with borders</strong> in the top-right corner of the screen.</p>
+            </section>
+            <section>
+                <h3>Other Buttons</h3>
+                <ul>
+                    <li><strong>Zoom In/Out:</strong> Use the "+" and "-" buttons in the top-left corner to adjust the map zoom level.</li>
+                    <li><strong>Recenter the Map:</strong> Click the location button (a circular icon) to recenter the map to your current location.</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    
+    
+      <!-- Troubleshooting Page -->
+      <div id="help-troubleshooting" class="help-page hidden">
+        <button id="back-to-main-2" class="back-button">&larr; Back</button>
+        <h2>Troubleshooting</h2>
+        <div class="help-content">
+            <section>
+                <h3>The Map Is Not Loading</h3>
+                <ul>
+                    <li>Check your internet connection.</li>
+                    <li>Ensure location services are enabled in your browser settings.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>The Recording Does Not Start</h3>
+                <ul>
+                    <li>Ensure GPS permissions are granted to the app.</li>
+                    <li>Refresh the page and try again.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Layer Buttons Are Unresponsive</h3>
+                <ul>
+                    <li>Make sure no recording is in progress.</li>
+                    <li>If the issue persists, clear your browser cache and reload the page.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Still Having Issues?</h3>
+                <p>If the above steps don’t resolve your issue, please contact our support team.</p>
+            </section>
+        </div>
+    </div>
+    
+    
+    
+      <!-- Contact & About Us Page -->
+      <div id="help-contact" class="help-page hidden">
+        <button id="back-to-main-3" class="back-button">&larr; Back</button>
+        <h2>Contact & About Us</h2>
+        <div class="help-content">
+            <section>
+                <h3>Contact</h3>
+                <p>If you need assistance, feel free to reach out to us:</p>
+                <ul>
+                    <li><strong>Email:</strong> <a href="mailto:zhihyu@ethz.ch">zhihyu@ethz.ch</a></li>
+                </ul>
+                <p>We aim to respond to inquiries within 48 hours.</p>
+            </section>
+            <section>
+                <h3>About Us</h3>
+                <p><strong>WalkAcity - Zurich City Walkability Tracker</strong></p>
+                <p>WebApp designed for urban planners by urban planners.</p>
+                <p>This is a semester project related to the lecture:</p>
+                <p><em>“Geoinformationstechnologien und -analysen HS2024” [103-0717-00L], Autumn semester 2024</em></p>
+                <p><strong>Authors:</strong> Zhihe Yu, Allyna Dachler, Angelika Nogueira Bhushan, Philip Gosset</p>
+                <p><strong>Supervisors:</strong> Prof. Dr. Martin Raubal, Dr. Peter Kiefer, Ye Hong, Nina Wiedemann, Tianyi Xiao, Yiwei Wang, Ayda Grisiute, Shupeng Wang, Dr. Sailin Zhong, Mischa Bauckhage, Andreas Dombos</p>
+                <p><strong>ETH Zürich</strong></p>
+                <p>Institute of Cartography & Geoinformation</p>
+                <p>Professor of Geoinformation Engineering</p>
+                <p>ETH Zürich, December 2024</p>
+            </section>
+        </div>
+    </div>
+
+
+
+    <dialog id="switch-warning">
+      <h2>Warning</h2>
+      <p>Recording is in progress. Do you really want to leave this page?</p>
+      <div class="controls">
+        <button id="confirm-switch">Yes</button>
+        <button id="cancel-switch">No</button>
+      </div>
     </dialog>
+    
+
+    <!-- disable icon for current layer -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname; // get current path
+        const walkBox = document.querySelector('#walk-icon').parentElement;
+        const heatmapBox = document.querySelector('#heatmap-icon').parentElement;
+
+        // if current is walk
+        if (currentPath.includes('walk') && !currentPath.includes('heatmap')) {
+            walkBox.classList.add('disabled');
+            walkBox.querySelector('#walk-icon').removeAttribute('href');
+        }
+      });
+    </script>
 
   </body>
 
