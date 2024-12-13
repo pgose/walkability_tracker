@@ -29,7 +29,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
     // Feel free to remove one of the polylines (but also remove the part that updates it
     // in geosuccess)
     var line = new L.Polyline([], {color: '#007bff',
-        weight: 10,
+        weight: 15,
         opacity: 1,
         smoothFactor: 1,
         stroke: false
@@ -172,6 +172,13 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         maximumAge: 15000,  // The maximum age of a cached location (10 seconds).
         timeout: 12000   // A maximum of 5 seconds before timeout.
     };
+
+}
+
+//Implemented the center button
+function centerMyLocation(){
+    map.panTo(latlng);//UserCords = user current latitude, longitude. I suppose you have them!!!
+    appstate.follow = true;
 }
 
 // This code block implements the button & dialog logic
@@ -218,6 +225,16 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         localStorage['saved'] = true;
     }
 
+    // This is called when the user presses x after pressing stop and continues recording
+    function continue_recording() {
+        console.log("The recording continues");
+        // We do not clear the local storage since we wish to continue the recording
+
+        // Sets "press" to true, which makes geosuccess start doing its thing
+        appstate.press = true;
+        console.log("appstate.press has been set to", appstate.press);
+        setStopMode();  // Switch button to Stop mode
+    }
 
     // Button reference and default state
     const startButton = document.getElementById("startbutton");
@@ -268,7 +285,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         // The querySelector finds the very first element that has the type dialog
         const dialog = document.querySelector("dialog");
         const are_you_sure_dialog = document.querySelector("#are_you_sure");
-       
+        const continue_trajectory = document.getElementById("continue_trajectory");
         document.getElementById("startbutton").addEventListener("click", function(){
             // It seems counterintuitive but by checking if the inner HTML of the button is
             // "Start" we are able to directly target the state change from Start to Stop
@@ -300,6 +317,13 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             dialog.close();
         }, false);
 
+        // Hide the pop up when the close button is clicked and the user wishes to continue
+        // Then continue recording
+        continue_trajectory.addEventListener("click", function () {
+            dialog.close();
+            console.log("it has been closed without any submitting")
+            continue_recording()
+            });
 
         var slider = document.getElementById("myRange");
         var output = document.getElementById("value");

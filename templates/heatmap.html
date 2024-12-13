@@ -75,10 +75,14 @@
       <em>D-BAUG</em>
       <em>GTA 2024</em>
     </footer>
-
+    <!-- Menu to set the weights of the different criteria-->
     <dialog>
       <h4>Set weights for different walkability factors:</h4>
-      <label for="range">Air Quality</label>
+      <!--The info icon of the air quality rating criteria-->
+      <div class="criteriaBox">
+            <label for="range">Air Quality</label>
+            <div id="info-icon-air-quality" class="material-symbols-outlined">info</div>
+      </div>
       <input type="range" min="0" max="10" value="10" class="slider" id="airQuality">
       <div class="sliderticks">
             <span>0</span>
@@ -86,8 +90,11 @@
             <span>10</span>
       </div>
       <p>Value: <span id="airqualityvalue">10</span></p>
-
-      <label for="range">User Rating</label>
+      <!--The info icon of the user rating criteria-->
+      <div class="criteriaBox">
+        <label for="range">User Rating</label>
+        <div id="info-icon-user-rating" class="material-symbols-outlined">info</div>
+      </div>
       <input type="range" min="0" max="10" value="10" class="slider" id="userRating">
       <div class="sliderticks">
             <span>0</span>
@@ -102,7 +109,30 @@
     </dialog>
 
 
+
     <!-- Help Dialog -->
+    <!--The show rating criteria info-->
+    <!--air quality-->
+    <dialog id="info-modal-airquality">
+      <span id="airquality-close-modal" class="close-button">&times;</span>
+      <h2>Air Quality Rating</h2>
+      <p id="block_text">This critaria is based off the dataset of [...]</p>
+    </dialog>
+
+    <!--user rating-->
+    <dialog id="info-modal-userrating">
+      <span id="userrating-close-modal" class="close-button">&times;</span>
+      <h2>User Rating</h2>
+      <p id="block_text">
+        This criteria represents the normalised and processed user rating gathered at the very end of the trajectory recording. It allows the spatial planners to add user's subjective perception in their analysis of the walking experience.
+      </p>
+      <p id="block_text">
+        By averaging all the trajectory ratings within each raster cell, the new user rating score is created. By using the slider we can adjust the impact of the user rating in the total score of the raster.
+      </p>
+    </dialog>
+
+    <!--help button pop up-->
+
     <dialog id="help-modal">
       <span id="close-modal" class="close-button">&times;</span>
     

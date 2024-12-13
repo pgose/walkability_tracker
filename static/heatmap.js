@@ -121,6 +121,58 @@ document.addEventListener('DOMContentLoaded', () => {
         previousweights = [weights.airquality, weights.userrating]
         weightdialog.close()
     })
+    
+// Info buttons
+// Info button triggers
+
+// Air quality rating info
+// Get modal and close button elements
+
+const air_quality_info_Modal = document.getElementById("info-modal-airquality");
+const info_airquality_icon = document.getElementById("info-icon-air-quality");
+const info_airquality_closeModal = document.getElementById("airquality-close-modal");
+
+// Show the modal when help icon is clicked
+info_airquality_icon.addEventListener("click", function () {
+air_quality_info_Modal.showModal();
+});
+
+// Hide the modal when the close button is clicked
+info_airquality_closeModal.addEventListener("click", function () {
+air_quality_info_Modal.close();
+});
+
+// Hide the modal when clicking outside of the modal content
+window.addEventListener("click", function (event) {
+if (event.target === air_quality_info_Modal) {
+    air_quality_info_Modal.close();
+}
+});
+
+// Air quality rating info
+// Get modal and close button elements
+
+const userrating_info_Modal = document.getElementById("info-modal-userrating");
+const info_userrating_icon = document.getElementById("info-icon-user-rating");
+const info_userrating_closeModal = document.getElementById("userrating-close-modal");
+
+// Show the modal when help icon is clicked
+info_userrating_icon.addEventListener("click", function () {
+userrating_info_Modal.showModal();
+});
+
+// Hide the modal when the close button is clicked
+info_userrating_closeModal.addEventListener("click", function () {
+userrating_info_Modal.close();
+});
+
+// Hide the modal when clicking outside of the modal content
+window.addEventListener("click", function (event) {
+if (event.target === userrating_info_Modal) {
+    userrating_info_Modal.close();
+}
+});
+
 }
 
 // Point data fetching logic; to be implemented

@@ -64,6 +64,7 @@
       <div id="map">
       </div>
       <button id="startbutton" type="button" onclick=""></button>
+      <div id="center-button" class="material-symbols-outlined" onclick="centerMyLocation()">my_location</div>
     </main>
 
     <!-- Small Footer Area under the nav bar -->
@@ -84,6 +85,7 @@
     <!-- This is the popup with the user rating-->
 
     <dialog>
+      <span id="continue_trajectory" class="close-button"><div class="material-symbols-outlined">undo</div></span>
       <h2>Thank you for participating!</h2>
       <!-- This is the slider-->
       <div class="slidecontainer">
@@ -103,13 +105,13 @@
       <!-- These are the buttons to either confirm or submit-->
       <div class="controls">
           <button class="submit-btn">Submit</button>
-          <button class="close-btn">Cancel</button>
+          <button class="close-btn">Discard</button>
       </div>
     </dialog>
     <!-- If you accidentally click cancel, you should get another popup-->
     <dialog id="are_you_sure">
       <h2>Do you wish to discard your walk?</h2>
-      <p>If you discard your recorded trajectory, it will not be saved and can not be recovered</p>
+      <p id="block_text">If you discard your recorded trajectory, it will not be saved and can not be recovered</p>
       <div class="controls">
         <button class="submit-btn">Yes</button>
         <button class="close-btn">No</button>
@@ -242,6 +244,7 @@
         <button id="cancel-switch">No</button>
       </div>
     </dialog>
+
     
 
     <!-- disable icon for current layer -->
