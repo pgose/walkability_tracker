@@ -340,50 +340,7 @@ function centerMyLocation(){
 
 // This code block implements the trajectory download and the push to the geoserver.
 {
-    // To generate the id of the trajectory with a specific amount of decimals
-    function getRandomID(length) {
-
-        return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
-    }
-
-
-    // A different Version to download the file
-    function download(filename) {
-        //creating an invisible element
-        // Why invisible? Because this element should be clicked at the same time as the submit button
-        // So we have to secretly press it ;)
-        // ATTENTION, currently the format of the csv file is NOT accurate to the UML, since the user rating is missing
-        // And of course it is not connected to the geoserver
-
-        if (!localStorage["trajectory"]) {
-            console.warn("No trajectory data is available in localStorage.");
-            alert("No trajectory data is available for download.");
-            return;
-        }
-
-        let firstrow = "trajectory_id;point_id;time_stamp;lat;lon;rating%0D%0A";
-        let alldata = firstrow;
-        trj = JSON.parse(localStorage["trajectory"]);
-        let i;
-        // PK of the trajectory and in order to concatinate it has to be a string
-        let trj_id = getRandomID(9).toString();
-
-        // Currently generates a new id per trajectory and creates point_id iteratively
-        for (i = 0; i < trj.length; i++) {
-            alldata = alldata + trj_id + ";" + i.toString() + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ "%0D%0A";
-        }
-
-        let element = document.createElement('a');
-        element.setAttribute('href',
-            "data:text/csv;charset=UTF-8," + alldata);
-        element.setAttribute('download', filename);
-        document.body.appendChild(element);
-        element.click();
-
-        document.body.removeChild(element);
-    }
-
-    // Instead of local download, we want to send this to the geoserver
+    // We want to send the trajectory to the GeoServer
     // This is done with WFS-T
     function insertTrajectory(maxid) {
         trj = JSON.parse(localStorage["trajectory"]);
