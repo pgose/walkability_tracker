@@ -81,16 +81,10 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         let userMarkerWithArrow = L.marker(latlng, { icon: userIconWithArrow });
         appstate.marker.addLayer(userMarkerWithArrow);
 
-        // turn the arrow
-        // if (position.coords.heading != null) {
-        //    const heading = position.coords.heading; // direction
-        //    document.querySelector('.user-icon-container').style.transform = `rotate(${heading}deg)`;
-        // }
-
         }
 
-        console.log(appstate.follow, "appstate initialized?")
         if (appstate.follow == true) {
+            console.log("setting follow user to false.")
             appstate.follow = false;
             // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
             // So that we aren't too far away from the point, its zoom level was set to 18
@@ -273,7 +267,22 @@ function centerMyLocation(){
             } else {
                 // This function sends everything to the geoserver and conversely to the database
                 console.log("There are trajectories in the local storage");
-                insertTrajectory();
+
+                // Check the SQL Database through Flask to read the current highest ID of all trajectories
+                // This is done at the address /js/max_id which was set through Flask.
+                // See /Backend/max_id.py for more info on how this works
+                $.ajax({
+                    url: '/js/max_id',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    success: function (data) {
+                        new_id = data+1
+                        // Call the insertTrajectory function to actually write the trajectory into the database.
+                        insertTrajectory(new_id);
+                        console.log('Trajectory number', new_id, 'has been added to the database')
+                    },
+                    error: function (data) { console.log('trajectory is', data); },
+                })
             }
             dialog.close();
         }, false);
@@ -340,7 +349,6 @@ function centerMyLocation(){
 
     // A different Version to download the file
     function download(filename) {
-
         //creating an invisible element
         // Why invisible? Because this element should be clicked at the same time as the submit button
         // So we have to secretly press it ;)
@@ -352,8 +360,6 @@ function centerMyLocation(){
             alert("No trajectory data is available for download.");
             return;
         }
-
-
 
         let firstrow = "trajectory_id;point_id;time_stamp;lat;lon;rating%0D%0A";
         let alldata = firstrow;
@@ -379,12 +385,12 @@ function centerMyLocation(){
 
     // Instead of local download, we want to send this to the geoserver
     // This is done with WFS-T
-    function insertTrajectory() {
+    function insertTrajectory(maxid) {
         trj = JSON.parse(localStorage["trajectory"]);
         let i;
         // PK of the trajectory and in order to concatinate it has to be a string
-        // TODO: CREATE A CHECK FOR DUPLICATES
-        let geo_trj_id = getRandomID(9).toString();
+        let geo_trj_id = maxid
+
 
         // The xml file that is sent to the geoserver
         let postData =
