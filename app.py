@@ -5,7 +5,7 @@ app = Flask(__name__, static_folder='static')
 
 @app.route("/")
 def hello_world():
-    return render_template('landing.html')
+    return render_template('walk.html')
 
 @app.route("/walk")
 def walk():
