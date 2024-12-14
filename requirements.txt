@@ -2,4 +2,4 @@ Flask==3.0.3
 numpy
 pyproj
 SQLAlchemy
-psycopg2
+psycopg2-binary
