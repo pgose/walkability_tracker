@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, redirect, render_template, url_for
-from Backend import max_id
+from Backend.max_id import get_max_id
 
 app = Flask(__name__, static_folder='static')
 
@@ -19,9 +19,9 @@ def heatmap():
 def debug():
     return render_template('debug.html')
 
-@app.route("/max_id")
+@app.route("/js/max_id")
 def max_id():
-    return max_id.get_max_id()
+    return jsonify(get_max_id())
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=8989)
