@@ -81,16 +81,10 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         let userMarkerWithArrow = L.marker(latlng, { icon: userIconWithArrow });
         appstate.marker.addLayer(userMarkerWithArrow);
 
-        // turn the arrow
-        // if (position.coords.heading != null) {
-        //    const heading = position.coords.heading; // direction
-        //    document.querySelector('.user-icon-container').style.transform = `rotate(${heading}deg)`;
-        // }
-
         }
 
-        console.log(appstate.follow, "appstate initialized?")
         if (appstate.follow == true) {
+            console.log("setting follow user to false.")
             appstate.follow = false;
             // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
             // So that we aren't too far away from the point, its zoom level was set to 18
@@ -174,6 +168,13 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
     };
 
 }
+
+// ATTENTION: This piece of code currently does not get called anywhere and doesn't do much as it is. Maybe rewrite it somewhere else or remove it entirely
+// Note that when appstate.follow = true, geosuccess sets it to false again. The intended functionality would be for appstate.follow to be trueby default,
+// And Javascript listening for a click on the map element on the page. If it hears you clicking, appstate.follow is automatically set to false and the
+// follow button stops being highlighted, until you press it again, appstate.follow is set back to true, and the follow button is, again highlighted. Please
+// Consider this when implementing a feature like that. Also, please implement within the code block for button & dialog logic, instead of outside of any
+// code blocks, to keep code clean and readable. Thanks. - Philip
 
 //Implemented the center button
 function centerMyLocation(){
@@ -273,7 +274,22 @@ function centerMyLocation(){
             } else {
                 // This function sends everything to the geoserver and conversely to the database
                 console.log("There are trajectories in the local storage");
-                insertTrajectory();
+
+                // Check the SQL Database through Flask to read the current highest ID of all trajectories
+                // This is done at the address /js/max_id which was set through Flask.
+                // See /Backend/max_id.py for more info on how this works
+                $.ajax({
+                    url: '/js/max_id',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    success: function (data) {
+                        new_id = data+1
+                        // Call the insertTrajectory function to actually write the trajectory into the database.
+                        insertTrajectory(new_id);
+                        console.log('Trajectory number', new_id, 'has been added to the database')
+                    },
+                    error: function (data) { console.log('trajectory is', data); },
+                })
             }
             dialog.close();
         }, false);
@@ -331,60 +347,14 @@ function centerMyLocation(){
 
 // This code block implements the trajectory download and the push to the geoserver.
 {
-    // To generate the id of the trajectory with a specific amount of decimals
-    function getRandomID(length) {
-
-        return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
-    }
-
-
-    // A different Version to download the file
-    function download(filename) {
-
-        //creating an invisible element
-        // Why invisible? Because this element should be clicked at the same time as the submit button
-        // So we have to secretly press it ;)
-        // ATTENTION, currently the format of the csv file is NOT accurate to the UML, since the user rating is missing
-        // And of course it is not connected to the geoserver
-
-        if (!localStorage["trajectory"]) {
-            console.warn("No trajectory data is available in localStorage.");
-            alert("No trajectory data is available for download.");
-            return;
-        }
-
-
-
-        let firstrow = "trajectory_id;point_id;time_stamp;lat;lon;rating%0D%0A";
-        let alldata = firstrow;
-        trj = JSON.parse(localStorage["trajectory"]);
-        let i;
-        // PK of the trajectory and in order to concatinate it has to be a string
-        let trj_id = getRandomID(9).toString();
-
-        // Currently generates a new id per trajectory and creates point_id iteratively
-        for (i = 0; i < trj.length; i++) {
-            alldata = alldata + trj_id + ";" + i.toString() + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ "%0D%0A";
-        }
-
-        let element = document.createElement('a');
-        element.setAttribute('href',
-            "data:text/csv;charset=UTF-8," + alldata);
-        element.setAttribute('download', filename);
-        document.body.appendChild(element);
-        element.click();
-
-        document.body.removeChild(element);
-    }
-
-    // Instead of local download, we want to send this to the geoserver
+    // We want to send the trajectory to the GeoServer
     // This is done with WFS-T
-    function insertTrajectory() {
+    function insertTrajectory(maxid) {
         trj = JSON.parse(localStorage["trajectory"]);
         let i;
         // PK of the trajectory and in order to concatinate it has to be a string
-        // TODO: CREATE A CHECK FOR DUPLICATES
-        let geo_trj_id = getRandomID(9).toString();
+        let geo_trj_id = maxid
+
 
         // The xml file that is sent to the geoserver
         let postData =

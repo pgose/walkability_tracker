@@ -23,8 +23,11 @@ def get_max_id():
     # Close the connection to the database since we are in no need of it anymore
     conn.close()
 
-    # To simply get the integer
-    return max_id[0][0]
-# testing was successfull:
-#trial = get_max_id()
-#print(trial)
+    # Handle edge case of empty Database;
+    if max_id[0][0] == None:
+        # return 0 instead of None.
+        return 0
+    else:
+        # return the integer
+        return max_id[0][0]
+
