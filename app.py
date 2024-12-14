@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, redirect, render_template, url_for
+from Backend import backend
 
 
 app = Flask(__name__, static_folder='static')
