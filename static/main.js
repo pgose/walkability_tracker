@@ -169,6 +169,13 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
 
 }
 
+// ATTENTION: This piece of code currently does not get called anywhere and doesn't do much as it is. Maybe rewrite it somewhere else or remove it entirely
+// Note that when appstate.follow = true, geosuccess sets it to false again. The intended functionality would be for appstate.follow to be trueby default,
+// And Javascript listening for a click on the map element on the page. If it hears you clicking, appstate.follow is automatically set to false and the
+// follow button stops being highlighted, until you press it again, appstate.follow is set back to true, and the follow button is, again highlighted. Please
+// Consider this when implementing a feature like that. Also, please implement within the code block for button & dialog logic, instead of outside of any
+// code blocks, to keep code clean and readable. Thanks. - Philip
+
 //Implemented the center button
 function centerMyLocation(){
     map.panTo(latlng);//UserCords = user current latitude, longitude. I suppose you have them!!!
