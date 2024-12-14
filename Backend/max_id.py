@@ -19,10 +19,12 @@ def get_max_id():
     
     # Since we do not wish to change the table yet, we don't commit the changes
     max_id = cur.fetchall()
+    print("max_id =", max_id)
+    print("apparently max of max_id =", max_id[0][0])
 
     # Close the connection to the database since we are in no need of it anymore
     conn.close()
-
+    print("connection has been closed again.")
     # To simply get the integer
     return max_id[0][0]
 # testing was successfull:
