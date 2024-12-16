@@ -25,29 +25,58 @@ let heatmap = L.layerGroup()
 
 // Help Menu
 
-{
-    // Get modal and close button elements
-    const helpModal = document.getElementById("help-modal");
-    const closeModal = document.getElementById("close-modal");
-    const helpIcon = document.getElementById("help-icon");
+document.addEventListener('DOMContentLoaded', () => {
+    const helpModal = document.getElementById('help-modal');
+    const closeButtons = document.querySelectorAll('.close-button');
+    const backButtons = document.querySelectorAll('.back-button');
+    const pages = document.querySelectorAll('.help-page');
 
-    // Show the modal when help icon is clicked
-    helpIcon.addEventListener("click", function () {
-    helpModal.showModal();
-    });
+    const introductionPage = document.getElementById('help-introduction');
+    const troubleshootingPage = document.getElementById('help-troubleshooting');
+    const contactPage = document.getElementById('help-contact');
+    const mainPage = document.getElementById('help-main');
 
-    // Hide the modal when the close button is clicked
-    closeModal.addEventListener("click", function () {
-    helpModal.close();
-    });
+    const introductionButton = document.getElementById('introduction-btn');
+    const troubleshootingButton = document.getElementById('troubleshooting-btn');
+    const contactButton = document.getElementById('contact-btn');
 
-    // Hide the modal when clicking outside of the modal content
-    window.addEventListener("click", function (event) {
-    if (event.target === helpModal) {
-        helpModal.close();
+    // Function to show a specific page
+    function showPage(pageToShow) {
+        pages.forEach((page) => page.classList.add('hidden')); // Hide all pages
+        pageToShow.classList.remove('hidden'); // Show the selected page
     }
+
+    // Close modal
+    closeButtons.forEach((button) =>
+        button.addEventListener('click', () => helpModal.close())
+    );
+
+    // Navigate to pages
+    introductionButton.addEventListener('click', () => showPage(introductionPage));
+    troubleshootingButton.addEventListener('click', () => showPage(troubleshootingPage));
+    contactButton.addEventListener('click', () => showPage(contactPage));
+
+    // Navigate back to the main page
+    backButtons.forEach((button) =>
+        button.addEventListener('click', () => showPage(mainPage))
+    );
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const helpIcon = document.getElementById('help-icon');
+    const helpModal = document.getElementById('help-modal');
+
+    // Open Help Modal
+    helpIcon.addEventListener('click', () => {
+        helpModal.showModal();
     });
-}
+
+    // Ensure close buttons are working
+    const closeButtons = document.querySelectorAll('.close-button');
+    closeButtons.forEach((button) => {
+        button.addEventListener('click', () => helpModal.close());
+    });
+});
+
 
 // This code block implements the weights menu
 {

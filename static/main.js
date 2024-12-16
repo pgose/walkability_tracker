@@ -184,21 +184,22 @@ function centerMyLocation(){
 
 // This code block implements the button & dialog logic
 {
-    // Function to switch to Start mode (green)
-    function setStartMode() {
-        startButton.classList.remove("stop");
-        startButton.classList.add("start");
-        startButton.innerHTML = "Start";
-        startButton.onclick = start; // Set click event to start tracking
+    // Switch button to Stop mode
+    function setStopMode() {
+        startbutton.innerHTML = "Stop";
+        startbutton.classList.remove("start"); // Remove Start-related styles
+        startbutton.classList.add("stop", "pulsing"); // Add Stop mode and pulsing animation
+        startbutton.onclick = stop; // Set the click handler to stop()
     }
 
-    // Function to switch to Stop mode (red)
-    function setStopMode() {
-        startButton.classList.remove("start");
-        startButton.classList.add("stop");
-        startButton.innerHTML = "Stop";
-        startButton.onclick = stop; // Set click event to stop tracking
+    // Switch button to Start mode
+    function setStartMode() {
+        startbutton.innerHTML = "Start";
+        startbutton.classList.remove("stop", "pulsing"); // Remove Stop-related styles and pulsing animation
+        startbutton.classList.add("start"); // Add Start mode styles
+        startbutton.onclick = start; // Set the click handler to start()
     }
+
 
     // This function is called from HTML when Start is pressed.
     function start() {
@@ -239,6 +240,44 @@ function centerMyLocation(){
     // Button reference and default state
     const startButton = document.getElementById("startbutton");
     setStartMode();  // Initialize button in Start mode
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const walkIcon = document.querySelector('#walk-icon');
+        const heatmapIcon = document.querySelector('#heatmap-icon');
+        const switchWarningDialog = document.getElementById('switch-warning');
+        const confirmSwitchButton = document.getElementById('confirm-switch');
+        const cancelSwitchButton = document.getElementById('cancel-switch');
+    
+        let targetHref = null; // Store the target href for navigation
+    
+        // Function to handle navigation with confirmation
+        function handleNavigation(event, href) {
+            if (appstate.press) {
+                event.preventDefault(); // Stop navigation
+                targetHref = href; // Save the target href
+                switchWarningDialog.showModal(); // Show the warning dialog
+            }
+        }
+    
+        // Attach event listeners to navigation icons
+        walkIcon.addEventListener('click', (event) => handleNavigation(event, walkIcon.href));
+        heatmapIcon.addEventListener('click', (event) => handleNavigation(event, heatmapIcon.href));
+    
+        // Handle dialog buttons
+        confirmSwitchButton.addEventListener('click', () => {
+            switchWarningDialog.close();
+            if (targetHref) {
+                window.location.href = targetHref; // Navigate to the saved href
+            }
+        });
+    
+        cancelSwitchButton.addEventListener('click', () => {
+            switchWarningDialog.close(); // Close the dialog without navigation
+            targetHref = null; // Reset target href
+        });
+    });
+
 
 
     // This code block implements the dialogs.
@@ -320,27 +359,59 @@ function centerMyLocation(){
             dialog.close();
         });
 
+        
 
-        // Get modal and close button elements
-        const helpModal = document.getElementById("help-modal");
-        const closeModal = document.getElementById("close-modal");
-        const helpIcon = document.getElementById("help-icon");
-
-        // Show the modal when help icon is clicked
-        helpIcon.addEventListener("click", function () {
-        helpModal.showModal();
+        // Help Menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const helpModal = document.getElementById('help-modal');
+            const closeButtons = document.querySelectorAll('.close-button');
+            const backButtons = document.querySelectorAll('.back-button');
+            const pages = document.querySelectorAll('.help-page');
+        
+            const introductionPage = document.getElementById('help-introduction');
+            const troubleshootingPage = document.getElementById('help-troubleshooting');
+            const contactPage = document.getElementById('help-contact');
+            const mainPage = document.getElementById('help-main');
+        
+            const introductionButton = document.getElementById('introduction-btn');
+            const troubleshootingButton = document.getElementById('troubleshooting-btn');
+            const contactButton = document.getElementById('contact-btn');
+        
+            // Function to show a specific page
+            function showPage(pageToShow) {
+                pages.forEach((page) => page.classList.add('hidden')); // Hide all pages
+                pageToShow.classList.remove('hidden'); // Show the selected page
+            }
+        
+            // Close modal
+            closeButtons.forEach((button) =>
+                button.addEventListener('click', () => helpModal.close())
+            );
+        
+            // Navigate to pages
+            introductionButton.addEventListener('click', () => showPage(introductionPage));
+            troubleshootingButton.addEventListener('click', () => showPage(troubleshootingPage));
+            contactButton.addEventListener('click', () => showPage(contactPage));
+        
+            // Navigate back to the main page
+            backButtons.forEach((button) =>
+                button.addEventListener('click', () => showPage(mainPage))
+            );
         });
-
-        // Hide the modal when the close button is clicked
-        closeModal.addEventListener("click", function () {
-        helpModal.close();
-        });
-
-        // Hide the modal when clicking outside of the modal content
-        window.addEventListener("click", function (event) {
-        if (event.target === helpModal) {
-            helpModal.close();
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const helpIcon = document.getElementById('help-icon');
+            const helpModal = document.getElementById('help-modal');
+        
+            // Open Help Modal
+            helpIcon.addEventListener('click', () => {
+                helpModal.showModal();
+            });
+        
+            // Ensure close buttons are working
+            const closeButtons = document.querySelectorAll('.close-button');
+            closeButtons.forEach((button) => {
+                button.addEventListener('click', () => helpModal.close());
+            });
         });
     }
 }
