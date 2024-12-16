@@ -440,7 +440,7 @@ button {
 
 
 
-=======
+#help-modal {
   /* Position it relative to the viewport */
     background-color: #fff; /* Modal background */
     padding: 20px; /* Add some padding for content */
@@ -451,6 +451,7 @@ button {
     z-index: 1001; /* Ensure it stays on top of other content */
   }
 /*Text that needs to have the "block" formating instead of center*/
+
 #block_text {
     text-align: justify;
     hyphens: auto;
@@ -595,4 +596,6 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     justify-content: center;
 }
 
-  
+img {
+    height: 100%;
+}
