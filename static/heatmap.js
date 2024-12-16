@@ -1,13 +1,17 @@
 // Defines a container for where the point datasets will live.
 let points = {
-    airqualitypoints: [],
+    emissionspoints: [],
+    treepoints: [],
     userratingpoints: [],
+    temperaturepoints: [],
 }
 
 // Defines a container for where the weights will live, defaults to 5
 let weights = {
-    airquality: 5,
+    emissionsrating: 5,
+    treerating: 5,
     userrating: 5,
+    temperaturerating: 5,
 }
 
 let heatmap = L.layerGroup()
@@ -84,72 +88,111 @@ document.addEventListener('DOMContentLoaded', () => {
     const weightdialog = document.querySelector("dialog");
     const cancelbutton = weightdialog.querySelector(".cancel-btn");
     const setbutton = weightdialog.querySelector(".set-btn");
-    var airqualityslider = document.getElementById("airQuality");
+    var treesslider = document.getElementById("treeRating");
+    var emissionsslider = document.getElementById("emissionsRating");
     var userratingslider = document.getElementById("userRating");
-    var displayedvalues = [document.getElementById("airqualityvalue"), document.getElementById("userratingvalue")]
-    var previousweights = [weights.airquality, weights.userrating]
+    var temperatureslider = document.getElementById("temperatureRating");
+    var displayedvalues = [document.getElementById("emissionsvalue"),document.getElementById("treevalue"), document.getElementById("userratingvalue"),document.getElementById("temperaturevalue")]
+    var previousweights = [,weights.emissionsrating, weights.treerating, weights.userrating, weights.temperaturerating]
 
+    emissionsslider.oninput = function() {
+        weights.emissionsrating = this.value;
+        displayedvalues[0].innerHTML = weights.emissionsrating;
+        renderheatmap();
+    }
 
-
-    airqualityslider.oninput = function() {
-        weights.airquality = this.value;
-        displayedvalues[0].innerHTML = weights.airquality;
+    treesslider.oninput = function() {
+        weights.treerating = this.value;
+        displayedvalues[1].innerHTML = weights.treerating;
         renderheatmap();
     }
 
     userratingslider.oninput = function() {
         weights.userrating = this.value;
-        displayedvalues[1].innerHTML = weights.userrating;
+        displayedvalues[2].innerHTML = weights.userrating;
         renderheatmap();
     }
+
+    temperatureslider.oninput = function() {
+        weights.temperaturerating = this.value;
+        displayedvalues[3].innerHTML = weights.temperaturerating;
+        renderheatmap();
+    }
+
     // Shows the weights menu when the menu button is pressed
     function weightmenu() {
-        [airqualityslider.value, userratingslider.value] = [weights.airquality, weights. userrating];
-        [displayedvalues[0].innerHTML, displayedvalues[1].innerHTML] = [weights.airquality, weights.userrating];
+        [emissionsslider.value, treesslider.value, userratingslider.value,temperatureslider.value] = [weights.emissionsrating,weights.treerating, weights.userrating, weights.temperaturerating];
+        [displayedvalues[0].innerHTML, displayedvalues[1].innerHTML, displayedvalues[2].innerHTML,displayedvalues[3].innerHTML] = [weights.emissionsrating, weights.treerating, weights.userrating, weights.temperaturerating];
         weightdialog.showModal();
     }
     // If the cancel button is pressed, it closes the popup
     cancelbutton.addEventListener("click", function() {
         console.log(previousweights[0])
-        weights.airquality = previousweights[0];
-        weights.userrating = previousweights[1];
+        weights.emissionsrating = previousweights[0];
+        weights.treerating = previousweights[1];
+        weights.userrating = previousweights[2];
+        weights.temperaturerating = previousweights[3];
         weightdialog.close()
         renderheatmap();
     })
 
     setbutton.addEventListener("click", function() {
-        previousweights = [weights.airquality, weights.userrating]
+        previousweights = [weights.emissionsrating, weights.treerating, weights.userrating, weights.temperaturerating]
         weightdialog.close()
     })
     
 // Info buttons
 // Info button triggers
 
-// Air quality rating info
+// Emissions rating info
 // Get modal and close button elements
 
-const air_quality_info_Modal = document.getElementById("info-modal-airquality");
-const info_airquality_icon = document.getElementById("info-icon-air-quality");
-const info_airquality_closeModal = document.getElementById("airquality-close-modal");
+const emissions_info_Modal = document.getElementById("info-modal-emissions");
+const info_emissions_icon = document.getElementById("info-icon-emissions");
+const info_emissions_closeModal = document.getElementById("emissions-close-modal");
 
 // Show the modal when help icon is clicked
-info_airquality_icon.addEventListener("click", function () {
-air_quality_info_Modal.showModal();
+info_emissions_icon.addEventListener("click", function () {
+emissions_info_Modal.showModal();
 });
 
 // Hide the modal when the close button is clicked
-info_airquality_closeModal.addEventListener("click", function () {
-air_quality_info_Modal.close();
+info_emissions_closeModal.addEventListener("click", function () {
+emissions_info_Modal.close();
 });
 
 // Hide the modal when clicking outside of the modal content
 window.addEventListener("click", function (event) {
-if (event.target === air_quality_info_Modal) {
-    air_quality_info_Modal.close();
+if (event.target === emissions_info_Modal) {
+    emissions_info_Modal.close();
 }
 });
 
-// Air quality rating info
+// Tree rating info
+// Get modal and close button elements
+
+const trees_info_Modal = document.getElementById("info-modal-trees");
+const info_trees_icon = document.getElementById("info-icon-trees");
+const info_trees_closeModal = document.getElementById("trees-close-modal");
+
+// Show the modal when help icon is clicked
+info_trees_icon.addEventListener("click", function () {
+trees_info_Modal.showModal();
+});
+
+// Hide the modal when the close button is clicked
+info_trees_closeModal.addEventListener("click", function () {
+trees_info_Modal.close();
+});
+
+// Hide the modal when clicking outside of the modal content
+window.addEventListener("click", function (event) {
+if (event.target === trees_info_Modal) {
+    trees_info_Modal.close();
+}
+});
+
+// Userrating info
 // Get modal and close button elements
 
 const userrating_info_Modal = document.getElementById("info-modal-userrating");
@@ -173,14 +216,42 @@ if (event.target === userrating_info_Modal) {
 }
 });
 
+// Temperaturerating info
+// Get modal and close button elements
+
+const temperature_info_Modal = document.getElementById("info-modal-temperature");
+const info_temperature_icon = document.getElementById("info-icon-temperature");
+const info_temperature_closeModal = document.getElementById("temperature-close-modal");
+
+// Show the modal when help icon is clicked
+info_temperature_icon.addEventListener("click", function () {
+temperature_info_Modal.showModal();
+});
+
+// Hide the modal when the close button is clicked
+info_temperature_closeModal.addEventListener("click", function () {
+temperature_info_Modal.close();
+});
+
+// Hide the modal when clicking outside of the modal content
+window.addEventListener("click", function (event) {
+if (event.target === temperature_info_Modal) {
+    temperature_info_Modal.close();
+}
+});
+
 }
 
 // Point data fetching logic; to be implemented
 {
     // Both weights are filled with dummy data here
-    points.airqualitypoints = [
+    points.emissionspoints = [
+    ]
+    points.treepoints = [
     ]
     points.userratingpoints = [
+    ]
+    points.temperaturepoints = [
     ]
 }
 
@@ -188,9 +259,10 @@ if (event.target === userrating_info_Modal) {
 {
     function renderheatmap() {
         heatmap.clearLayers()
-        console.log(points.airqualitypoints)
-        heatmappoints = points.airqualitypoints.map((x) => [x[0], x[1], weights.airquality/2.5]).concat(
-            points.userratingpoints.map((x) => [x[0], x[1], weights.userrating/2.5]));
+        console.log(points.treepoints)
+        heatmappoints = points.emissionspoints.map((x) => [x[0], x[1],x[2] ,x[3],weights.emissionsrating/2.5]).concat(points.treepoints.map((x) => [x[0], x[1],x[2] ,x[3] ,weights.treerating/2.5])).concat(
+            points.userratingpoints.map((x) => [x[0], x[1],x[2] ,x[3] ,weights.userrating/2.5])).concat(
+                points.temperaturepoints.map((x) => [x[0], x[1],x[2] ,x[3] ,weights.temperaturerating/2.5]));
         var heat = L.heatLayer(heatmappoints, {radius: 25}).addTo(heatmap);
     }
 

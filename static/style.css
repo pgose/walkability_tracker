@@ -596,6 +596,19 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     justify-content: center;
 }
 
+/* Continue recording trajectories */
+/* Back Button (Top-Left) */
+.continue-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
+
 img {
     height: 100%;
 }

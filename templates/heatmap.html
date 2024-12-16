@@ -78,19 +78,34 @@
     </footer>
     <!-- Menu to set the weights of the different criteria-->
     <dialog>
-      <h4>Set weights for different walkability factors:</h4>
-      <!--The info icon of the air quality rating criteria-->
+      <h2>Set weights for different walkability factors:</h2>
+
+      <!--The info icon of the emissions rating criteria-->
       <div class="criteriaBox">
-            <label for="range">Air Quality</label>
-            <div id="info-icon-air-quality" class="material-symbols-outlined">info</div>
+            <label for="range">Emissions</label>
+            <div id="info-icon-emissions" class="material-symbols-outlined">info</div>
       </div>
-      <input type="range" min="0" max="10" value="10" class="slider" id="airQuality">
+      <input type="range" min="0" max="10" value="10" class="slider" id="emissionsRating">
       <div class="sliderticks">
             <span>0</span>
             <span>5</span>
             <span>10</span>
       </div>
-      <p>Value: <span id="airqualityvalue">10</span></p>
+      <p>Value: <span id="emissionsvalue">10</span></p>
+
+      <!--The info icon of the air quality rating criteria-->
+      <div class="criteriaBox">
+            <label for="range">Tree Density</label>
+            <div id="info-icon-trees" class="material-symbols-outlined">info</div>
+      </div>
+      <input type="range" min="0" max="10" value="10" class="slider" id="treeRating">
+      <div class="sliderticks">
+            <span>0</span>
+            <span>5</span>
+            <span>10</span>
+      </div>
+      <p>Value: <span id="treevalue">10</span></p>
+
       <!--The info icon of the user rating criteria-->
       <div class="criteriaBox">
         <label for="range">User Rating</label>
@@ -103,20 +118,40 @@
             <span>10</span>
       </div>
       <p>Value: <span id="userratingvalue">10</span></p>
+
+    <!--The info icon of the temperature rating criteria-->
+      <div class="criteriaBox">
+        <label for="range">PET</label>
+        <div id="info-icon-temperature" class="material-symbols-outlined">info</div>
+      </div>
+      <input type="range" min="0" max="10" value="10" class="slider" id="temperatureRating">
+      <div class="sliderticks">
+            <span>0</span>
+            <span>5</span>
+            <span>10</span>
+      </div>
+      <p>Value: <span id="temperaturevalue">10</span></p>
+
       <div class="controls">
-          <button class="cancel-btn">Cancel</button>
           <button class="set-btn">Set</button>
+          <button class="cancel-btn">Cancel</button>
       </div>
     </dialog>
 
-
-
     <!-- Help Dialog -->
     <!--The show rating criteria info-->
+
+    <!--Emissions-->
+    <dialog id="info-modal-emissions">
+      <span id="emissions-close-modal" class="close-button">&times;</span>
+      <h2>Air pollution and Greenhouse gas Emissions</h2>
+      <p id="block_text">This critaria is based off the dataset of [...]</p>
+    </dialog>
+
     <!--air quality-->
-    <dialog id="info-modal-airquality">
-      <span id="airquality-close-modal" class="close-button">&times;</span>
-      <h2>Air Quality Rating</h2>
+    <dialog id="info-modal-trees">
+      <span id="trees-close-modal" class="close-button">&times;</span>
+      <h2>Tree Density</h2>
       <p id="block_text">This critaria is based off the dataset of [...]</p>
     </dialog>
 
@@ -129,6 +164,15 @@
       </p>
       <p id="block_text">
         By averaging all the trajectory ratings within each raster cell, the new user rating score is created. By using the slider we can adjust the impact of the user rating in the total score of the raster.
+      </p>
+    </dialog>
+
+    <!--Temperature rating-->
+    <dialog id="info-modal-temperature">
+      <span id="temperature-close-modal" class="close-button">&times;</span>
+      <h2>PET (Physiological Equivalent Temperature)</h2>
+      <p id="block_text">
+        This critaria is based off the dataset of [...]
       </p>
     </dialog>
 
