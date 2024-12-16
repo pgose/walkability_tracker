@@ -400,10 +400,6 @@ function centerMyLocation(){
     }
 }
 
-
-
-
-
 // This code block implements the trajectory download and the push to the geoserver.
 {
     // To generate the id of the trajectory with a specific amount of decimals
