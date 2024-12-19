@@ -7,7 +7,7 @@ import geopandas as gpd # for analysis
 
 def data_analysis():
     # CONNECT
-    # Establish connection to pgAdmin database
+    # Define credentials
     db_credentials = {
         "user": "gta_p3",
         "password": "wbNw8q9T",
@@ -15,6 +15,9 @@ def data_analysis():
         "port": "5432",
         "dbname": "gta"
     }
+    # Establish database connection
+    conn = psycopg2.connect(**db_credentials)
+    cur = conn.cursor()
 
     # RETRIEVE DATA FROM DATABASE
     # define sql query statement and use it to retrieve the trackpoints from the database via the method "geopandas.GeoDataFrame.to_postgis", defining the index column same as the column 'point id'
@@ -70,9 +73,4 @@ def data_analysis():
     conn.commit()
     conn.close()
 
-
-
-
-
-
-
+    return "success"

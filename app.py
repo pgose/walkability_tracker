@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, redirect, render_template, url_for
 from Backend.max_id import get_max_id
+from Backend.backend import data_analysis
 
 app = Flask(__name__, static_folder='static')
 
@@ -22,6 +23,10 @@ def debug():
 @app.route("/js/max_id")
 def max_id():
     return jsonify(get_max_id())
+
+@app.route("/js/data_analysis_trigger")
+def data_analysis_trigger():
+    return data_analysis()
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=8989)
