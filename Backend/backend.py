@@ -1,11 +1,10 @@
 # Import needed packages
 import os # for data paths
-import warnings # to suppress warnings
 import psycopg2 # for database connection
 import geopandas as gpd # for analysis
 
 # Define function returning the result
-warnings.filterwarnings("ignore")
+
 
 def data_analysis():
     # CONNECT
@@ -33,6 +32,10 @@ def data_analysis():
     # APPLY SPATIAL JOIN ON DATA COLLECTED AND CONTEXTUAL DATA
     # use the method df.sjoin(geom a, geom b, how = '...')
     merged = gpd.sjoin(trackpts, walk_idx, how='inner')
+
+    print("this is what merged looks like:")
+    print(merged)
+    print("------------------------")
 
 
     # CALCULATE AVERAGE USER RATING AND COUNT PER CELL/POLYGON
