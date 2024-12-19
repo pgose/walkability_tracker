@@ -1,10 +1,5 @@
-// Defines a container for where the point datasets will live.
-let points = {
-    emissionspoints: [],
-    treepoints: [],
-    userratingpoints: [],
-    temperaturepoints: [],
-}
+// The location of the geoserver for wms
+let wms = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wms';
 
 // Defines a container for where the weights will live, defaults to 5
 let weights = {
@@ -26,6 +21,18 @@ let heatmap = L.layerGroup()
     }).addTo(map);
     map.addLayer(heatmap)
 }
+
+// The raster seen overlayed onto the base map
+// It loads the standard weights of 0.25 (equal weighting for each criteria)
+// The raster is fetched via wms
+let walkabilityRaster = L.tileLayer.wms(wms, {
+    layers: "GTA24_project:visualisation_raster_styling",
+    format: "image/png",
+    styles:"rating_visualisation_styling",
+    transparent: true
+});
+
+walkabilityRaster.addTo(map);
 
 // Help Menu
 
@@ -84,6 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // This code block implements the weights menu
 {
+
+    // A function to later use to sum up all the weights
+    function sum(weights_list) {
+    let sum_of_weights = 0;
+    for (let i = 0; i < weights_list.length; i++) {
+        // So that it doesn't concatinate strings but instead does an actual sumation
+        sum_of_weights += Number(weights_list[i]);
+    }
+    return sum_of_weights;
+    }
     // Define the hook for the weightdialog
     const weightdialog = document.querySelector("dialog");
     const cancelbutton = weightdialog.querySelector(".cancel-btn");
@@ -138,9 +155,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setbutton.addEventListener("click", function() {
         previousweights = [weights.emissionsrating, weights.treerating, weights.userrating, weights.temperaturerating]
+        // The raster seen overlayed onto the base map
+        // It loads the newly defined weights and fetches the new raster with the correct final rating scores
+        // The raster is fetched via wms
+
+        // Since we can't override layers on leaflet, we need to generate a new layer
+        walkabilityRaster.remove();
+        walkabilityRaster = L.tileLayer.wms(wms, {
+            layers: "GTA24_project:visualisation_raster_styling",
+            format: "image/png",
+            //styles:"rating_visualisation_styling",
+            styles: "rating_visualisation_styling",
+            // Dynamic weighting that is sent over to the Geoserver
+            viewparams:"weights_emmission:" +(Number(previousweights[0])/sum(previousweights))+";"+"weights_pet:" +(Number(previousweights[3])/sum(previousweights))+";"+"weights_tree:" +(Number(previousweights[1])/sum(previousweights))+";"+"weights_user_rating:" +(Number(previousweights[2])/sum(previousweights)),
+            transparent: true
+        
+        });
+        // It's added back to the map
+        walkabilityRaster.addTo(map);   
         weightdialog.close()
     })
-    
+
 // Info buttons
 // Info button triggers
 
@@ -242,18 +277,6 @@ if (event.target === temperature_info_Modal) {
 
 }
 
-// Point data fetching logic; to be implemented
-{
-    // Both weights are filled with dummy data here
-    points.emissionspoints = [
-    ]
-    points.treepoints = [
-    ]
-    points.userratingpoints = [
-    ]
-    points.temperaturepoints = [
-    ]
-}
 
 // This code block will implement heatmap rendering using leaflet.heat
 {
