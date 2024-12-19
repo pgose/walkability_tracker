@@ -30,7 +30,7 @@ def data_analysis():
 
     # APPLY SPATIAL JOIN ON DATA COLLECTED AND CONTEXTUAL DATA
     # use the method df.sjoin(geom a, geom b, how = '...')
-    merged = gpd.sjoin(trackpts, walk_idx, how='inner', op="within")
+    merged = gpd.sjoin(trackpts, walk_idx, how='inner')
 
 
     # CALCULATE AVERAGE USER RATING AND COUNT PER CELL/POLYGON
