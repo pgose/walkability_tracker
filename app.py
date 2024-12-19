@@ -28,5 +28,8 @@ def max_id():
 def data_analysis_trigger():
     return data_analysis()
 
+def create_app():
+    return app
+
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=8989)
