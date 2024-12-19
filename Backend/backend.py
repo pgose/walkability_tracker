@@ -35,7 +35,7 @@ def data_analysis():
 
     print("this is what merged looks like:")
     print(merged)
-    print("------------------------")
+    print("------------------------^")
 
 
     # CALCULATE AVERAGE USER RATING AND COUNT PER CELL/POLYGON
