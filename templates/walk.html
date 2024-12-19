@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Walkability App</title>
+    <!-- load style.css -->
+
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}"/>
+
+    <!-- load all google icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- load Leaflet stylesheet (necessary for Leaflet to render correctly) -->
+
+    <link   rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""/>
+
+    <!-- load JQuery and Leaflet -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous" defer></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <!-- load local main.js file -->
+    <script src="{{url_for('static', filename='main.js')}}" defer></script>
+
+  </head>
+
+
+  <body onload="onload();">
+
+    <!-- Small Header Area -->
+    <header style="display: flex">
+      <!--Logo-->
+      <img src="{{url_for('static', filename='Logo.png')}}" alt="Web App Logo">
+      <!-- This message only shows up when a user cannot use JavaScript -->
+      <p id="nogps"></p>
+    </header>
+    <div id="help-icon" class="material-symbols-outlined">
+      help
+    </div>
+
+    <div id="navigation-icons">
+      <div class="symbol-box">
+          <a href="." id="walk-icon" class="material-symbols-outlined">directions_walk</a>
+      </div>
+      <div class="symbol-box">
+          <a href="../heatmap" id="heatmap-icon" class="material-symbols-outlined">map</a>
+      </div>
+    </div>
+  
+
+
+    <!-- Main Content with Map, populated using javascript -->
+    <main>
+      <noscript>Enable JavaScript to use this App as intended.</noscript>
+      <div id="map">
+      </div>
+      <button id="startbutton" type="button" onclick=""></button>
+      <div id="center-button" class="material-symbols-outlined" onclick="centerMyLocation()">my_location</div>
+    </main>
+
+    <!-- Small Footer Area under the nav bar -->
+    <footer>
+      <!--Allyna: Made a change to make it popup dependent-->
+      <!--Old code: -->
+      <!-- <a id="download" href="#" download="trackpoints.csv"></a> -->
+      
+      <em>D-BAUG</em>
+      <em>GTA 2024</em>
+
+      
+    </footer>
+
+    <!-- DIALOGS -->
+
+    <!-- When the stop button is pressed, this will become active and visible on the webpage-->
+    <!-- This is the popup with the user rating-->
+
+    <dialog>
+      <button id="continue_trajectory" class="continue-button">&larr; Continue</button>
+      <h2>Thank you for participating!</h2>
+      <!-- This is the slider-->
+      <div class="slidecontainer">
+          <!-- <p>Custom range slider:</p> -->
+          <label for="range">How would you rate the quality of your trip?</label>
+          <!--With this I set the range of the slider, if I don't want a continuous slider add step=2.5 -->
+          <input type="range" min="0" max="10" value="5" class="slider" id="myRange">
+          <!--Here we make the ticks that you know where which value approximately is-->
+          <div class="sliderticks">
+            <span>0</span>
+            <span>5</span>
+            <span>10</span>
+          </div>
+          <!--The current selected value output-->
+          <p>Value: <span id="value"></span></p>
+      </div>
+      <!-- These are the buttons to either confirm or submit-->
+      <div class="controls">
+          <button class="submit-btn">Submit</button>
+          <button class="close-btn">Discard</button>
+      </div>
+    </dialog>
+    <!-- If you accidentally click cancel, you should get another popup-->
+    <dialog id="are_you_sure">
+      <h2>Do you wish to discard your walk?</h2>
+      <p id="block_text">If you discard your recorded trajectory, it will not be saved and can not be recovered</p>
+      <div class="controls">
+        <button class="submit-btn">Yes</button>
+        <button class="close-btn">No</button>
+      </div>
+    </dialog>
+
+    <!-- Help Dialog -->
+    <dialog id="help-modal">
+      <span id="close-modal" class="close-button">&times;</span>
+    
+      <!-- Main Help Page -->
+      <div id="help-main" class="help-page">
+        <h2>Help Center</h2>
+        <ul class="help-options">
+          <li><button id="introduction-btn">Introduction</button></li>
+          <li><button id="troubleshooting-btn">Troubleshooting</button></li>
+          <li><button id="contact-btn">Contact & About Us</button></li>
+        </ul>
+      </div>
+    
+      <!-- Introduction Page -->
+      <div id="help-introduction" class="help-page hidden">
+        <button id="back-to-main-1" class="back-button">&larr; Back</button>
+        <h2>Introduction</h2>
+        <div class="help-content">
+            <section>
+                <h3>Track Your Route</h3>
+                <ol>
+                    <li><strong>Start Recording:</strong> Click the <em>"Start"</em> button at the bottom of the screen to begin recording your trip. The button will change to <em>"Stop"</em>, indicating the recording is in progress.</li>
+                    <li><strong>Stop Recording:</strong> When you are done, click the <em>"Stop"</em> button. A dialog will appear, allowing you to either <strong>rate the quality of your trip</strong> or <strong>cancel the submission</strong>.</li>
+                    <li><strong>Submit or Discard:</strong> 
+                        <ul>
+                            <li>If you choose to <strong>Submit</strong>, your route and rating will be saved for further analysis.</li>
+                            <li>If you select <strong>Cancel</strong>, the recorded data will be discarded and cannot be recovered.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+            <section>
+                <h3>Switch Between Layers</h3>
+                <p>The app offers two layers to help you analyze walkability in your area:</p>
+                <ul>
+                    <li><strong>Walk Layer:</strong> Track and visualize your route in real time. It highlights your movement and provides tools for route recording.</li>
+                    <li><strong>Heatmap Layer:</strong> Presents a heatmap showcasing the walkability quality across the map. Adjust the <em>weights for different walkability factors</em> like air quality and user ratings using the control menu in the top-right corner.</li>
+                </ul>
+                <p>To switch between layers, use the <strong>icons with borders</strong> in the top-right corner of the screen.</p>
+            </section>
+            <section>
+                <h3>Other Buttons</h3>
+                <ul>
+                    <li><strong>Zoom In/Out:</strong> Use the "+" and "-" buttons in the top-left corner to adjust the map zoom level.</li>
+                    <li><strong>Recenter the Map:</strong> Click the location button (a circular icon) to recenter the map to your current location.</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    
+    
+      <!-- Troubleshooting Page -->
+      <div id="help-troubleshooting" class="help-page hidden">
+        <button id="back-to-main-2" class="back-button">&larr; Back</button>
+        <h2>Troubleshooting</h2>
+        <div class="help-content">
+            <section>
+                <h3>The Map Is Not Loading</h3>
+                <ul>
+                    <li>Check your internet connection.</li>
+                    <li>Ensure location services are enabled in your browser settings.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>The Recording Does Not Start</h3>
+                <ul>
+                    <li>Ensure GPS permissions are granted to the app.</li>
+                    <li>Refresh the page and try again.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Layer Buttons Are Unresponsive</h3>
+                <ul>
+                    <li>Make sure no recording is in progress.</li>
+                    <li>If the issue persists, clear your browser cache and reload the page.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Still Having Issues?</h3>
+                <p>If the above steps don’t resolve your issue, please contact our support team.</p>
+            </section>
+        </div>
+      </div>
+    
+    
+    
+      <!-- Contact & About Us Page -->
+      <div id="help-contact" class="help-page hidden">
+        <button id="back-to-main-3" class="back-button">&larr; Back</button>
+        <h2>Contact & About Us</h2>
+        <div class="help-content">
+            <section>
+                <h3>Contact</h3>
+                <p>If you need assistance, feel free to reach out to us:</p>
+                <ul>
+                    <li><strong>Email:</strong> <a href="mailto:zhihyu@ethz.ch">zhihyu@ethz.ch</a></li>
+                </ul>
+                <p>We aim to respond to inquiries within 48 hours.</p>
+            </section>
+            <section>
+                <h3>About Us</h3>
+                <p><strong>WalkAcity - Zurich City Walkability Tracker</strong></p>
+                <p>WebApp designed for urban planners by urban planners.</p>
+                <p>This is a semester project related to the lecture:</p>
+                <p><em>“Geoinformationstechnologien und -analysen HS2024” [103-0717-00L], Autumn semester 2024</em></p>
+                <p><strong>Authors:</strong> Zhihe Yu, Allyna Dachler, Angelika Nogueira Bhushan, Philip Gosset</p>
+                <p><strong>Supervisors:</strong> Prof. Dr. Martin Raubal, Dr. Peter Kiefer, Ye Hong, Nina Wiedemann, Tianyi Xiao, Yiwei Wang, Ayda Grisiute, Shupeng Wang, Dr. Sailin Zhong, Mischa Bauckhage, Andreas Dombos</p>
+                <p><strong>ETH Zürich</strong></p>
+                <p>Institute of Cartography & Geoinformation</p>
+                <p>Professor of Geoinformation Engineering</p>
+                <p>ETH Zürich, December 2024</p>
+            </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="switch-warning">
+      <h2>Warning</h2>
+      <p>Recording is in progress. Do you really want to leave this page?</p>
+      <div class="controls">
+        <button id="confirm-switch">Yes</button>
+        <button id="cancel-switch">No</button>
+      </div>
+    </dialog>
+
+
+    
+
+    <!-- disable icon for current layer -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname; // get current path
+        const walkBox = document.querySelector('#walk-icon').parentElement;
+        const heatmapBox = document.querySelector('#heatmap-icon').parentElement;
+
+        // if current is walk
+        if (currentPath.includes('walk') && !currentPath.includes('heatmap')) {
+            walkBox.classList.add('disabled');
+            walkBox.querySelector('#walk-icon').removeAttribute('href');
+        }
+      });
+    </script>
+
+  </body>
+
+
+</html>

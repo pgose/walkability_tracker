@@ -29,7 +29,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
     // Feel free to remove one of the polylines (but also remove the part that updates it
     // in geosuccess)
     var line = new L.Polyline([], {color: '#007bff',
-        weight: 10,
+        weight: 15,
         opacity: 1,
         smoothFactor: 1,
         stroke: false
@@ -81,16 +81,10 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         let userMarkerWithArrow = L.marker(latlng, { icon: userIconWithArrow });
         appstate.marker.addLayer(userMarkerWithArrow);
 
-        // turn the arrow
-        // if (position.coords.heading != null) {
-        //    const heading = position.coords.heading; // direction
-        //    document.querySelector('.user-icon-container').style.transform = `rotate(${heading}deg)`;
-        // }
-
         }
 
-        console.log(appstate.follow, "appstate initialized?")
         if (appstate.follow == true) {
+            console.log("setting follow user to false.")
             appstate.follow = false;
             // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
             // So that we aren't too far away from the point, its zoom level was set to 18
@@ -101,6 +95,8 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
 
         // Checks if the button has been pressed yet
         if (appstate.press == false) {
+            // Removes the nogps error message for when it appears before recording
+            document.getElementById("nogps").innerHTML = "";
             console.log("geosuccess called before button press, waiting.")
             return
         }
@@ -110,14 +106,14 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         // the recording was stopped.
         if (appstate.timeout == true) {
             // Removes the nogps error message
-            document.getElementById("nogps").innerHTML = ""
+            document.getElementById("nogps").innerHTML = "";
 
             // the "timeout" is over
             appstate.timeout = false;
 
             // Compares current time to last recorded time from trajectories.
             trj = JSON.parse(localStorage["trajectory"]);
-            let offlinetime = (Date.now() - (trj[trj.length - 1][2]))/1000
+            let offlinetime = (Date.now() - (trj[trj.length - 1][2]))/1000;
             // Alerts the user to how much time has passed
             alert("Tracking timed out for " + offlinetime + " seconds")
 
@@ -170,25 +166,40 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         maximumAge: 15000,  // The maximum age of a cached location (10 seconds).
         timeout: 12000   // A maximum of 5 seconds before timeout.
     };
+
+}
+
+// ATTENTION: This piece of code currently does not get called anywhere and doesn't do much as it is. Maybe rewrite it somewhere else or remove it entirely
+// Note that when appstate.follow = true, geosuccess sets it to false again. The intended functionality would be for appstate.follow to be trueby default,
+// And Javascript listening for a click on the map element on the page. If it hears you clicking, appstate.follow is automatically set to false and the
+// follow button stops being highlighted, until you press it again, appstate.follow is set back to true, and the follow button is, again highlighted. Please
+// Consider this when implementing a feature like that. Also, please implement within the code block for button & dialog logic, instead of outside of any
+// code blocks, to keep code clean and readable. Thanks. - Philip
+
+//Implemented the center button
+function centerMyLocation(){
+    map.panTo(latlng);//UserCords = user current latitude, longitude. I suppose you have them!!!
+    appstate.follow = true;
 }
 
 // This code block implements the button & dialog logic
 {
-    // Function to switch to Start mode (green)
-    function setStartMode() {
-        startButton.classList.remove("stop");
-        startButton.classList.add("start");
-        startButton.innerHTML = "Start";
-        startButton.onclick = start; // Set click event to start tracking
+    // Switch button to Stop mode
+    function setStopMode() {
+        startbutton.innerHTML = "Stop";
+        startbutton.classList.remove("start"); // Remove Start-related styles
+        startbutton.classList.add("stop", "pulsing"); // Add Stop mode and pulsing animation
+        startbutton.onclick = stop; // Set the click handler to stop()
     }
 
-    // Function to switch to Stop mode (red)
-    function setStopMode() {
-        startButton.classList.remove("start");
-        startButton.classList.add("stop");
-        startButton.innerHTML = "Stop";
-        startButton.onclick = stop; // Set click event to stop tracking
+    // Switch button to Start mode
+    function setStartMode() {
+        startbutton.innerHTML = "Start";
+        startbutton.classList.remove("stop", "pulsing"); // Remove Stop-related styles and pulsing animation
+        startbutton.classList.add("start"); // Add Start mode styles
+        startbutton.onclick = start; // Set the click handler to start()
     }
+
 
     // This function is called from HTML when Start is pressed.
     function start() {
@@ -215,10 +226,58 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         localStorage['saved'] = true;
     }
 
+    // This is called when the user presses x after pressing stop and continues recording
+    function continue_recording() {
+        console.log("The recording continues");
+        // We do not clear the local storage since we wish to continue the recording
+
+        // Sets "press" to true, which makes geosuccess start doing its thing
+        appstate.press = true;
+        console.log("appstate.press has been set to", appstate.press);
+        setStopMode();  // Switch button to Stop mode
+    }
 
     // Button reference and default state
     const startButton = document.getElementById("startbutton");
     setStartMode();  // Initialize button in Start mode
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const walkIcon = document.querySelector('#walk-icon');
+        const heatmapIcon = document.querySelector('#heatmap-icon');
+        const switchWarningDialog = document.getElementById('switch-warning');
+        const confirmSwitchButton = document.getElementById('confirm-switch');
+        const cancelSwitchButton = document.getElementById('cancel-switch');
+    
+        let targetHref = null; // Store the target href for navigation
+    
+        // Function to handle navigation with confirmation
+        function handleNavigation(event, href) {
+            if (appstate.press) {
+                event.preventDefault(); // Stop navigation
+                targetHref = href; // Save the target href
+                switchWarningDialog.showModal(); // Show the warning dialog
+            }
+        }
+    
+        // Attach event listeners to navigation icons
+        walkIcon.addEventListener('click', (event) => handleNavigation(event, walkIcon.href));
+        heatmapIcon.addEventListener('click', (event) => handleNavigation(event, heatmapIcon.href));
+    
+        // Handle dialog buttons
+        confirmSwitchButton.addEventListener('click', () => {
+            switchWarningDialog.close();
+            if (targetHref) {
+                window.location.href = targetHref; // Navigate to the saved href
+            }
+        });
+    
+        cancelSwitchButton.addEventListener('click', () => {
+            switchWarningDialog.close(); // Close the dialog without navigation
+            targetHref = null; // Reset target href
+        });
+    });
+
 
 
     // This code block implements the dialogs.
@@ -227,7 +286,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         // The querySelector finds the very first element that has the type dialog
         const dialog = document.querySelector("dialog");
         const are_you_sure_dialog = document.querySelector("#are_you_sure");
-       
+        const continue_trajectory = document.getElementById("continue_trajectory");
         document.getElementById("startbutton").addEventListener("click", function(){
             // It seems counterintuitive but by checking if the inner HTML of the button is
             // "Start" we are able to directly target the state change from Start to Stop
@@ -254,11 +313,33 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             } else {
                 // This function sends everything to the geoserver and conversely to the database
                 console.log("There are trajectories in the local storage");
-                insertTrajectory();
+
+                // Check the SQL Database through Flask to read the current highest ID of all trajectories
+                // This is done at the address /js/max_id which was set through Flask.
+                // See /Backend/max_id.py for more info on how this works
+                $.ajax({
+                    url: '/js/max_id',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    success: function (data) {
+                        new_id = data+1
+                        // Call the insertTrajectory function to actually write the trajectory into the database.
+                        insertTrajectory(new_id);
+                        console.log('Trajectory number', new_id, 'has been added to the database')
+                    },
+                    error: function (data) { console.log('trajectory is', data); },
+                })
             }
             dialog.close();
         }, false);
 
+        // Hide the pop up when the close button is clicked and the user wishes to continue
+        // Then continue recording
+        continue_trajectory.addEventListener("click", function () {
+            dialog.close();
+            console.log("it has been closed without any submitting")
+            continue_recording()
+            });
 
         var slider = document.getElementById("myRange");
         var output = document.getElementById("value");
@@ -278,87 +359,73 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             dialog.close();
         });
 
+        
 
-        // Get modal and close button elements
-        const helpModal = document.getElementById("help-modal");
-        const closeModal = document.getElementById("close-modal");
-        const helpIcon = document.getElementById("help-icon");
-
-        // Show the modal when help icon is clicked
-        helpIcon.addEventListener("click", function () {
-        helpModal.showModal();
+        // Help Menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const helpModal = document.getElementById('help-modal');
+            const closeButtons = document.querySelectorAll('.close-button');
+            const backButtons = document.querySelectorAll('.back-button');
+            const pages = document.querySelectorAll('.help-page');
+        
+            const introductionPage = document.getElementById('help-introduction');
+            const troubleshootingPage = document.getElementById('help-troubleshooting');
+            const contactPage = document.getElementById('help-contact');
+            const mainPage = document.getElementById('help-main');
+        
+            const introductionButton = document.getElementById('introduction-btn');
+            const troubleshootingButton = document.getElementById('troubleshooting-btn');
+            const contactButton = document.getElementById('contact-btn');
+        
+            // Function to show a specific page
+            function showPage(pageToShow) {
+                pages.forEach((page) => page.classList.add('hidden')); // Hide all pages
+                pageToShow.classList.remove('hidden'); // Show the selected page
+            }
+        
+            // Close modal
+            closeButtons.forEach((button) =>
+                button.addEventListener('click', () => helpModal.close())
+            );
+        
+            // Navigate to pages
+            introductionButton.addEventListener('click', () => showPage(introductionPage));
+            troubleshootingButton.addEventListener('click', () => showPage(troubleshootingPage));
+            contactButton.addEventListener('click', () => showPage(contactPage));
+        
+            // Navigate back to the main page
+            backButtons.forEach((button) =>
+                button.addEventListener('click', () => showPage(mainPage))
+            );
         });
-
-        // Hide the modal when the close button is clicked
-        closeModal.addEventListener("click", function () {
-        helpModal.close();
-        });
-
-        // Hide the modal when clicking outside of the modal content
-        window.addEventListener("click", function (event) {
-        if (event.target === helpModal) {
-            helpModal.close();
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const helpIcon = document.getElementById('help-icon');
+            const helpModal = document.getElementById('help-modal');
+        
+            // Open Help Modal
+            helpIcon.addEventListener('click', () => {
+                helpModal.showModal();
+            });
+        
+            // Ensure close buttons are working
+            const closeButtons = document.querySelectorAll('.close-button');
+            closeButtons.forEach((button) => {
+                button.addEventListener('click', () => helpModal.close());
+            });
         });
     }
 }
 
 // This code block implements the trajectory download and the push to the geoserver.
 {
-    // To generate the id of the trajectory with a specific amount of decimals
-    function getRandomID(length) {
-
-        return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
-    }
-
-
-    // A different Version to download the file
-    function download(filename) {
-
-        //creating an invisible element
-        // Why invisible? Because this element should be clicked at the same time as the submit button
-        // So we have to secretly press it ;)
-        // ATTENTION, currently the format of the csv file is NOT accurate to the UML, since the user rating is missing
-        // And of course it is not connected to the geoserver
-
-        if (!localStorage["trajectory"]) {
-            console.warn("No trajectory data is available in localStorage.");
-            alert("No trajectory data is available for download.");
-            return;
-        }
-
-
-
-        let firstrow = "trajectory_id;point_id;time_stamp;lat;lon;rating%0D%0A";
-        let alldata = firstrow;
-        trj = JSON.parse(localStorage["trajectory"]);
-        let i;
-        // PK of the trajectory and in order to concatinate it has to be a string
-        let trj_id = getRandomID(9).toString();
-
-        // Currently generates a new id per trajectory and creates point_id iteratively
-        for (i = 0; i < trj.length; i++) {
-            alldata = alldata + trj_id + ";" + i.toString() + ";" + trj[i][2] + ";" + trj[i][0].lat + ";" + trj[i][0].lng + ";" + (slider.value).toString()+ "%0D%0A";
-        }
-
-        let element = document.createElement('a');
-        element.setAttribute('href',
-            "data:text/csv;charset=UTF-8," + alldata);
-        element.setAttribute('download', filename);
-        document.body.appendChild(element);
-        element.click();
-
-        document.body.removeChild(element);
-    }
-
-    // Instead of local download, we want to send this to the geoserver
+    // We want to send the trajectory to the GeoServer
     // This is done with WFS-T
-    function insertTrajectory() {
+    function insertTrajectory(maxid) {
         trj = JSON.parse(localStorage["trajectory"]);
         let i;
         // PK of the trajectory and in order to concatinate it has to be a string
-        // TODO: CREATE A CHECK FOR DUPLICATES
-        let geo_trj_id = getRandomID(9).toString();
+        let geo_trj_id = maxid
+
 
         // The xml file that is sent to the geoserver
         let postData =

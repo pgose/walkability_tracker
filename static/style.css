@@ -36,6 +36,9 @@ header a {
 }
 
 header button {
+    position: absolute; /* Position it independently from other elements */
+    top: 10px; /* Adjust to appear below the header, 5px gap */
+    right: 10px; 
     padding: 0;
     cursor:pointer;
     border: none;
@@ -67,12 +70,40 @@ header button p {
       'opsz' 24;
 }
 
+/* centering button */
+#center-button {
+    position: absolute;
+    top: calc(9vh + 85px); /* Below the zoom buttons */
+    left: -10px; /* Align to the left edge */
+    display: flex;
+    flex-direction: column; /* Vertical alignment */
+    gap: 20px; /* Space between icons */
+    z-index: 10;
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Default icon color */
+    font-size: 36px; /* Icon size */
+    padding-left: 0.5em;
+}
+
+
+
+/* disabled icon on current layer */
+/* a.disabled {
+    pointer-events: none;
+    color: #007bff;
+    cursor: default;
+    opacity: 1 !important;
+    border: 2px solid #0056b3; 
+    box-sizing: border-box;
+} */
+
+
 
 /* Help icon positioned below the header */
 #help-icon {
     position: absolute; /* Position it independently from other elements */
     top: calc(7vh + 30px); /* Adjust to appear below the header, 5px gap */
-    right: 10px; /* Distance from the right edge of the screen */
+    right: 18px; /* Distance from the right edge of the screen */
     font-size: 36px; /* Icon size */
     color: #333; /* Default icon color */
     cursor: pointer; /* Pointer cursor for interactivity */
@@ -95,7 +126,7 @@ header button p {
 /* Navigation Icons */
 #navigation-icons {
     position: absolute;
-    top: calc(7vh + 80px); /* Below the Help icon */
+    top: calc(7vh + 100px); /* Below the Help icon */
     right: 10px; /* Align to the right edge */
     display: flex;
     flex-direction: column; /* Vertical alignment */
@@ -119,34 +150,114 @@ header button p {
   #walk-icon.active,
   #heatmap-icon.active {
     color: #007bff; /* Highlight active page icon */
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
-/* user location icon blue */
-.material-symbols-outlined {
-    font-variation-settings:
-      'FILL' 0,
-      'wght' 400,
-      'GRAD' 0,
-      'opsz' 24;
-    font-size: 32px;
-    color: #007bff;
-    z-index: 1; /* higher than arrow */
+/* Box */
+.symbol-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #d9d9d9;
+    border: 2px solid transparent;
+    border-radius: 8px; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px; /* between two boxes */
 }
 
-/* arrow */
-.arrow {
-    width: 8px;
-    height: 10px;
-    background-color: #007bff; /* blue arrow */
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* triangle */
-    position: absolute;
-    top: -10px;
-    left: 40%; /* could be changed!!!!!!!!!!!!!!!! */
-    transform: translateX(-55%); /* could be changed!!!!!!!!!!!!!!!! */
+/* box hover */
+.symbol-box:hover {
+    background-color: #e9ecef;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow */
+    border: 2px solid #007bff; 
+}
+
+/* icon in box */
+.symbol-box a {
+    font-size: 24px;
+    color: #333;
+    text-decoration: none;
+}
+
+.symbol-box.disabled {
+    border: 2px solid #0056b3; /* highlight border */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+    cursor: default;
 }
 
 
+
+#switch-warning {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#switch-warning h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #f44336; /* Highlight warning title in red */
+}
+
+#switch-warning p {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#switch-warning .controls {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+#switch-warning .controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#switch-warning .controls #confirm-switch {
+    padding: 0.75em;
+    cursor: pointer;
+    background: #007bff;
+    outline: none;
+    border: 1px solid #007bff;
+    color: #ddd;
+    font-size: 0.9em;
+}
+
+#switch-warning .controls #cancel-switch {
+    padding: 0.75em;
+    cursor: pointer; 
+    background: transparent;
+    color: #007bff; 
+    border: 1px solid #007bff; 
+    font-size: 0.9em;
+}
+
+/* Criteria info button styling */
+#info-icon-air-quality{
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Default icon color */
+    font-size: 20px; /* Icon size */
+    padding-left: 0.5em;
+}
+
+#info-icon-user-rating{
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Default icon color */
+    font-size: 20px; /* Icon size */
+    padding-left: 0.5em;
+}
 
 main {
     flex-grow: 1;
@@ -178,6 +289,13 @@ main button {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: none;
+}
+
+/* So that the info button border is invisible */
+button {
+    padding: 0;
+    border: none;
     background: none;
 }
 
@@ -225,7 +343,103 @@ main button {
 }
 
 
+
+/* Stop button pulsing animation */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.5); /* begin: no shadow */
+    }
+    70% {
+        box-shadow: 0 0 0 20px rgba(244, 67, 54, 0); /* shadow maximum */
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); /* end: no shadow */
+    }
+}
+
+#startbutton.stop.pulsing {
+    animation: pulse 1.5s infinite; /* constant */
+}
+
+
+
 /* Modal dialog */
+/* Help Modal */
+/* General Help Modal Styling */
+#help-modal {
+    box-sizing: border-box;
+    width: 80%;
+    max-width: 600px;
+    height: 70%;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    text-align: left;
+}
+
+/* Hidden Pages */
+.hidden {
+    display: none;
+}
+
+/* Close Button (Top-Right) */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Back Button (Top-Left) */
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
+
+/* Main Help Page Options */
+.help-options {
+    list-style: none;
+    padding: 0;
+}
+
+.help-options li {
+    margin-bottom: 15px;
+}
+
+.help-options button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.help-options button:hover {
+    background: #0056b3;
+}
+
+.help-content h3 {
+    color: #007bff; /* Slightly different color for troubleshooting sections */
+}
+
+
+
+
+
 #help-modal {
   /* Position it relative to the viewport */
     background-color: #fff; /* Modal background */
@@ -236,6 +450,12 @@ main button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
     z-index: 1001; /* Ensure it stays on top of other content */
   }
+/*Text that needs to have the "block" formating instead of center*/
+
+#block_text {
+    text-align: justify;
+    hyphens: auto;
+}
 
   /* Close button (X) */
   .close-button {
@@ -274,7 +494,7 @@ dialog {
     box-sizing: border-box;
     width: calc(100%-1em);
     /*max-width: 350px; */
-    border: 1px solid #ddd;
+    border: 1px solid #ffffff;
     border-radius: 0.5em;
     text-align: center;
     padding: 0.8em 1.5em 1em;
@@ -308,7 +528,7 @@ dialog .controls button {
     background: #007bff;
     outline: none;
     border: 1px solid #007bff;
-    color: #ddd;
+    color: #ffffff;
     font-size: 0.9em;
 }
 
@@ -369,5 +589,26 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     background: #d3d3d3;
     line-height: 40px;
   }
+/* Have the info button show up next to the label without moving it from the center */
+.criteriaBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+/* Continue recording trajectories */
+/* Back Button (Top-Left) */
+.continue-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
 
+img {
+    height: 100%;
+}
