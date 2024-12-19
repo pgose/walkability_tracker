@@ -1,9 +1,11 @@
 # Import needed packages
 import os # for data paths
+import warnings # to suppress warnings
 import psycopg2 # for database connection
 import geopandas as gpd # for analysis
 
 # Define function returning the result
+warnings.filterwarnings("ignore")
 
 def data_analysis():
     # CONNECT

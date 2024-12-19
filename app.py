@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request, redirect, render_template, url_for
 from Backend.max_id import get_max_id
 from Backend.backend import data_analysis
+import warnings # to suppress warnings
 
+warnings.filterwarnings("ignore")
 app = Flask(__name__, static_folder='static')
 
 @app.route("/")
