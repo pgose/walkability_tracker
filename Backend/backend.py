@@ -2,6 +2,7 @@
 import os # for data paths
 import psycopg2 # for database connection
 import geopandas as gpd # for analysis
+import numpy as np
 
 # Define function returning the result
 
@@ -35,7 +36,7 @@ def data_analysis():
 
     print("this is what merged looks like:")
     print(merged)
-    print("------------------------^")
+    print("------------------------")
 
 
     # CALCULATE AVERAGE USER RATING AND COUNT PER CELL/POLYGON

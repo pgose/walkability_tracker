@@ -5,3 +5,4 @@ SQLAlchemy
 psycopg2-binary
 geopandas==0.14.0
 waitress
+numpy
