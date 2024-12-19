@@ -67,8 +67,8 @@ def data_analysis():
         cur.execute(query, (norm_count[0], index))
 
         # commit changes in the database and close connection
-        conn.commit()
-        conn.close()
+    conn.commit()
+    conn.close()
 
 
 
