@@ -154,8 +154,12 @@
       <li>Laughing gas(N20) </li>
       <li>Ammonia (NH3) </li>
       <li>Nitrogen oxide (NOx) </li>
+      <li> Fine dust particles (PM10) </li>
+      <li> Fine dust particles (PM2.5) </li>
+      <li> Sulfur dioxide (SO2) </li>
+      <li> volatile organic compounds (VOC) </li>
       </p>
-      <p id="block_text"><b>Attention:</b>The tree ratings have been normalised and rasterized to an interval [0,1], in order to make them comparible to other datasets. The legend however ranges from [-1,1], which is why the tree ratings are shown in mostly green and yellow tones.</p>
+      <p id="block_text"><b>Attention:</b>The emissions ratings have been normalised and rasterized to an interval [-1,0], in order to make them comparible to other datasets. The legend however ranges from [-1,1], which is why the tree ratings are shown in mostly blueish greens and yellow tones.</p>
     </dialog>
 
 
@@ -184,9 +188,8 @@
     <dialog id="info-modal-temperature">
       <span id="temperature-close-modal" class="close-button">&times;</span>
       <h2>PET (Physiological Equivalent Temperature)</h2>
-      <p id="block_text">
-        This critaria is based off the dataset of [...]
-      </p>
+      <p id="block_text">This critaria is based off the dataset of City Zürich known as "Klimamodell ZH" (Climate Model ZH). It represents the perceived average temperature of a person during the summer period.</p>
+      <p id="block_text"><b>Attention:</b>The PET ratings have been normalised and rasterized to an interval [-1,0], in order to make them comparible to other datasets. The legend however ranges from [-1,1], which is why the tree ratings are shown in mostly blue tones.</p>
     </dialog>
 
     <!--help button pop up-->
@@ -323,11 +326,6 @@
           }
       });
     </script>
-
-  <!--The color ramp is custom made in QGIS and can not be exported. So we need to cheat a little bit and insert an image of the color ramp-->
-  <!--Legend-->
-  <img id= legend src="{{url_for('static', filename='cramp_converted.svg')}}" alt="legend">
-
   </body>
 
 </html>
