@@ -3,3 +3,5 @@ numpy
 pyproj
 SQLAlchemy
 psycopg2-binary
+geopandas
+waitress
