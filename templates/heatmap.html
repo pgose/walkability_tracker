@@ -145,14 +145,26 @@
     <dialog id="info-modal-emissions">
       <span id="emissions-close-modal" class="close-button">&times;</span>
       <h2>Air pollution and Greenhouse gas Emissions</h2>
-      <p id="block_text">This critaria is based off the dataset of [...]</p>
+      <p id="block_text">This critaria is based off the dataset of City Zürich known as "Emissionskataster" (emissions cadastre). It contains in total 12 different types of air pollutants and greenhouse gases:
+      <li>Soot (BC)</li>
+      <li>Benzene</li>
+      <li>Methane (CH4)</li>
+      <li>Carbon monoxide (CO)</li>
+      <li>Carbon dioxide (CO2)</li>
+      <li>Laughing gas(N20) </li>
+      <li>Ammonia (NH3) </li>
+      <li>Nitrogen oxide (NOx) </li>
+      </p>
+      <p id="block_text"><b>Attention:</b>The tree ratings have been normalised and rasterized to an interval [0,1], in order to make them comparible to other datasets. The legend however ranges from [-1,1], which is why the tree ratings are shown in mostly green and yellow tones.</p>
     </dialog>
 
-    <!--air quality-->
+
+    <!--tree rating-->
     <dialog id="info-modal-trees">
       <span id="trees-close-modal" class="close-button">&times;</span>
       <h2>Tree Density</h2>
-      <p id="block_text">This critaria is based off the dataset of [...]</p>
+      <p id="block_text">This critaria is based off the dataset of City Zürich known as "Baumkataster" (tree cadastre). It contains all the trees in City Zurich located near roads that are maintained by the city. Additionally, it contains the "Obstbauminventar" (Fruittree inventory) and specially selected trees located in public green spaces and private spaces.</p>
+      <p id="block_text"><b>Attention:</b>The tree ratings have been normalised and rasterized to an interval [0,1], in order to make them comparible to other datasets. The legend however ranges from [-1,1], which is why the tree ratings are shown in mostly green and yellow tones.</p>
     </dialog>
 
     <!--user rating-->
@@ -165,6 +177,7 @@
       <p id="block_text">
         By averaging all the trajectory ratings within each raster cell, the new user rating score is created. By using the slider we can adjust the impact of the user rating in the total score of the raster.
       </p>
+      <p id="block_text"><b>Attention:</b> As the user ratings range from [0,10], they had to be normalised to an interval [0,1] in order to make them comparible to other datasets. The legend however ranges from [-1,1], which is why the user ratings are shown in mostly green and yellow tones.</p>
     </dialog>
 
     <!--Temperature rating-->
@@ -311,6 +324,9 @@
       });
     </script>
 
+  <!--The color ramp is custom made in QGIS and can not be exported. So we need to cheat a little bit and insert an image of the color ramp-->
+  <!--Legend-->
+  <img id= legend src="{{url_for('static', filename='cramp_converted.svg')}}" alt="legend">
 
   </body>
 
