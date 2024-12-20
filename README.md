@@ -17,8 +17,12 @@ assess and map walkability in Zurich. This app is intended for use by planners a
 
 ## UI & Frontend
 
+The UI & Frontend are relatively straight forward HTML web pages. 
+
 ## Backend
 
+The backend functions mainly through Flask, which is implemented within `app.py`. Flask serves the different pages and static resources to the client. By default, Flask serves the `templates/walk.html` under /walk, or / as the home page. `templates/heatmap.html` is then served under heatmap. Beyond this, `app.py` only imports functions from `Backend/backend.py` and `Backend/max_id.py` to make them callable from JavaScript through AJAX GET requests, under paths that begin with `/js/`. 
+Other than that, the GeoServer, hosted at `https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wms` is used to process the raster heatmap that is viewable under `/heatmap`. How this is done is explained in the following chapter.
 
 ## Pre Processing
 The Datasets used are all from the [Open Data Catalogue of the city of Zurich](https://data.stadt-zuerich.ch/). Pre Processing was done using QGIS, Python3.11, and SQL through pgAdmin.
