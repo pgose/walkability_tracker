@@ -219,7 +219,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
     }
 
     // Button reference and default state
-    const startButton = document.getElementById("startbutton");
+    startButton = document.getElementById("startbutton");
     setStartMode();  // Initialize button in Start mode
 
     // This function is called when the center-button is clicked
