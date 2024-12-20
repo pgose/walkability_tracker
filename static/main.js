@@ -16,6 +16,7 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
 
 // This code block initializes the map and all of its layers (markers and path)
 {
+
     // Initializes Leaflet map. For more Info see Leaflet documentation online.
     var map = L.map('map').setView([47.408375, 8.507669], 13);
 
@@ -23,74 +24,63 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
         attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a> contributors'
     }).addTo(map);
 
-    // This is supposed to render one trajectory that shows just the dots with weight 10
-    // and one trajectory with weight 5 that shows the segments too.
-    // I tried implementing this with "stroke" true and false, but it doesn't seem to work
-    // Feel free to remove one of the polylines (but also remove the part that updates it
-    // in geosuccess)
+    // This is a Polyline that will be displayed on the map to show the user the path they've walked on the map
     var line = new L.Polyline([], {color: '#007bff',
-        weight: 15,
-        opacity: 1,
-        smoothFactor: 1,
-        stroke: false
-    })
-    var dots = new L.Polyline([], {color: '#007bff',
         weight: 5,
         opacity: 1,
         smoothFactor: 1,
         stroke: true
     })
 
+    // This adds the currently empty layer for the position marker, and the path to the map
     map.addLayer(appstate.marker);
     line.addTo(map);
-    dots.addTo(map);
+
 }
 
 // This code block defines geosuccess, geoerror and geooptions for navigator.geolocation.watchPosition().
 {
-    // Is called if user is sharing data.
-    function geosuccess(position) {
+
+    // geoSuccess is called by watchposition if user enabled sharing location Data. see onLoad()
+    function geoSuccess(position) {
+
         let lat = position.coords.latitude;
         let lng = position.coords.longitude;
-        latlng = L.latLng(lat, lng);
+        latLng = L.latLng(lat, lng);
         accuracy = position.coords.accuracy;
         time = Date.now();
 
-        // This renders the user's current location and accuracy as a circle
-        {appstate.marker.clearLayers(); // clear old marker
+        // This renders the user's current location and accuracy as a circle around their position
 
-        let circle = L.circle(latlng, {
-            radius: accuracy,
-            color: '#007bff', // Border color for accuracy circle
-            fillColor: '#007bff', // Fill color for accuracy circle
-            fillOpacity: 0.2, // Transparency of the fill
-            weight: 2 // Border thickness
-        });
-        appstate.marker.addLayer(circle);
+        {
+            appstate.marker.clearLayers(); // clear old marker
+            let circle = L.circle(latLng, {
+                radius: accuracy,
+                color: '#007bff', // Border color for accuracy circle
+                fillColor: '#007bff', // Fill color for accuracy circle
+                fillOpacity: 0.2, // Transparency of the fill
+                weight: 2 // Border thickness
+            });
 
-        // Update user location marker with icon and heading
-        let userIconWithArrow = L.divIcon({
-            className: 'user-location-icon',
-            html: `
-                <div id="dot"/>
-            `,
-            iconSize: [20, 20], // constant size
-            iconAnchor: [10, 10] // central
-        });
+            appstate.marker.addLayer(circle);
 
-        let userMarkerWithArrow = L.marker(latlng, { icon: userIconWithArrow });
-        appstate.marker.addLayer(userMarkerWithArrow);
+            // Update user location marker with icon and heading
+            let userIconWithArrow = L.divIcon({
+                className: 'user-location-icon',
+                html: `
+                    <div id="dot"/>
+                `,
+                iconSize: [20, 20], // constant size
+                iconAnchor: [10, 10] // central
+            });
 
+            let userMarker = L.marker(latLng, { icon: userIconWithArrow });
+            appstate.marker.addLayer(userMarker);
         }
 
+        // Recenters the map on the user if appstate.follow is true
         if (appstate.follow == true) {
-            console.log("setting follow user to false.")
-            appstate.follow = false;
-            // At present the map is centered at the ETH Hönggerberg, this way I center my map to the user's position
-            // So that we aren't too far away from the point, its zoom level was set to 18
-            if (map) {
-            map.setView([lat,lng],18);
-            }
+            map.panTo(latLng);
         }
 
         // Checks if the button has been pressed yet
@@ -98,13 +88,16 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             // Removes the nogps error message for when it appears before recording
             document.getElementById("nogps").innerHTML = "";
             console.log("geosuccess called before button press, waiting.")
+            // Returning at this point exits out of geoSuccess entirely.
             return
         }
 
+        // Everything beyond this point happens only if the Start button has been pressed
 
-        // Creates a timeout message for the user, alerting them how long
-        // the recording was stopped.
+
+        // This gets called if there has been a gap in recording. appstate.timeout is set to true in geoError().
         if (appstate.timeout == true) {
+
             // Removes the nogps error message
             document.getElementById("nogps").innerHTML = "";
 
@@ -114,76 +107,66 @@ let wfs = 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wfs';
             // Compares current time to last recorded time from trajectories.
             trj = JSON.parse(localStorage["trajectory"]);
             let offlinetime = (Date.now() - (trj[trj.length - 1][2]))/1000;
-            // Alerts the user to how much time has passed
+
+            // Lets the user know how much time has passed since the last recorded point.
             alert("Tracking timed out for " + offlinetime + " seconds")
 
         };
 
-        console.log("geosuccess was called, with appstate.press =", appstate.press);
 
+        // This block records gps locations into the trajectory
+        {
 
-        // This section records gps locations into the trajectory
-        {if ('trajectory' in localStorage) {
-            console.log("trajectory is in localStorage.")
-            //Append a new Point to the list of current points named "trajectory"
-            let newtrajectory = JSON.parse(localStorage["trajectory"]);
-            newtrajectory.push([latlng, accuracy, time]);
-            localStorage.setItem("trajectory", JSON.stringify(newtrajectory));
-            console.log("trajectory is currently as follows:", localStorage["trajectory"])
+            if ('trajectory' in localStorage) {
+                console.log("trajectory is in localStorage.")
+                //Append a new Point to the list of current points named "trajectory"
+                let newtrajectory = JSON.parse(localStorage["trajectory"]);
+                newtrajectory.push([latLng, accuracy, time]);
+                localStorage.setItem("trajectory", JSON.stringify(newtrajectory));
+                console.log("trajectory is currently as follows:", localStorage["trajectory"])
+            }
+
+            else {
+                // Start recording a new Trajectory
+                console.log("starting record")
+                let firstpoint = JSON.stringify([[latLng, accuracy, time]]);
+                console.log("writing firstpoint into trajectory:", firstpoint)
+                localStorage.setItem("trajectory", firstpoint)
+            }
+
         }
 
-        else {
-            // Start recording a new Trajectory
-            console.log("starting record")
-            let firstpoint = JSON.stringify([[latlng, accuracy, time]]);
-            console.log("writing firstpoint into trajectory:", firstpoint)
-            localStorage.setItem("trajectory", firstpoint)
-        }}
+        // This block renders a new Polyline showing the path on the map
+        {
+            trj = JSON.parse(localStorage["trajectory"]);
+            pointlist = trj.map((x) => x[0]);
+            console.log("pointlist is:", pointlist);
 
-        // Render a Polyline that shows the users trajectory on the map
-        trj = JSON.parse(localStorage["trajectory"]);
-        pointlist = trj.map((x) => x[0]);
-        console.log("pointlist is:", pointlist);
+            // Update the rendered trajectory
+            line.setLatLngs(pointlist);
+        }
 
-        line.setLatLngs(pointlist);
-
-        dots.setLatLngs(pointlist);
     };
 
-
-    // This function is called when the location data stops being provided.
-    function geoerror() {
+    // geoError is called when the location data stops being provided. see onLoad()
+    function geoError() {
         console.log("no location data provided, calling geoError");
-        // Sets timeout to true, so that the user can be notified about the gap
-        // in recording using an alert in geosuccess.
+        // Sets timeout to true to later let the user know there was a gap in recording where geoError was called.
         appstate.timeout = true;
-        document.getElementById("nogps").innerHTML = "GPS disabled!"
+        document.getElementById("nogps").innerHTML = "GPS disabled!" // Enables the NoGPS message in the header
     };
 
-    geooptions = {
-        enableHighAccuracy: true,
-        // These values are probably lower than they can be.^
+    geoOptions = {
+        enableHighAccuracy: true, // requests precise location from user
         maximumAge: 15000,  // The maximum age of a cached location (10 seconds).
         timeout: 12000   // A maximum of 5 seconds before timeout.
     };
 
 }
 
-// ATTENTION: This piece of code currently does not get called anywhere and doesn't do much as it is. Maybe rewrite it somewhere else or remove it entirely
-// Note that when appstate.follow = true, geosuccess sets it to false again. The intended functionality would be for appstate.follow to be trueby default,
-// And Javascript listening for a click on the map element on the page. If it hears you clicking, appstate.follow is automatically set to false and the
-// follow button stops being highlighted, until you press it again, appstate.follow is set back to true, and the follow button is, again highlighted. Please
-// Consider this when implementing a feature like that. Also, please implement within the code block for button & dialog logic, instead of outside of any
-// code blocks, to keep code clean and readable. Thanks. - Philip
-
-//Implemented the center button
-function centerMyLocation(){
-    map.panTo(latlng);//UserCords = user current latitude, longitude. I suppose you have them!!!
-    appstate.follow = true;
-}
-
-// This code block implements the button & dialog logic
+// This code block implements the button logic
 {
+
     // Switch button to Stop mode
     function setStopMode() {
         startbutton.innerHTML = "Stop";
@@ -191,6 +174,7 @@ function centerMyLocation(){
         startbutton.classList.add("stop", "pulsing"); // Add Stop mode and pulsing animation
         startbutton.onclick = stop; // Set the click handler to stop()
     }
+
 
     // Switch button to Start mode
     function setStartMode() {
@@ -206,11 +190,9 @@ function centerMyLocation(){
         console.log("start button has been pressed");
         // Clears the currently cached trajectory
         localStorage.clear();
-        //downloadlink.innerHTML = ""
 
         // Sets "press" to true, which makes geosuccess start doing its thing
         appstate.press = true;
-        console.log("appstate.press has been set to", appstate.press);
         setStopMode();  // Switch button to Stop mode
     }
 
@@ -222,11 +204,10 @@ function centerMyLocation(){
         appstate.press = false;
         startbutton.innerHTML = "Start";
         setStartMode();  // Switch button to Start mode
-        //downloadlink.innerHTML = "download csv";
         localStorage['saved'] = true;
     }
 
-    // This is called when the user presses x after pressing stop and continues recording
+    // This is called when the user presses continue after pressing stop and continues recording
     function continue_recording() {
         console.log("The recording continues");
         // We do not clear the local storage since we wish to continue the recording
@@ -241,6 +222,17 @@ function centerMyLocation(){
     const startButton = document.getElementById("startbutton");
     setStartMode();  // Initialize button in Start mode
 
+    // This function is called when the center-button is clicked
+    function followUser() {
+        map.flyTo(latLng, 18);
+        appstate.follow = true;
+        console.log("following user")
+    };
+
+    // This function stops automatic following of the user until followUser is called again
+    function unFollowUser() {
+        appstate.follow = false;
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         const walkIcon = document.querySelector('#walk-icon');
@@ -276,156 +268,158 @@ function centerMyLocation(){
             switchWarningDialog.close(); // Close the dialog without navigation
             targetHref = null; // Reset target href
         });
+
+        // Stop following the user when they interact with the map.
+        document.getElementById("map").addEventListener("focus", unFollowUser);
+
+    });
+}
+
+// This code block implements the dialogs.
+{
+    // This is where the popup window is triggered and made interactive
+    // The querySelector finds the very first element that has the type dialog
+    const dialog = document.querySelector("dialog");
+    const are_you_sure_dialog = document.querySelector("#are_you_sure");
+    const continue_trajectory = document.getElementById("continue_trajectory");
+    document.getElementById("startbutton").addEventListener("click", function(){
+        // It seems counterintuitive but by checking if the inner HTML of the button is
+        // "Start" we are able to directly target the state change from Start to Stop
+        // Why? Because when we click stop, the inner HTML becomes "start" AND
+        // Because the addEventListener is click based, the edge case when the page is loaded
+        // and the inner HTML is "start", it will be ignored
+        if (startButton.innerHTML == "Start") {
+            dialog.showModal();  // Show the dialog when disabled
+        }
+
+    });
+    // If the cancel button is pressed, it closes the popup
+    dialog.querySelector(".close-btn").addEventListener("click", function(){
+        are_you_sure_dialog.showModal();
+    });
+    // If the submit button is pressed, only then does the download commence
+    dialog.querySelector(".submit-btn").addEventListener("click", function(){
+        console.log("Submit button clicked");
+
+        if (!localStorage["trajectory"]) {
+            console.warn("No trajectory data is available in local storage.");
+            alert("There is no trajectory data available for download.");
+
+        } else {
+            // This function sends everything to the geoserver and conversely to the database
+            console.log("There are trajectories in the local storage");
+
+            // Check the SQL Database through Flask to read the current highest ID of all trajectories
+            // This is done at the address /js/max_id which was set through Flask.
+            // See /Backend/max_id.py for more info on how this works
+            $.ajax({
+                url: '/js/max_id',
+                type: 'GET',
+                dataType: 'JSON',
+                success: function (data) {
+                    new_id = data+1
+                    // Call the insertTrajectory function to actually write the trajectory into the database.
+                    insertTrajectory(new_id);
+                    console.log('Trajectory number', new_id, 'has been added to the database')
+                },
+                error: function (data) { console.log('trajectory is', data); },
+            })
+
+        // Call the Data_Analysis function from the backend. This function returns nothing to JavaScript directly, it is only triggered to
+        // Make the Data Analysis happen in the background.
+        console.log('calling ajax request to trigger data_analysis')
+        $.ajax({
+            url: '/js/data_analysis_trigger',
+            success: function (data) {console.log('data analysis called successfuly, returned', data)},
+            error: function (data) {console.log('ERROR: data analysis has failed')}
+        })
+        }
+        dialog.close();
+    }, false);
+
+    // Hide the pop up when the close button is clicked and the user wishes to continue
+    // Then continue recording
+    continue_trajectory.addEventListener("click", function () {
+        dialog.close();
+        console.log("it has been closed without any submitting")
+        continue_recording()
+        });
+
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("value");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+    output.innerHTML = this.value;
+    }
+
+    // If the No button of the are you sure popup is pressed, it closes the popup and returns to the original popup
+    are_you_sure_dialog.querySelector(".close-btn").addEventListener("click", function(){
+        are_you_sure_dialog.close();
+    });
+    // If the yes button is pressed it closes the pop up completely
+    are_you_sure_dialog.querySelector(".submit-btn").addEventListener("click", function(){
+        are_you_sure_dialog.close();
+        dialog.close();
     });
 
 
 
-    // This code block implements the dialogs.
-    {
-        // This is where the popup window is triggered and made interactive
-        // The querySelector finds the very first element that has the type dialog
-        const dialog = document.querySelector("dialog");
-        const are_you_sure_dialog = document.querySelector("#are_you_sure");
-        const continue_trajectory = document.getElementById("continue_trajectory");
-        document.getElementById("startbutton").addEventListener("click", function(){
-            // It seems counterintuitive but by checking if the inner HTML of the button is
-            // "Start" we are able to directly target the state change from Start to Stop
-            // Why? Because when we click stop, the inner HTML becomes "start" AND
-            // Because the addEventListener is click based, the edge case when the page is loaded
-            // and the inner HTML is "start", it will be ignored
-            if (startButton.innerHTML == "Start") {
-                dialog.showModal();  // Show the dialog when disabled
-            }
+    // Help Menu
+    document.addEventListener('DOMContentLoaded', () => {
+        const helpModal = document.getElementById('help-modal');
+        const closeButtons = document.querySelectorAll('.close-button');
+        const backButtons = document.querySelectorAll('.back-button');
+        const pages = document.querySelectorAll('.help-page');
 
-        });
-        // If the cancel button is pressed, it closes the popup
-        dialog.querySelector(".close-btn").addEventListener("click", function(){
-            are_you_sure_dialog.showModal();
-        });
-        // If the submit button is pressed, only then does the download commence
-        dialog.querySelector(".submit-btn").addEventListener("click", function(){
-            console.log("Submit button clicked");
+        const introductionPage = document.getElementById('help-introduction');
+        const troubleshootingPage = document.getElementById('help-troubleshooting');
+        const contactPage = document.getElementById('help-contact');
+        const mainPage = document.getElementById('help-main');
 
-            if (!localStorage["trajectory"]) {
-                console.warn("No trajectory data is available in local storage.");
-                alert("There is no trajectory data available for download.");
-                
-            } else {
-                // This function sends everything to the geoserver and conversely to the database
-                console.log("There are trajectories in the local storage");
+        const introductionButton = document.getElementById('introduction-btn');
+        const troubleshootingButton = document.getElementById('troubleshooting-btn');
+        const contactButton = document.getElementById('contact-btn');
 
-                // Check the SQL Database through Flask to read the current highest ID of all trajectories
-                // This is done at the address /js/max_id which was set through Flask.
-                // See /Backend/max_id.py for more info on how this works
-                $.ajax({
-                    url: '/js/max_id',
-                    type: 'GET',
-                    dataType: 'JSON',
-                    success: function (data) {
-                        new_id = data+1
-                        // Call the insertTrajectory function to actually write the trajectory into the database.
-                        insertTrajectory(new_id);
-                        console.log('Trajectory number', new_id, 'has been added to the database')
-                    },
-                    error: function (data) { console.log('trajectory is', data); },
-                })
-
-            // Call the Data_Analysis function from the backend. This function returns nothing to JavaScript directly, it is only triggered to
-            // Make the Data Analysis happen in the background.
-            console.log('calling ajax request to trigger data_analysis')
-            $.ajax({
-                url: '/js/data_analysis_trigger',
-                success: function (data) {console.log('data analysis called successfuly, returned', data)},
-                error: function (data) {console.log('ERROR: data analysis has failed')}
-            })
-            }
-            dialog.close();
-        }, false);
-
-        // Hide the pop up when the close button is clicked and the user wishes to continue
-        // Then continue recording
-        continue_trajectory.addEventListener("click", function () {
-            dialog.close();
-            console.log("it has been closed without any submitting")
-            continue_recording()
-            });
-
-        var slider = document.getElementById("myRange");
-        var output = document.getElementById("value");
-        output.innerHTML = slider.value;
-
-        slider.oninput = function() {
-        output.innerHTML = this.value;
+        // Function to show a specific page
+        function showPage(pageToShow) {
+            pages.forEach((page) => page.classList.add('hidden')); // Hide all pages
+            pageToShow.classList.remove('hidden'); // Show the selected page
         }
 
-        // If the No button of the are you sure popup is pressed, it closes the popup and returns to the original popup
-        are_you_sure_dialog.querySelector(".close-btn").addEventListener("click", function(){
-            are_you_sure_dialog.close();
-        });
-        // If the yes button is pressed it closes the pop up completely
-        are_you_sure_dialog.querySelector(".submit-btn").addEventListener("click", function(){
-            are_you_sure_dialog.close();
-            dialog.close();
+        // Close modal
+        closeButtons.forEach((button) =>
+            button.addEventListener('click', () => helpModal.close())
+        );
+
+        // Navigate to pages
+        introductionButton.addEventListener('click', () => showPage(introductionPage));
+        troubleshootingButton.addEventListener('click', () => showPage(troubleshootingPage));
+        contactButton.addEventListener('click', () => showPage(contactPage));
+
+        // Navigate back to the main page
+        backButtons.forEach((button) =>
+            button.addEventListener('click', () => showPage(mainPage))
+        );
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        const helpIcon = document.getElementById('help-icon');
+        const helpModal = document.getElementById('help-modal');
+
+        // Open Help Modal
+        helpIcon.addEventListener('click', () => {
+            helpModal.showModal();
         });
 
-        
-
-        // Help Menu
-        document.addEventListener('DOMContentLoaded', () => {
-            const helpModal = document.getElementById('help-modal');
-            const closeButtons = document.querySelectorAll('.close-button');
-            const backButtons = document.querySelectorAll('.back-button');
-            const pages = document.querySelectorAll('.help-page');
-        
-            const introductionPage = document.getElementById('help-introduction');
-            const troubleshootingPage = document.getElementById('help-troubleshooting');
-            const contactPage = document.getElementById('help-contact');
-            const mainPage = document.getElementById('help-main');
-        
-            const introductionButton = document.getElementById('introduction-btn');
-            const troubleshootingButton = document.getElementById('troubleshooting-btn');
-            const contactButton = document.getElementById('contact-btn');
-        
-            // Function to show a specific page
-            function showPage(pageToShow) {
-                pages.forEach((page) => page.classList.add('hidden')); // Hide all pages
-                pageToShow.classList.remove('hidden'); // Show the selected page
-            }
-        
-            // Close modal
-            closeButtons.forEach((button) =>
-                button.addEventListener('click', () => helpModal.close())
-            );
-        
-            // Navigate to pages
-            introductionButton.addEventListener('click', () => showPage(introductionPage));
-            troubleshootingButton.addEventListener('click', () => showPage(troubleshootingPage));
-            contactButton.addEventListener('click', () => showPage(contactPage));
-        
-            // Navigate back to the main page
-            backButtons.forEach((button) =>
-                button.addEventListener('click', () => showPage(mainPage))
-            );
+        // Ensure close buttons are working
+        const closeButtons = document.querySelectorAll('.close-button');
+        closeButtons.forEach((button) => {
+            button.addEventListener('click', () => helpModal.close());
         });
-        document.addEventListener('DOMContentLoaded', () => {
-            const helpIcon = document.getElementById('help-icon');
-            const helpModal = document.getElementById('help-modal');
-        
-            // Open Help Modal
-            helpIcon.addEventListener('click', () => {
-                helpModal.showModal();
-            });
-        
-            // Ensure close buttons are working
-            const closeButtons = document.querySelectorAll('.close-button');
-            closeButtons.forEach((button) => {
-                button.addEventListener('click', () => helpModal.close());
-            });
-        });
-    }
+    });
 }
 
-// This code block implements the trajectory download and the push to the geoserver.
+// This code block pushes the trajectories to the geoserver.
 {
     // We want to send the trajectory to the GeoServer
     // This is done with WFS-T
@@ -495,10 +489,14 @@ function centerMyLocation(){
 }
 
 // This function is called when the document loads
-function onload() {
+function onLoad() {
+
+
     var trj = []
+    // initialize buttons (redundant)
     startbutton = document.getElementById("startbutton");
     downloadlink = document.getElementById("download")
+
     // If there's already a trajectory, recording picks up where it left off.
     if ('saved' in localStorage) {
         //downloadlink.innerHTML = "download csv";
@@ -524,6 +522,7 @@ function onload() {
 
     // Checks if the user is sharing location data in the first place
     if ("geolocation" in navigator) {
-        navigator.geolocation.watchPosition(geosuccess, geoerror, geooptions)
+        navigator.geolocation.watchPosition(geoSuccess, geoError, geoOptions)
     }
+
 }

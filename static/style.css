@@ -17,6 +17,7 @@ body {
 }
 
 header {
+    display: flex;
     height: 7vh;
     padding: 1vh 2vw;
     background-color: rgba(255, 255, 255, 0.8); /* transparent */
@@ -61,6 +62,10 @@ header button p {
     margin: 0;
 }
 
+header img {
+    height: 100%;
+}
+
 /* General Material Symbols styles */
 .material-symbols-outlined {
     font-variation-settings:
@@ -71,60 +76,39 @@ header button p {
 }
 
 /* centering button */
-#center-button {
+
+#center-button, #help-icon {
     position: absolute;
-    top: calc(9vh + 85px); /* Below the zoom buttons */
-    left: -10px; /* Align to the left edge */
-    display: flex;
-    flex-direction: column; /* Vertical alignment */
+    display: inline-block;
     gap: 20px; /* Space between icons */
     z-index: 10;
-    text-decoration: none; /* Remove underline */
     color: #333; /* Default icon color */
+    cursor: pointer;
     font-size: 36px; /* Icon size */
-    padding-left: 0.5em;
-}
-
-
-
-/* disabled icon on current layer */
-/* a.disabled {
-    pointer-events: none;
-    color: #007bff;
-    cursor: default;
-    opacity: 1 !important;
-    border: 2px solid #0056b3; 
-    box-sizing: border-box;
-} */
-
-
-
-/* Help icon positioned below the header */
-#help-icon {
-    position: absolute; /* Position it independently from other elements */
-    top: calc(7vh + 30px); /* Adjust to appear below the header, 5px gap */
-    right: 18px; /* Distance from the right edge of the screen */
-    font-size: 36px; /* Icon size */
-    color: #333; /* Default icon color */
-    cursor: pointer; /* Pointer cursor for interactivity */
-    z-index: 10; /* Ensure it stays above other content */
-    background: none; /* Remove any background to avoid white bar */
-    border: none; /* Remove any borders */
-    box-shadow: none; /* Ensure no shadow effects */
-    display: inline-block; /* Avoid block-level behavior */
-    padding: 0; /* No padding around the icon */
-    margin: 0; /* No additional margins */
     transition: transform 0.2s ease, color 0.2s ease; /* Smooth hover effect */
 }
 
-#help-icon:hover {
+/* Center Location on user button positioned below the zoom buttons */
+#center-button {
+    top: calc(9vh + 85px); /* Below the zoom buttons */
+    left: 10px; /* Align to the left edge */
+}
+
+/* Help icon positioned below the header */
+#help-icon {
+    top: calc(7vh + 30px); /* Adjust to appear below the header, 5px gap */
+    right: 18px; /* Distance from the right edge of the screen */
+}
+
+#help-icon:hover, #center-button:hover {
     color: #007bff; /* Change color on hover */
     transform: scale(1.1); /* Slightly enlarge the icon */
 }
 
 
 /* Navigation Icons */
-#navigation-icons {
+
+nav {
     position: absolute;
     top: calc(7vh + 100px); /* Below the Help icon */
     right: 10px; /* Align to the right edge */
@@ -134,61 +118,49 @@ header button p {
     z-index: 10;
 }
 
-  #navigation-icons a {
+nav a {
     text-decoration: none; /* Remove underline */
     color: #333; /* Default icon color */
     font-size: 36px; /* Icon size */
     transition: transform 0.2s ease, color 0.2s ease;
-}
-
-  #navigation-icons a:hover {
-    color: #007bff; /* Change color on hover */
-    transform: scale(1.1); /* Slightly enlarge on hover */
-}
-
-  /* Active Page Icon (Optional Highlight) */
-  #walk-icon.active,
-  #heatmap-icon.active {
-    color: #007bff; /* Highlight active page icon */
-    /* font-weight: bold; */
-}
-
-/* Box */
-.symbol-box {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
     background-color: #d9d9d9;
     border: 2px solid transparent;
-    border-radius: 8px; 
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-bottom: 10px; /* between two boxes */
-}
-
-/* box hover */
-.symbol-box:hover {
-    background-color: #e9ecef;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow */
-    border: 2px solid #007bff; 
-}
-
-/* icon in box */
-.symbol-box a {
+    padding: 8px;
+    max-width: 48px;
     font-size: 24px;
     color: #333;
     text-decoration: none;
 }
 
-.symbol-box.disabled {
+nav a strong {
+    width: 50px;
+    font-size: 36px;
+}
+
+
+nav a:hover:not(.disabled) {
+    color: #007bff; /* Change color on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+    background-color: #e9ecef;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow */
+    border: 2px solid #007bff;
+}
+
+nav a.disabled {
     border: 2px solid #0056b3; /* highlight border */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
     cursor: default;
 }
 
-
+/* Active Page Icon (Optional Highlight) */
+#walk-icon.active,
+#heatmap-icon.active {
+    color: #007bff; /* Highlight active page icon */
+    /* font-weight: bold; */
+}
 
 #switch-warning {
     text-align: center;
@@ -607,8 +579,4 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     border: none;
     color: #007bff;
     cursor: pointer;
-}
-
-img {
-    height: 100%;
 }
