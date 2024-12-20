@@ -276,20 +276,3 @@ if (event.target === temperature_info_Modal) {
 });
 
 }
-
-
-// This code block will implement heatmap rendering using leaflet.heat
-{
-    function renderheatmap() {
-        heatmap.clearLayers()
-        console.log(points.treepoints)
-        heatmappoints = points.emissionspoints.map((x) => [x[0], x[1],x[2] ,x[3],weights.emissionsrating/2.5]).concat(points.treepoints.map((x) => [x[0], x[1],x[2] ,x[3] ,weights.treerating/2.5])).concat(
-            points.userratingpoints.map((x) => [x[0], x[1],x[2] ,x[3] ,weights.userrating/2.5])).concat(
-                points.temperaturepoints.map((x) => [x[0], x[1],x[2] ,x[3] ,weights.temperaturerating/2.5]));
-        var heat = L.heatLayer(heatmappoints, {radius: 25}).addTo(heatmap);
-    }
-
-    function onload() {
-        renderheatmap();
-    }
-}

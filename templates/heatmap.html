@@ -38,7 +38,7 @@
   </head>
 
 
-  <body onload="onload()">
+  <body>
 
     <!-- Small Header Area -->
     <header>
@@ -48,26 +48,18 @@
       <button id="menu" type="button" onclick="weightmenu()" style="float: right;"><span class="material-symbols-outlined">Tune</span></a>
     </header>
 
-    <div id="help-icon" class="material-symbols-outlined">
-      help
-    </div>
+    <div id="help-icon" class="material-symbols-outlined">help</div>
 
-
-    <div id="navigation-icons">
-      <div class="symbol-box">
-          <a href="../walk" id="walk-icon" class="material-symbols-outlined">directions_walk</a>
-      </div>
-      <div class="symbol-box">
-          <a href="." id="heatmap-icon" class="material-symbols-outlined">map</a>
-      </div>
-    </div>
+    <nav>
+      <a href="../walk" id="walk-icon" class="material-symbols-outlined"><strong>directions_walk</strong></a>
+      <a id="heatmap-icon" class="material-symbols-outlined disabled"><strong>map</strong></a>
+    </nav>
   
 
     <!-- Main Content with Map, populated using javascript -->
     <main>
       <noscript>Enable JavaScript to use this App as intended.</noscript>
-      <div id="map">
-      </div>
+      <div id="map"></div>
     </main>
 
     <!-- Small Footer Area under the nav bar -->
@@ -78,31 +70,32 @@
     </footer>
     <!-- Menu to set the weights of the different criteria-->
     <dialog>
+
       <h2>Set weights for different walkability factors:</h2>
 
       <!--The info icon of the emissions rating criteria-->
       <div class="criteriaBox">
-            <label for="range">Emissions</label>
-            <div id="info-icon-emissions" class="material-symbols-outlined">info</div>
+        <label for="range">Emissions</label>
+        <div id="info-icon-emissions" class="material-symbols-outlined">info</div>
       </div>
       <input type="range" min="0" max="10" value="10" class="slider" id="emissionsRating">
       <div class="sliderticks">
-            <span>0</span>
-            <span>5</span>
-            <span>10</span>
+        <span>0</span>
+        <span>5</span>
+        <span>10</span>
       </div>
       <p>Value: <span id="emissionsvalue">10</span></p>
 
       <!--The info icon of the air quality rating criteria-->
       <div class="criteriaBox">
-            <label for="range">Tree Density</label>
-            <div id="info-icon-trees" class="material-symbols-outlined">info</div>
+        <label for="range">Tree Density</label>
+        <div id="info-icon-trees" class="material-symbols-outlined">info</div>
       </div>
       <input type="range" min="0" max="10" value="10" class="slider" id="treeRating">
       <div class="sliderticks">
-            <span>0</span>
-            <span>5</span>
-            <span>10</span>
+        <span>0</span>
+        <span>5</span>
+        <span>10</span>
       </div>
       <p>Value: <span id="treevalue">10</span></p>
 
@@ -113,29 +106,30 @@
       </div>
       <input type="range" min="0" max="10" value="10" class="slider" id="userRating">
       <div class="sliderticks">
-            <span>0</span>
-            <span>5</span>
-            <span>10</span>
+        <span>0</span>
+        <span>5</span>
+        <span>10</span>
       </div>
       <p>Value: <span id="userratingvalue">10</span></p>
 
-    <!--The info icon of the temperature rating criteria-->
+      <!--The info icon of the temperature rating criteria-->
       <div class="criteriaBox">
         <label for="range">PET</label>
         <div id="info-icon-temperature" class="material-symbols-outlined">info</div>
       </div>
       <input type="range" min="0" max="10" value="10" class="slider" id="temperatureRating">
       <div class="sliderticks">
-            <span>0</span>
-            <span>5</span>
-            <span>10</span>
+        <span>0</span>
+        <span>5</span>
+        <span>10</span>
       </div>
       <p>Value: <span id="temperaturevalue">10</span></p>
 
       <div class="controls">
-          <button class="set-btn">Set</button>
-          <button class="cancel-btn">Cancel</button>
+        <button class="set-btn">Set</button>
+        <button class="cancel-btn">Cancel</button>
       </div>
+
     </dialog>
 
     <!-- Help Dialog -->
@@ -209,121 +203,111 @@
         <button id="back-to-main-1" class="back-button">&larr; Back</button>
         <h2>Introduction</h2>
         <div class="help-content">
-            <section>
-                <h3>Track Your Route</h3>
-                <ol>
-                    <li><strong>Start Recording:</strong> Click the <em>"Start"</em> button at the bottom of the screen to begin recording your trip. The button will change to <em>"Stop"</em>, indicating the recording is in progress.</li>
-                    <li><strong>Stop Recording:</strong> When you are done, click the <em>"Stop"</em> button. A dialog will appear, allowing you to either <strong>rate the quality of your trip</strong> or <strong>cancel the submission</strong>.</li>
-                    <li><strong>Submit or Discard:</strong> 
-                        <ul>
-                            <li>If you choose to <strong>Submit</strong>, your route and rating will be saved for further analysis.</li>
-                            <li>If you select <strong>Cancel</strong>, the recorded data will be discarded and cannot be recovered.</li>
-                        </ul>
-                    </li>
-                </ol>
-            </section>
-            <section>
-                <h3>Switch Between Layers</h3>
-                <p>The app offers two layers to help you analyze walkability in your area:</p>
+
+          <section>
+            <h3>Track Your Route</h3>
+            <ol>
+              <li><strong>Start Recording:</strong> Click the <em>"Start"</em> button at the bottom of the screen to begin recording your trip. The button will change to <em>"Stop"</em>, indicating the recording is in progress.</li>
+              <li><strong>Stop Recording:</strong> When you are done, click the <em>"Stop"</em> button. A dialog will appear, allowing you to either <strong>rate the quality of your trip</strong> or <strong>cancel the submission</strong>.</li>
+              <li><strong>Submit or Discard:</strong>
                 <ul>
-                    <li><strong>Walk Layer:</strong> Track and visualize your route in real time. It highlights your movement and provides tools for route recording.</li>
-                    <li><strong>Heatmap Layer:</strong> Presents a heatmap showcasing the walkability quality across the map. Adjust the <em>weights for different walkability factors</em> like air quality and user ratings using the control menu in the top-right corner.</li>
+                  <li>If you choose to <strong>Submit</strong>, your route and rating will be saved for further analysis.</li>
+                  <li>If you select <strong>Cancel</strong>, the recorded data will be discarded and cannot be recovered.</li>
                 </ul>
-                <p>To switch between layers, use the <strong>icons with borders</strong> in the top-right corner of the screen.</p>
-            </section>
-            <section>
-                <h3>Other Buttons</h3>
-                <ul>
-                    <li><strong>Zoom In/Out:</strong> Use the "+" and "-" buttons in the top-left corner to adjust the map zoom level.</li>
-                    <li><strong>Recenter the Map:</strong> Click the location button (a circular icon) to recenter the map to your current location.</li>
-                </ul>
-            </section>
+              </li>
+            </ol>
+          </section>
+
+          <section>
+            <h3>Switch Between Layers</h3>
+            <p>The app offers two layers to help you analyze walkability in your area:</p>
+            <ul>
+              <li><strong>Walk Layer:</strong> Track and visualize your route in real time. It highlights your movement and provides tools for route recording.</li>
+              <li><strong>Heatmap Layer:</strong> Presents a heatmap showcasing the walkability quality across the map. Adjust the <em>weights for different walkability factors</em> like air quality and user ratings using the control menu in the top-right corner.</li>
+            </ul>
+            <p>To switch between layers, use the <strong>icons with borders</strong> in the top-right corner of the screen.</p>
+          </section>
+
+          <section>
+            <h3>Other Buttons</h3>
+            <ul>
+              <li><strong>Zoom In/Out:</strong> Use the "+" and "-" buttons in the top-left corner to adjust the map zoom level.</li>
+              <li><strong>Recenter the Map:</strong> Click the location button (a circular icon) to recenter the map to your current location.</li>
+            </ul>
+          </section>
         </div>
-    </div>
+      </div>
     
     
       <!-- Troubleshooting Page -->
       <div id="help-troubleshooting" class="help-page hidden">
         <button id="back-to-main-2" class="back-button">&larr; Back</button>
         <h2>Troubleshooting</h2>
-        <div class="help-content">
-            <section>
-                <h3>The Map Is Not Loading</h3>
-                <ul>
-                    <li>Check your internet connection.</li>
-                    <li>Ensure location services are enabled in your browser settings.</li>
-                </ul>
-            </section>
-            <section>
-                <h3>The Recording Does Not Start</h3>
-                <ul>
-                    <li>Ensure GPS permissions are granted to the app.</li>
-                    <li>Refresh the page and try again.</li>
-                </ul>
-            </section>
-            <section>
-                <h3>Layer Buttons Are Unresponsive</h3>
-                <ul>
-                    <li>Make sure no recording is in progress.</li>
-                    <li>If the issue persists, clear your browser cache and reload the page.</li>
-                </ul>
-            </section>
-            <section>
-                <h3>Still Having Issues?</h3>
-                <p>If the above steps don’t resolve your issue, please contact our support team.</p>
-            </section>
+          <div class="help-content">
+
+          <section>
+            <h3>The Map Is Not Loading</h3>
+            <ul>
+              <li>Check your internet connection.</li>
+              <li>Ensure location services are enabled in your browser settings.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>The Recording Does Not Start</h3>
+            <ul>
+              <li>Ensure GPS permissions are granted to the app.</li>
+              <li>Refresh the page and try again.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>Layer Buttons Are Unresponsive</h3>
+            <ul>
+              <li>Make sure no recording is in progress.</li>
+              <li>If the issue persists, clear your browser cache and reload the page.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>Still Having Issues?</h3>
+            <p>If the above steps don’t resolve your issue, please contact our support team.</p>
+          </section>
         </div>
-    </div>
-    
-    
-    
+      </div>
+
+
+
       <!-- Contact & About Us Page -->
       <div id="help-contact" class="help-page hidden">
         <button id="back-to-main-3" class="back-button">&larr; Back</button>
         <h2>Contact & About Us</h2>
         <div class="help-content">
-            <section>
-                <h3>Contact</h3>
-                <p>If you need assistance, feel free to reach out to us:</p>
-                <ul>
-                    <li><strong>Email:</strong> <a href="mailto:zhihyu@ethz.ch">zhihyu@ethz.ch</a></li>
-                </ul>
-                <p>We aim to respond to inquiries within 48 hours.</p>
-            </section>
-            <section>
-                <h3>About Us</h3>
-                <p><strong>WalkAcity - Zurich City Walkability Tracker</strong></p>
-                <p>WebApp designed for urban planners by urban planners.</p>
-                <p>This is a semester project related to the lecture:</p>
-                <p><em>“Geoinformationstechnologien und -analysen HS2024” [103-0717-00L], Autumn semester 2024</em></p>
-                <p><strong>Authors:</strong> Zhihe Yu, Allyna Dachler, Angelika Nogueira Bhushan, Philip Gosset</p>
-                <p><strong>Supervisors:</strong> Prof. Dr. Martin Raubal, Dr. Peter Kiefer, Ye Hong, Nina Wiedemann, Tianyi Xiao, Yiwei Wang, Ayda Grisiute, Shupeng Wang, Dr. Sailin Zhong, Mischa Bauckhage, Andreas Dombos</p>
-                <p><strong>ETH Zürich</strong></p>
-                <p>Institute of Cartography & Geoinformation</p>
-                <p>Professor of Geoinformation Engineering</p>
-                <p>ETH Zürich, December 2024</p>
-            </section>
+
+          <section>
+            <h3>Contact</h3>
+            <p>If you need assistance, feel free to reach out to us:</p>
+            <ul>
+              <li><strong>Email:</strong> <a href="mailto:zhihyu@ethz.ch">zhihyu@ethz.ch</a></li>
+            </ul>
+            <p>We aim to respond to inquiries within 48 hours.</p>
+          </section>
+          <section>
+            <h3>About Us</h3>
+            <p><strong>WalkAcity - Zurich City Walkability Tracker</strong></p>
+            <p>WebApp designed for urban planners by urban planners.</p>
+            <p>This is a semester project related to the lecture:</p>
+            <p><em>“Geoinformationstechnologien und -analysen HS2024” [103-0717-00L], Autumn semester 2024</em></p>
+            <p><strong>Authors:</strong> Zhihe Yu, Allyna Dachler, Angelika Nogueira Bhushan, Philip Gosset</p>
+            <p><strong>Supervisors:</strong> Prof. Dr. Martin Raubal, Dr. Peter Kiefer, Ye Hong, Nina Wiedemann, Tianyi Xiao, Yiwei Wang, Ayda Grisiute, Shupeng Wang, Dr. Sailin Zhong, Mischa Bauckhage, Andreas Dombos</p>
+            <p><strong>ETH Zürich</strong></p>
+            <p>Institute of Cartography & Geoinformation</p>
+            <p>Professor of Geoinformation Engineering</p>
+            <p>ETH Zürich, December 2024</p>
+          </section>
         </div>
-    </div>
+      </div>
     
-    
-
-
-    <!-- disable icon for current layer -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-          const currentPath = window.location.pathname; // get current path
-          const walkBox = document.querySelector('#walk-icon').parentElement; 
-          const heatmapBox = document.querySelector('#heatmap-icon').parentElement;
-    
-          // if current is heatmap
-          if (currentPath.includes('heatmap')) {
-              heatmapBox.classList.add('disabled'); 
-              heatmapBox.querySelector('#heatmap-icon').href = 'javascript:void(0)'; 
-          }
-      });
-    </script>
-
   <!--The color ramp is custom made in QGIS and can not be exported. So we need to cheat a little bit and insert an image of the color ramp-->
   <!--Legend-->
   <img id= legend src="{{url_for('static', filename='cramp_converted.svg')}}" alt="legend">
