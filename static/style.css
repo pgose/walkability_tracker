@@ -220,7 +220,6 @@ nav a.disabled {
 #info-icon-air-quality{
     text-decoration: none; /* Remove underline */
     color: #333; /* Default icon color */
-    font-size: 20px; /* Icon size */
     padding-left: 0.5em;
 }
 
@@ -579,4 +578,52 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     border: none;
     color: #007bff;
     cursor: pointer;
+}
+
+
+#legend {
+    background: rgba(255, 255, 255, 0.8);
+    position: fixed;
+    height: 70px;
+    width: 260px;
+    max-width: 80%;
+    z-index: 10;
+    bottom: 55px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid darkgrey;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#legend section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+}
+
+#legend strong {
+    font-size: 0.8em;
+}
+
+#legend p {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+#legend #gradient {
+    height: 30px;
+    width: 200px;
+    max-width: 60vw;
+    margin: 5px;
+    background: rgb(26,23,161);
+    background: -moz-linear-gradient(90deg, rgba(26,23,161,1) 0%, rgba(0,123,255,1) 29.7%, rgba(226,234,0,1) 56.9%, rgba(104,152,28,1) 79.6%, rgba(0,174,6,1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(26,23,161,1) 0%, rgba(0,123,255,1) 29.7%, rgba(226,234,0,1) 56.9%, rgba(104,152,28,1) 79.6%, rgba(0,174,6,1) 100%);
+    background: linear-gradient(90deg, rgba(26,23,161,1) 0%, rgba(0,123,255,1) 29.7%, rgba(226,234,0,1) 56.9%, rgba(104,152,28,1) 79.6%, rgba(0,174,6,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1a17a1",endColorstr="#00ae06",GradientType=1);
 }

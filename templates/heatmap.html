@@ -60,6 +60,15 @@
     <main>
       <noscript>Enable JavaScript to use this App as intended.</noscript>
       <div id="map"></div>
+      <!--Legend-->
+      <div id="legend" alt="legend">
+        <section>
+          <strong>Walkability Score</strong>
+        </section>
+        <section>
+          <p>0</p><div id="gradient"></div><p>10</p>
+        </section>
+      </div>
     </main>
 
     <!-- Small Footer Area under the nav bar -->
@@ -307,10 +316,8 @@
           </section>
         </div>
       </div>
-    
-  <!--The color ramp is custom made in QGIS and can not be exported. So we need to cheat a little bit and insert an image of the color ramp-->
-  <!--Legend-->
-  <img id= legend src="{{url_for('static', filename='cramp_converted.svg')}}" alt="legend">
+
+    </dialog>
 
   </body>
 
