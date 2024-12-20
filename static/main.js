@@ -332,6 +332,7 @@ function centerMyLocation(){
 
             // Call the Data_Analysis function from the backend. This function returns nothing to JavaScript directly, it is only triggered to
             // Make the Data Analysis happen in the background.
+            console.log('calling ajax request to trigger data_analysis')
             $.ajax({
                 url: '/js/data_analysis_trigger',
                 success: function (data) {console.log('data analysis called successfuly, returned', data)},
