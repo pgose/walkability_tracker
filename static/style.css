@@ -585,8 +585,8 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
     background: rgba(255, 255, 255, 0.8);
     position: fixed;
     height: 70px;
-    width: 260px;
-    max-width: 80%;
+    width: 290px;
+    max-width: 90vw;
     z-index: 10;
     bottom: 55px;
     right: 10px;
@@ -613,7 +613,7 @@ dialog .controls button.close-btn, dialog .controls button.cancel-btn {
 
 #legend p {
     margin: 0;
-    font-size: 1.1em;
+    font-size: 0.9em;
 }
 
 #legend #gradient {
