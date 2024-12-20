@@ -67,13 +67,12 @@ def data_analysis():
     # Method: iterate through the generated dataframes, define the query and execute the query to update "count_pts" in the right row
     for index, row in count_pt.iterrows():
         query = 'UPDATE gta_p3.walkability_scoring SET count_pts = %s WHERE idx = %s'
-
         # normalize count between 0 and 1 by using the formula "(value - min_value) /(max_value - min_value)"
         min_val = 0 # the minimum is 0, since the count cannot be negative
         max_val = count_pt.max() # extract the maximum value in the whole dataframe
         norm_count = (int(row.iloc[0]) - min_val) / (max_val - min_val) # apply mentioned formula
         
-        cur.execute(query, (float(norm_count[0]), index))
+        cur.execute(query, (float(row.iloc[0]), index))
 
         # commit changes in the database and close connection
     conn.commit()
