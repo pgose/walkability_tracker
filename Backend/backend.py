@@ -73,7 +73,7 @@ def data_analysis():
         max_val = count_pt.max() # extract the maximum value in the whole dataframe
         norm_count = (int(row.iloc[0]) - min_val) / (max_val - min_val) # apply mentioned formula
         
-        cur.execute(query, (norm_count[0], index))
+        cur.execute(query, (float(norm_count[0]), index))
 
         # commit changes in the database and close connection
     conn.commit()
