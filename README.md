@@ -1,4 +1,4 @@
-![alt text](https://github.com/pgose/walkacity/blob/main/static/logo.png?raw=true)
+![alt text](static/Logo.png)
 
 ## Overview
 WalkACity is a web application designed to allow for user surveys with the goal to collect data about how walkable different areas of a city are, and visualize said data. This implementation is designed to be used in the city of Zurich,
