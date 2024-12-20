@@ -10,19 +10,25 @@ assess and map walkability in Zurich. This app is intended for use by planners a
 1. [UI & Frontend](#ui-&-frontend)
 2. [Backend](#backend)
 3. [Pre Processing](#pre-processing)
-4. [Visualization](#visualization)
+4. [geoserver](#geoserver)
 5. [Deploying](#deploying)
 6. [Credits](#credits)
 7. [Sources](#sources)
 
 ## UI & Frontend
 
-The UI & Frontend are relatively straight forward HTML web pages. 
+The UI & Frontend are relatively straight forward HTML web pages. The main tab under `/walk` allows recording of new trajectories, and subsequent rating of the finished path. The other tab under `/heatmap` visualizes the user data in a
+clear and concise manner. This is done interactively, through the slider menu, triggered by pressing the button in the top right, which allows the user to set custom weights and see how scaling different factors affects walkability
+scores. The pages are styled through `static/style.css`, and made interactive through `static/main.js` for `/walk` and `static/heatmap.js` for `/heatmap` respectively. 
+
+To visualize all of this on an interactive map, the [Leaflet JavaScript library](https://leafletjs.com/) was used, along with the bundled css styling it necessitates to display properly. 
 
 ## Backend
 
-The backend functions mainly through Flask, which is implemented within `app.py`. Flask serves the different pages and static resources to the client. By default, Flask serves the `templates/walk.html` under /walk, or / as the home page. `templates/heatmap.html` is then served under heatmap. Beyond this, `app.py` only imports functions from `Backend/backend.py` and `Backend/max_id.py` to make them callable from JavaScript through AJAX GET requests, under paths that begin with `/js/`. 
-Other than that, the GeoServer, hosted at `https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wms` is used to process the raster heatmap that is viewable under `/heatmap`. How this is done is explained in the following chapter.
+The backend functions mainly through Flask, which is implemented within `app.py`. Flask serves the different pages and static resources to the client. By default, Flask serves the `templates/walk.html` under /walk, or / as the home page.
+`templates/heatmap.html` is then served under heatmap. Beyond this, `app.py` only imports functions from `Backend/backend.py` and `Backend/max_id.py` to make them callable from JavaScript through AJAX GET requests, under paths that begin 
+with `/js/`. Other than that, the GeoServer, hosted at `https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wms` is used to process the raster heatmap that is viewable under `/heatmap`. How this is done is explained in the 
+[chapter of the same title](#geoserver)
 
 ## Pre Processing
 The Datasets used are all from the [Open Data Catalogue of the city of Zurich](https://data.stadt-zuerich.ch/). Pre Processing was done using QGIS, Python3.11, and SQL through pgAdmin.
@@ -37,7 +43,7 @@ In QGIS:
 
 2. Stadtkreise shp dissolved, for Raster clipping
 
-3. Import raster dataset with emmission values "ugz_luftqualitaet_emissionen_100m_2022"
+3. Import raster dataset with emission values "ugz_luftqualitaet_emissionen_100m_2022"
 --> imported > upsampled and aligned with 25X25m cells  (method: "Raster anpassen"/"Align Raster")
 --> Extent: 2676220.0000000004656613,1241580.0000000002328306 : 2689620.0000000004656613,1254280.0000000002328306
 [EPSG:2056]
@@ -123,7 +129,7 @@ IMPORTANT: Since the deployed app cannot handle data over a certain volume, the 
 
 9. Once completed, commit changes and close connection to database
 
-## Visualisation
+## GeoServer
 
 ## Deploying
 
