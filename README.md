@@ -27,14 +27,14 @@ To visualize all of this on an interactive map, the [Leaflet JavaScript library]
 
 The backend functions mainly through Flask, which is implemented within `app.py`. Flask serves the different pages and static resources to the client. By default, Flask serves the `templates/walk.html` under /walk, or / as the home page.
 `templates/heatmap.html` is then served under heatmap. Beyond this, `app.py` only imports functions from `Backend/backend.py` and `Backend/max_id.py` to make them callable from JavaScript through AJAX GET requests, under paths that begin 
-with `/js/`. Other than that, the GeoServer, hosted at `https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wms` is used to process the raster heatmap that is viewable under `/heatmap`. How this is done is explained in the 
-[chapter of the same title](#geoserver)
+with `/js/`. Other than that, the GeoServer, hosted at `https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wms` is used to process the raster heatmap that is viewable under `/heatmap`. To use a different GeoServer, simply switch
+out the link at the beginning of the `statis/heatmap.js` file. How the Geoserver handles requests is explained in the [chapter of the same title](#geoserver)
 
 ## Pre Processing
-The Datasets used are all from the [Open Data Catalogue of the city of Zurich](https://data.stadt-zuerich.ch/). Pre Processing was done using QGIS, Python3.11, and SQL through pgAdmin.
-Our Database is hosted at ikgpgis.ethz.ch, and was provided to us by the TA's of the lecture. At the moment, our credentials are hard coded into the project. To change the server, or the credentials, you will have to change them under
-`Backend/max_id.py`, as well as `Backend/backend.py`. In both files, they are defined near the top, and stored in the variable `db_credentials`. Make sure to change this if you deploy the project, unless you would like to write into
-our database. 
+The Datasets used are all from the [Open Data Catalogue of the city of Zurich](https://data.stadt-zuerich.ch/). See the [Sources](#sources) for information on which datasets were used. Pre Processing was done using QGIS, Python3.11, and 
+SQL through pgAdmin. Our Database is hosted at ikgpgis.ethz.ch, and was provided to us by the TA's of the lecture. At the moment, our credentials are hard coded into the project. To change the server, or the credentials, you will have to 
+change them under `Backend/max_id.py`, as well as `Backend/backend.py`. In both files, they are defined near the top, and stored in the variable `db_credentials`. Make sure to change this if you deploy the project, unless you would like 
+to read/write directly into our database. 
 
 
 In QGIS:
@@ -132,6 +132,20 @@ IMPORTANT: Since the deployed app cannot handle data over a certain volume, the 
 ## GeoServer
 
 ## Deploying
+
+Our Server started out being deployed on [Vercel](https://vercel.com/), but was then switched to [Railway](https://railway.app/), because the free Vercel plan didn't allow for more than 250MB storage, and this was needed because
+GeoPandas is a very large package. If you are willing to pay for a vercel subscription, this project will run as is on Vercel, seeing that all necessary configuration is containted in `vercel.json`. 
+For Railway, we needed to add the `Dockerfile`, which also means this project would likely be deployable through Docker. `requirements.txt` contains all packages needed for the python backend to do its job.
+
+1. For local deployment, clone the project from github using
+`git clone https://github.com/pgose/walkacity`
+
+2. Create a new Python environment using your preferred Python environment manager, and then install the required dependencies by running
+`pip install -r requirements.txt`
+from within the project folder
+
+3. Flask should also get installed this way. In your active environment, you can then run the following command inside the folder to deploy the Flask web server locally.
+`python app.py`
 
 ## Credits
 
