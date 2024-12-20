@@ -27,7 +27,7 @@ def data_analysis():
     trackpts = gpd.GeoDataFrame.from_postgis(query_trackpts, conn, geom_col='geometry',index_col='point_id')
 
     # define sql query statement and use it to retrieve the contextual data table (not raster) from the database via the method "geopandas.GeoDataFrame.to_postgis", defining the index column same as the column 'idx'
-    query_context = "SELECT w.idx, w.geom FROM gta_p3.walkability_scoring as w WHERE idx < 100"
+    query_context = "SELECT w.idx, w.geom FROM gta_p3.walkability_scoring as w"
     walk_idx = gpd.GeoDataFrame.from_postgis(query_context, conn, geom_col='geom',index_col='idx' ) #Create geodataframe from contextual data table
 
     # APPLY SPATIAL JOIN ON DATA COLLECTED AND CONTEXTUAL DATA
