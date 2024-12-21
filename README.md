@@ -135,6 +135,9 @@ $\rightarrow$ IMPORTANT: Since the deployed app cannot handle data over a certai
 9. Once completed, commit changes and close connection to database
 
 ## GeoServer
+The GeoServer is using what's called a Web Map Service, or 'wms' for short. The GeoServer receives weights from `heatmap.js`, to generate a Raster made of polygons that is then rendered on top of the leaflet map. It applies these
+weights to the different attributes of the raster generated in pre-processing, and then returns this element back to `heatmap.js`, where it is rendered accordingly over the map.
+The GeoServer is located at 'https://baug-ikg-gis-01.ethz.ch:8443/geoserver/GTA24_project/wms'. To request from a different address, simply change this address at the top of `heatmap.js`.
 
 ## Deploying
 
