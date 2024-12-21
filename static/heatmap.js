@@ -115,25 +115,21 @@ document.addEventListener('DOMContentLoaded', () => {
     emissionsslider.oninput = function() {
         weights.emissionsrating = this.value;
         displayedvalues[0].innerHTML = weights.emissionsrating;
-        renderheatmap();
     }
 
     treesslider.oninput = function() {
         weights.treerating = this.value;
         displayedvalues[1].innerHTML = weights.treerating;
-        renderheatmap();
     }
 
     userratingslider.oninput = function() {
         weights.userrating = this.value;
         displayedvalues[2].innerHTML = weights.userrating;
-        renderheatmap();
     }
 
     temperatureslider.oninput = function() {
         weights.temperaturerating = this.value;
         displayedvalues[3].innerHTML = weights.temperaturerating;
-        renderheatmap();
     }
 
     // Shows the weights menu when the menu button is pressed
@@ -150,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
         weights.userrating = previousweights[2];
         weights.temperaturerating = previousweights[3];
         weightdialog.close()
-        renderheatmap();
     })
 
     setbutton.addEventListener("click", function() {
