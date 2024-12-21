@@ -146,14 +146,14 @@ Our Server started out being deployed on [Vercel](https://vercel.com/), but was 
 GeoPandas is a very large package. If you are willing to pay for a vercel subscription, this project will run as is on Vercel, seeing that all necessary configuration is containted in `vercel.json`. 
 For Railway, we needed to add the `Dockerfile`, which also means this project would likely be deployable through Docker. `requirements.txt` contains all packages needed for the python backend to do its job.
 
-1. For local deployment, clone the project from github using
+1. For local deployment, clone the project from github using\
 `git clone https://github.com/pgose/walkacity`
 
-2. Create a new Python environment using your preferred Python environment manager, and then install the required dependencies by running
-`pip install -r requirements.txt`
+2. Create a new Python environment using your preferred Python environment manager, and then install the required dependencies by running\
+`pip install -r requirements.txt`\
 from within the project folder
 
-3. Flask should also get installed this way. In your active environment, you can then run the following command inside the folder to deploy the Flask web server locally.
+3. Flask should also get installed this way. In your active environment, you can then run the following command inside the folder to deploy the Flask web server locally.\
 `python app.py`
 
 ## Credits
