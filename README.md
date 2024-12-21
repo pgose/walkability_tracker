@@ -10,7 +10,7 @@ assess and map walkability in Zurich. This app is intended for use by planners a
 1. [UI & Frontend](#ui-&-frontend)
 2. [Backend](#backend)
 3. [Pre Processing](#pre-processing)
-4. [geoserver](#geoserver)
+4. [GeoServer](#geoserver)
 5. [Deploying](#deploying)
 6. [Credits](#credits)
 7. [Sources](#sources)
