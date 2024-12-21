@@ -178,3 +178,12 @@ Supervisors:
 * Andreas Dombos – Supervision
 
 ## Sources
+The datasets used are as follows:
+1. Stadt Zürich: Kreise, 2024.\
+   URL: https://data.stadt-zuerich.ch/dataset/geo_stadtkreise
+2. Stadt Zürich: Emmissionen, 2022.\
+   URL: https://data.stadt-zuerich.ch/dataset/geo_emissionskataster_luftschadstoffe_und_treibhausgase
+3. Stadt Zürich: Baumkataster, 2024.\
+   URL: https://data.stadt-zuerich.ch/dataset/geo_baumkataster
+4. Kanton Zürich: Klima, 2018.\
+   URL: https://opendata.swiss/de/dataset/klimamodell-zh-analysekarten-raster
