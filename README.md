@@ -1,9 +1,10 @@
 ![alt text](static/Logo.png)
 
 ## Overview
-WalkACity is a web application designed to allow for user surveys with the goal to collect data about how walkable different areas of a city are, and visualize said data. This implementation is designed to be used in the city of Zurich,
-though it could be modified to work anywhere. Our approach essentially combines the routes that users frequently take, the user rating they assign to that route, and a combination of publicly available datasets from the city of Zurich, to
-assess and map walkability in Zurich. This app is intended for use by planners and policymakers to find walkability blindspots. These are places with much foot traffic, but insufficient accommodation for this foot traffic.
+[WalkACity](https://github.com/pgose/walkacity) is a web application designed to allow for user surveys with the goal to collect data about how walkable different areas of a city are, and visualize said data. This implementation is 
+designed to be used in the city of Zurich,though it could be modified to work anywhere. Our approach essentially combines the routes that users frequently take, the user rating they assign to that route, and a combination of publicly
+available datasets from the city of Zurich, to assess and map walkability in Zurich. This app is intended for use by planners and policymakers to find walkability blindspots. These are places with much foot traffic, but insufficient 
+accommodation for this foot traffic.
 
 
 ## Table of Contents
